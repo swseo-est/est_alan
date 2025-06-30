@@ -68,8 +68,8 @@ class AlanMCPHost:
         tools = tools + tools_mcp
 
         # 3) LangGraph Agent 생성
-        if 'checkpointer' not in kwargs:
-            kwargs['checkpointer'] = InMemorySaver()
+        # if 'checkpointer' not in kwargs:
+        #     kwargs['checkpointer'] = InMemorySaver()
         
         agent = create_react_agent(
             *args,

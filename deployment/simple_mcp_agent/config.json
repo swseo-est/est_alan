@@ -6,11 +6,7 @@
             "transport": "streamable_http"
         },
         "notion": {
-            "url": "https://server.smithery.ai/@smithery/notion/mcp?profile=scary-turtle-Ljf5sY&api_key=a457b5a4-cd03-4a13-b2ac-cf99c04f6fc4",
-            "transport": "streamable_http"
-        },
-        "sequential_thinking": {
-            "url": "https://server.smithery.ai/@kiennd/reference-servers/mcp?api_key=a457b5a4-cd03-4a13-b2ac-cf99c04f6fc4",
+            "url": "https://server.smithery.ai/@smithery/notion/mcp?api_key=a457b5a4-cd03-4a13-b2ac-cf99c04f6fc4&profile=scary-turtle-Ljf5sY",
             "transport": "streamable_http"
         }
     }

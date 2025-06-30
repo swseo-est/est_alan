@@ -7,10 +7,8 @@ from typing import Any
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_mcp_adapters.tools import load_mcp_tools
 from langgraph.prebuilt import create_react_agent
-from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph.graph import CompiledGraph
 
-from estalan.utils import load_config_json
 
 @dataclass(slots=True)
 class AlanMCPHost:
@@ -29,18 +27,6 @@ class AlanMCPHost:
     _sessions: Any                   # 유지되는 MCP 세션
     # _lock: asyncio.Lock = field(default_factory=asyncio.Lock, repr=False)
 
-    @classmethod
-    async def create_from_config_file(cls,
-                                      filename,
-                                        *args,
-                                        tools: list = None,
-                                        **kwargs,
-                                    ) -> AlanMCPHost:
-
-        server_configs = load_config_json(filename)
-        result = await cls.create(server_configs, *args, tools=tools, **kwargs)
-
-        return result
 
     @classmethod
     async def create(

@@ -8,6 +8,20 @@
         "notion": {
             "url": "https://server.smithery.ai/@smithery/notion/mcp?api_key=a457b5a4-cd03-4a13-b2ac-cf99c04f6fc4&profile=scary-turtle-Ljf5sY",
             "transport": "streamable_http"
+        },
+        "naver-search-mcp": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "@isnow890/naver-search-mcp",
+                "--key",
+                "a457b5a4-cd03-4a13-b2ac-cf99c04f6fc4",
+                "--profile",
+                "scary-turtle-Ljf5sY"
+            ],
+            "transport": "stdio"
         }
     }
 }

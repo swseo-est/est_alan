@@ -24,6 +24,6 @@ async def get_graph():
         if _graph is None:
             _graph, _host = await create_mcp_agent(
                 server_configs,
-                model=model_name,
+                model=model_name
             )
     return _graph

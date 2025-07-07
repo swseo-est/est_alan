@@ -92,5 +92,5 @@ async def create_mcp_agent(
         **kwargs,
     ):
     host = await AlanMCPHost.create(server_configs, *args, tools=tools, **kwargs)
-    graph = host.get_graph()
+    graph = host.get_graph().with_config(recursion_limit=500)
     return graph, host

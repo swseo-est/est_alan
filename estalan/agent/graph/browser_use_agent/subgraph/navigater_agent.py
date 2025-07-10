@@ -81,6 +81,12 @@ def create_browser_use_agent(supervisor_llm, navigator_llm, name=None):
                     ["1. ~~~~", "2. ~~~~", "3. ~~~~", "4. ~~~~", "5. ~~~~"]
             3. 1단계 계획을 current_plan에 업데이트하세요.
             4. next_node를 "supervisor_node"로 업데이트하세요
+            
+            - supervisor_messages: str # 작업을 수행하기 위한 계획을 사용자에게 단계별로 친절하게 안내하세요
+                ex) 요청하신 작업을 수행하기 위한 계획은 다음과 같습니다.
+                    1. ~~~~
+                    2. ~~~~
+                    ...
             """
         else:
             system_instructions = f"""
@@ -104,7 +110,8 @@ def create_browser_use_agent(supervisor_llm, navigator_llm, name=None):
 
         if state.get("plans") is not None:
             response["plans"] = state["plans"]
-            response["messages"] = [AIMessage(content=response['supervisor_messages'])]
+
+        response["messages"] = [AIMessage(content=response['supervisor_messages'])]
 
         print(response)
         print(state.get("navigation_history"))

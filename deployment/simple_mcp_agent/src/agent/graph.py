@@ -27,3 +27,4 @@ async def get_graph():
                 model=model_name
             )
     return _graph
+

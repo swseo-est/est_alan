@@ -6,7 +6,7 @@ from langchain_google_vertexai import ChatVertexAI
 from estalan.llm.base import AlanBaseChatModelWrapper
 
 
-class AlanChatOpenAI(AlanBaseChatModelWrapper):
+class AlanChatVertexAI(AlanBaseChatModelWrapper):
     def __init__(self, **kwargs):
         super().__init__(
             ChatVertexAI(

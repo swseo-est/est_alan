@@ -47,6 +47,7 @@ def create_browser_use_agent(supervisor_llm, navigator_llm, name=None):
         
         이제 다음으로 아래와 같은 작업을 수행하세요.
         - {goal}        
+        - 병렬로 액션을 수행하지마세요
         
         작업 수행 결과를 아래와 같이 출력하세요.
         - navigator_result: bool = Field(..., description="작업 성공/실패 결과")
@@ -65,7 +66,7 @@ def create_browser_use_agent(supervisor_llm, navigator_llm, name=None):
         }
         return {
             "navigation_history": [navigation_history],
-            "messages": [AIMessage(content=result['navigator_message'])]
+            # "messages": [AIMessage(content=result['navigator_message'])]
         }
 
     def supervisor_node(state: BrowserUseAgentState) -> Dict:
@@ -94,22 +95,34 @@ def create_browser_use_agent(supervisor_llm, navigator_llm, name=None):
 
             당신은 웹 브라우저 자동화 에이전트를 관리하는 supervisor 입니다.
             
-            1. {state.get("navigation_history")}을 참고하여, current_plan: {state.get("current_plan")}을 모두 완료했을 경우 current_plan을 다음 계획으로 업데이트하세요.
-            2. current_plan를 달성하기 위한 단위 작업을 navigator_goal 에 입력하세요.
-                - navigator_goal의 작업은 navigator_node에서 수행합니다.
-            3. navigator_goal이 웹 브라우저를 통한 작업이 필요한 경우 next_node를 "navigator_node"로 업데이트하세요.
-            4. 모든 계획을 완료한 경우 next_node를 end로 업데이트하세요.
+            - 현재 계획은 {state.get("plans")} 입니다.
             
-            - supervisor_messages: str # 현재 작업과 관련된 ai 메시지, 다음 작업에 필요한 정보가 있을 경우 충분한 정보를 담아 메시지를 출력
-
+            1. 지금까지 작업 결과를 바탕으로 계획의 업데이트가 필요한 경우 아래와 같은 양식으로 plans를 업데이트 하세요.
+            - 정의된 작업에 추가로 작업이 필요한 경우, plans에 작업들을 추가하세요.
+                ex)
+                    ["1. ~~~~(완료)", "2. ~~~~(완료)", "3. ~~~~", "4. ~~~~", "5. ~~~~", 6. ~~~~ (추가), 7. ~~~~ (추가), 8. ~~~~ (추가)]
+            2. {state.get("navigation_history")}을 참고하여, current_plan: {state.get("current_plan")}을 모두 완료했을 경우 current_plan을 다음 계획으로 업데이트하세요.
+            3. current_plan를 달성하기 위한 단위 작업을 navigator_goal 에 입력하세요.
+                - navigator_goal의 작업은 navigator_node에서 수행합니다.
+            4. navigator_goal이 웹 브라우저를 통한 작업이 필요한 경우 next_node를 "navigator_node"로 업데이트하세요.
+            5. 모든 계획을 완료한 경우 next_node를 end로 업데이트하세요.
+            
+            - supervisor_messages: str # 현재 작업과 관련된 ai 메시지, 다음 작업에 필요한 정보가 있을 경우 충분한 정보를 담아 메시지를 출력. 아래와 같은 양식으로 메시지를 구성하세요.
+                ex) - 유저에게 전달해야할 정보
+                    - 현재 작업 현황은 다음과 같습니다
+                    1. ~~~~ (완료)
+                    2. ~~~~ (완료)
+                    ...
+                    n. ~~~~ (추가)
+                    n+1. ~~~~~ (추가)
             """
 
         response = supervisor_llm.invoke(
-                    state["messages"] + [SystemMessage(content=system_instructions)]
+                    state["messages"] + [SystemMessage(content=system_instructions)], {"recursion_limit": 1000}
             )
 
-        if state.get("plans") is not None:
-            response["plans"] = state["plans"]
+        # if state.get("plans") is not None:
+        #     response["plans"] = state["plans"]
 
         response["messages"] = [AIMessage(content=response['supervisor_messages'])]
 
@@ -173,7 +186,7 @@ if __name__ == "__main__":
         )
 
         browser_use_agent = create_browser_use_agent(planer_llm, navigator_llm)
-        await browser_use_agent.ainvoke({"messages": "최신 엔비디아 gpu 모델명을 알아내고, amazon에서 최저가 링크를 찾아줘"})
+        await browser_use_agent.ainvoke({"messages": "인기있는 김치찌개 레시피를 찾고, 요리에 필요한 재료들을 검색해줘"})
 
 
     asyncio.run(main())

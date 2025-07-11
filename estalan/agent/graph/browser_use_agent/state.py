@@ -2,6 +2,7 @@ from langgraph.prebuilt.chat_agent_executor import AgentState
 from typing import Literal
 from typing import List, TypedDict, Literal, Annotated
 import operator
+from langgraph.managed import IsLastStep, RemainingSteps
 
 
 # ---------------------------------------------------------------------------
@@ -20,3 +21,5 @@ class BrowserUseAgentState(AgentState):
 
     next_node: Literal["end", "navigator_node", "supervisor_node"]
     navigation_history: Annotated[list, operator.add]
+
+    remaining_steps: RemainingSteps

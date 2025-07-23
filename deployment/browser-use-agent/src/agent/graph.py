@@ -3,8 +3,7 @@ from langgraph.prebuilt import create_react_agent
 from estalan.agent.graph.browser_use_agent.subgraph.navigater_agent import NavigatorOutput, create_browser_use_agent, SupervisorOutput
 import asyncio
 
-from langgraph_supervisor import create_supervisor
-from langchain_openai import ChatOpenAI
+from estalan.llm import create_chat_model
 
 from dotenv import load_dotenv
 
@@ -31,14 +30,15 @@ async def get_graph():
             client = await AlanMCPClient.create(server_configs)
             tools = client.tools
 
-            planer_llm = ChatOpenAI(model="gpt-4.1").with_structured_output(SupervisorOutput)
+            planer_llm = create_chat_model(provider="azure_openai", model="gpt-4.1").with_structured_output(SupervisorOutput)
+            navigator_llm = create_chat_model(provider="azure_openai", model="gpt-4.1")
 
-            navigator_llm = create_react_agent(
-                model="openai:gpt-4.1",
+            navigator_agent = create_react_agent(
+                model=navigator_llm,
                 tools=tools,
                 response_format=NavigatorOutput
             )
 
-            graph = create_browser_use_agent(planer_llm, navigator_llm)
+            graph = create_browser_use_agent(planer_llm, navigator_agent)
 
     return graph

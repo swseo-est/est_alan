@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숙박 정보 - 제네바 여행 가이드</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            overflow: hidden;
+            position: relative;
+            background-color: #ffffff;
+            display: flex;
+        }
+        .content-left {
+            width: 50%;
+            padding: 60px;
+            min-height: 720px;
+        }
+        .image-right {
+            width: 50%;
+            position: relative;
+            min-height: 720px;
+            overflow: hidden;
+        }
+        .image-right img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .swiss-accent {
+            display: inline-block;
+            width: 60px;
+            height: 4px;
+            background-color: #cc0000;
+            margin: 16px 0 28px 0;
+        }
+        .content-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #cc0000;
+            padding: 16px;
+            margin: 25px 0;
+        }
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+        }
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        .info-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cc0000;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="content-left">
+            <h1 class="text-3xl font-bold mb-2">숙박 정보</h1>
+            <div class="swiss-accent"></div>
+
+            <p class="mb-5">제네바는 국제도시답게 다양한 수준의 숙박시설이 갖추어져 있으며, 여행 목적과 예산에 따라 선택할 수 있습니다.</p>
+
+            <div class="content-box">
+                <p class="font-bold mb-2">예약 시 참고 사항</p>
+                <p class="text-sm">국제 행사 시즌(특히 3월, 9월)에는 최소 2-3개월 전 예약 필수. 숙소에서 제공하는 '제네바 교통 카드' 활용하세요!</p>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">•</div>
+                <div>
+                    <p class="font-semibold">럭셔리 호텔</p>
+                    <p class="text-sm text-gray-600">호텔 드 라 페(Hotel de la Paix), 만다린 오리엔탈(Mandarin Oriental), 호텔 메트로폴(Hotel Metropole) - 레만 호수 인근 위치</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">•</div>
+                <div>
+                    <p class="font-semibold">중저가 호텔</p>
+                    <p class="text-sm text-gray-600">호텔 스트라스부르(Hotel Strasbourg), 이비스(Ibis), 노보텔(Novotel) - 기차역 주변 및 시내 중심부</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">•</div>
+                <div>
+                    <p class="font-semibold">저렴한 숙박 옵션</p>
+                    <p class="text-sm text-gray-600">시티 호스텔 제네바(City Hostel Geneva), 에어비앤비, 게스트하우스 - 플랑팔레(Plainpalais) 지역</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">•</div>
+                <div>
+                    <p class="font-semibold">지역별 추천</p>
+                    <p class="text-sm text-gray-600">호수 인근: 경관 좋고 고급 시설 / 기차역 주변: 편리한 교통 / 구시가지: 역사적 분위기 / 국제지구: 조용하고 안전</p>
+                </div>
+            </div>
+
+            <p class="text-sm text-gray-500 mt-8 italic">* 성수기(5월-9월)에는 평균 20-30% 가격 상승, 주말에도 가격이 더 비쌉니다.</p>
+        </div>
+
+        <div class="image-right">
+            <img src="https://a.travel-assets.com/findyours-php/viewfinder/images/res70/81000/81690-Geneva.jpg" alt="제네바 구시가지 전경">
+            <div class="image-caption">
+                <p class="text-sm">제네바 구시가지 - 매력적인 숙박 지역</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

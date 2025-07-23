@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>맛집 추천 - 제네바 여행 가이드</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            overflow: hidden;
+            position: relative;
+            background-color: #ffffff;
+            display: flex;
+        }
+        .content-left {
+            width: 50%;
+            padding: 60px;
+            min-height: 720px;
+        }
+        .image-right {
+            width: 50%;
+            position: relative;
+            min-height: 720px;
+            overflow: hidden;
+        }
+        .image-right img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .swiss-accent {
+            display: inline-block;
+            width: 60px;
+            height: 4px;
+            background-color: #cc0000;
+            margin: 16px 0 28px 0;
+        }
+        .content-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #cc0000;
+            padding: 16px;
+            margin: 25px 0;
+        }
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+        }
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        .info-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cc0000;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .restaurant-list {
+            margin-top: 20px;
+        }
+        .restaurant-item {
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="content-left">
+            <h1 class="text-3xl font-bold mb-2">맛집 추천</h1>
+            <div class="swiss-accent"></div>
+
+            <p class="mb-5">제네바에서는 전통적인 스위스 요리부터 세계 각국의 다양한 요리까지 즐길 수 있습니다. 특히 치즈를 활용한 전통 요리가 유명합니다.</p>
+
+            <div class="content-box">
+                <p class="font-bold mb-2">스위스 대표 음식</p>
+                <p class="text-sm">치즈 퐁듀와 라클렛 - 스위스 문화의 핵심이자 겨울철 최고의 별미로, 제네바에서 꼭 맛봐야 할 전통 음식</p>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">•</div>
+                <div>
+                    <p class="font-semibold">치즈 퐁듀(Fondue)</p>
+                    <p class="text-sm text-gray-600">녹인 치즈에 빵을 찍어 먹는 스위스 대표 요리, 그뤼에르와 에멘탈 치즈가 주로 사용됨</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">•</div>
+                <div>
+                    <p class="font-semibold">라클렛(Raclette)</p>
+                    <p class="text-sm text-gray-600">치즈를 녹여 감자, 피클, 양파와 함께 먹는 전통 요리</p>
+                </div>
+            </div>
+
+            <h3 class="font-bold mt-6 mb-3">추천 레스토랑</h3>
+
+            <div class="restaurant-list">
+                <div class="restaurant-item">
+                    <p class="font-semibold">레 아무르(Les Armures)</p>
+                    <p class="text-sm text-gray-600">구시가지의 전통적인 스위스 레스토랑, 퐁듀와 라클렛 전문</p>
+                </div>
+
+                <div class="restaurant-item">
+                    <p class="font-semibold">카페 뒤 솔레이(Café du Soleil)</p>
+                    <p class="text-sm text-gray-600">제네바에서 가장 오래된 레스토랑 중 하나, 최고의 치즈 퐁듀로 유명</p>
+                </div>
+
+                <div class="restaurant-item">
+                    <p class="font-semibold">레스토랑 에델바이스(Restaurant Edelweiss)</p>
+                    <p class="text-sm text-gray-600">전통 알프스 음식과 스위스 민속 음악을 함께 즐길 수 있는 곳</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="image-right">
+            <img src="https://en.barnes-suisse.ch/upload4mail/gerofinance/9/w/j/f/b/1280_9WJfB_raclette-fondue.jpg" alt="스위스 전통 음식 - 퐁듀와 라클렛">
+            <div class="image-caption">
+                <p class="text-sm">스위스 전통 음식 - 치즈 퐁듀와 라클렛</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

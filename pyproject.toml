@@ -35,6 +35,9 @@ dependencies = [
     "pydantic>=2.11.5",
 ]
 
+[tool.poetry.dependencies]
+requests = { git = "https://<PAT>@github.com/swseo-est/est_alan.git", branch = "master" }
+
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",

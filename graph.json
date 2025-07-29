@@ -1,0 +1,4 @@
+{
+  "simple_chat_model": "/deps/est_alan/deployment/simple_chat_model/src/agent/graph.py:get_graph",
+  "slide_generate_agent": "/deps/est_alan/deployment/slide_generate_agent/src/agent/graph.py:get_graph"
+}

@@ -5,7 +5,6 @@ description = ""
 authors = [
     {name = "EST", email = "swseo@estsoft.com"}
 ]
-readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.11"
 classifiers = [
@@ -21,6 +20,7 @@ classifiers = [
 ]
 dependencies = [
     "dotenv>=0.9.9",
+    "fastapi>=0.116.1",
     "jupyter>=1.1.1",
     "langchain>=0.3.25",
     "langchain-anthropic>=0.3.15",
@@ -30,10 +30,12 @@ dependencies = [
     "langchain-mcp-adapters>=0.1.7",
     "langchain-openai>=0.3.22",
     "langgraph>=0.4.8",
-    "langgraph-cli[inmem]>=0.3.1",
+    "langgraph-cli[inmem,postegre]>=0.3.1",
     "langgraph-supervisor>=0.0.27",
     "playwright>=1.52.0",
     "pydantic>=2.11.5",
+    "langgraph-checkpoint-postgres",
+    "langgraph-sdk>=0.1.70",
 ]
 
 [tool.poetry.dependencies]

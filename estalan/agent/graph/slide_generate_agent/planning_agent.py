@@ -5,7 +5,7 @@ from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph.prebuilt import create_react_agent
 from langgraph.graph import START, END, StateGraph
 
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preliminary_investigation_instructions
 from estalan.tools.search import GoogleSerperSearchResult
@@ -37,7 +37,23 @@ class PlanningAgentState(AgentState):
 class GenerateSectionsOutput(TypedDict):
     sections: List[Section]
 
+def create_init_planning_agent_node():
+    def init_planning_agent_node(state: PlanningAgentState):
+        init_msg = AIMessage(content="검색 도구를 사용하여 목차를 생성하기 위한 조사를 시작합니다.")
+        return {"messages": [init_msg]}
+    return init_planning_agent_node
+
 def create_generate_sections_node(llm):
+    def generate_section_result_msg(sections):
+        msg = "생성된 목차는 다음과 같습니다. \n\n"
+        for section in sections:
+            msg_section = f"""{section["idx"]}. {section["topic"]} - {section["description"]} \n"""
+            msg += msg_section
+
+        msg = AIMessage(content=msg)
+        return msg
+
+
     async def generate_sections_node(state: PlanningAgentState):
         topic = state["topic"]
         num_sections = state["num_sections"]
@@ -67,11 +83,18 @@ def create_generate_sections_node(llm):
             ]
         }
         )
-        return results['structured_response']
+
+        msg_result = generate_section_result_msg(results['structured_response']['sections'])
+        updated_state = {"messages": [msg_result]}
+        updated_state = updated_state | results['structured_response']
+        return updated_state
 
     return generate_sections_node
 
 def create_planning_agent(name=None):
+    init_planning_agent_node = create_init_planning_agent_node()
+
+
     serper_api_key = os.getenv("SERPER_API_KEY")
 
     search_tool = GoogleSerperSearchResult.from_api_key(
@@ -92,9 +115,11 @@ def create_planning_agent(name=None):
 
 
     builder = StateGraph(PlanningAgentState)
+    builder.add_node("init_planning_agent_node", init_planning_agent_node)
     builder.add_node("generate_sections_node", generate_sections_node)
 
-    builder.add_edge(START, "generate_sections_node")
+    builder.add_edge(START, "init_planning_agent_node")
+    builder.add_edge("init_planning_agent_node", "generate_sections_node")
     builder.add_edge("generate_sections_node", END)
 
     planning_agent = builder.compile(name=name)

@@ -22,6 +22,11 @@ class ExecutorOutput(TypedDict):
     slides: Section
 
 
+def preprocessing_node(state):
+    topic = state["messages"][0]
+    return {"topic": topic, "num_sections": 5}
+
+
 def post_processing_node(state):
     print(state)
     # 생성된 HTML을 test.html로 저장
@@ -49,11 +54,14 @@ def create_graph():
 
     # main graph
     builder = StateGraph(SlideGenerateAgentState)
+    builder.add_node("preprocessing_node", preprocessing_node)
     builder.add_node("planning_agent", planning_agent)
     builder.add_node("executor", executor.compile(name="executor"))
 
 
-    builder.add_edge(START, "planning_agent")
+    builder.add_edge(START, "preprocessing_node")
+    builder.add_edge("preprocessing_node", "planning_agent")
+
     def generate_slide(state):
         return[
             Send(

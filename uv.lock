@@ -629,6 +629,7 @@ dependencies = [
     { name = "langchain-mcp-adapters" },
     { name = "langchain-openai" },
     { name = "langgraph" },
+    { name = "langgraph-api" },
     { name = "langgraph-checkpoint-postgres" },
     { name = "langgraph-cli", extra = ["inmem"] },
     { name = "langgraph-sdk" },
@@ -662,6 +663,7 @@ requires-dist = [
     { name = "langchain-mcp-adapters", specifier = ">=0.1.7" },
     { name = "langchain-openai", specifier = ">=0.3.22" },
     { name = "langgraph", specifier = ">=0.4.8" },
+    { name = "langgraph-api", specifier = "==0.2.110" },
     { name = "langgraph-checkpoint-postgres" },
     { name = "langgraph-cli", extras = ["inmem", "postegre"], specifier = ">=0.3.1" },
     { name = "langgraph-sdk", specifier = ">=0.1.70" },
@@ -1849,7 +1851,7 @@ wheels = [
 
 [[package]]
 name = "langgraph-api"
-version = "0.2.48"
+version = "0.2.110"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cloudpickle" },
@@ -1872,9 +1874,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "watchfiles" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c1/4e/34b57c125d5cf3397ca236699af4a2974b4653005a5831141e6a4b2c3127/langgraph_api-0.2.48.tar.gz", hash = "sha256:8a5e2b4443c72d58c1d8e23cddc165164e205c32fb5ff45b433cb668dac68613", size = 219955 }
+sdist = { url = "https://files.pythonhosted.org/packages/a4/32/ab82b581ccddd6fdf61e73d3a9476be1046ebef04370572fb1e971d1685c/langgraph_api-0.2.110.tar.gz", hash = "sha256:0aba6f51700def5e0f7708e25d72fd8395985e2a147b8ea8a6432d09707783d4", size = 241545 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/12/9b/f8f434636ead10679f3dae159550e13a6dea2b4bc280daae270084474f70/langgraph_api-0.2.48-py3-none-any.whl", hash = "sha256:7692dcdc56d7b339dc35a75c48cb6236e83c2618045cf4b1135aac3b67c3201a", size = 181729 },
+    { url = "https://files.pythonhosted.org/packages/fc/07/9fb0fec8cf944705a7868dce183a28a09fc6fbe6f69002fddf9f44e71d28/langgraph_api-0.2.110-py3-none-any.whl", hash = "sha256:97a7c21114552890e6537f10392746a4714ed55e881bb2849fc1f8c8a7a7c07c", size = 197142 },
 ]
 
 [[package]]
@@ -1940,7 +1942,7 @@ wheels = [
 
 [[package]]
 name = "langgraph-runtime-inmem"
-version = "0.2.1"
+version = "0.6.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "blockbuster" },
@@ -1950,22 +1952,22 @@ dependencies = [
     { name = "starlette" },
     { name = "structlog" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/dd/8e/f00baca4696a33ba2738ba52b45908368be7d795d1d653d2132ca0d6d5c9/langgraph_runtime_inmem-0.2.1.tar.gz", hash = "sha256:55964010566d3bb7b9b38ca4b3279eeabd7d23f9f64d2ffa659d89c618531c31", size = 72697 }
+sdist = { url = "https://files.pythonhosted.org/packages/b6/4d/51380ac95d34cb1c6b58770e15c1d5ac8d39adb1d0bbac081eb64a989b6a/langgraph_runtime_inmem-0.6.5.tar.gz", hash = "sha256:ce59aa2d9bdb66d680989f174e7638988b59c3b0e70927c071777e69b59d9c50", size = 78528 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b0/f9/1cde5f10dd946bf92ab76e36c60a92d65c074c89a764f4e515c98aee007f/langgraph_runtime_inmem-0.2.1-py3-none-any.whl", hash = "sha256:538414bdb6102d3a27bc0ccbe240567037d92fa476a946b6118d4b65ab8d8474", size = 28446 },
+    { url = "https://files.pythonhosted.org/packages/03/9e/65377bb1051088400fb53da548f3223a51fa15a8ec63bc35a1c602b430c7/langgraph_runtime_inmem-0.6.5-py3-none-any.whl", hash = "sha256:ce34d55f539e30387f8e1f7421e483a526500f67d624d680a4a59b800e3e93cd", size = 30285 },
 ]
 
 [[package]]
 name = "langgraph-sdk"
-version = "0.1.70"
+version = "0.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
     { name = "orjson" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c1/dd/c074adf91d2fe67f00dc3be4348119f40a9d0ead9e55c958f81492c522c0/langgraph_sdk-0.1.70.tar.gz", hash = "sha256:cc65ec33bcdf8c7008d43da2d2b0bc1dd09f98d21a7f636828d9379535069cf9", size = 71530 }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/3e/3dc45dc7682c9940db9edaf8773d2e157397c5bd6881f6806808afd8731e/langgraph_sdk-0.2.0.tar.gz", hash = "sha256:cd8b5f6595e5571be5cbffd04cf936978ab8f5d1005517c99715947ef871e246", size = 72510 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8c/77/b0930ca5d54ef91e2bdb37e0f7dbeda1923e1e0b5b71ab3af35c103c2e39/langgraph_sdk-0.1.70-py3-none-any.whl", hash = "sha256:47f2b04a964f40a610c1636b387ea52f961ce7a233afc21d3103e5faac8ca1e5", size = 49986 },
+    { url = "https://files.pythonhosted.org/packages/a5/03/a8ab0e8ea74be6058cb48bb1d85485b5c65d6ea183e3ee1aa8ca1ac73b3e/langgraph_sdk-0.2.0-py3-none-any.whl", hash = "sha256:150722264f225c4d47bbe7394676be102fdbf04c4400a0dd1bd41a70c6430cc7", size = 50569 },
 ]
 
 [[package]]

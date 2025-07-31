@@ -22,6 +22,7 @@ class Section(TypedDict):
     content: str
     img_url: str
 
+    design: str
     html: str
 
 class PlanningStateInput(TypedDict):

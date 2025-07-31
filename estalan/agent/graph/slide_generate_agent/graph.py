@@ -1,10 +1,13 @@
 from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph.graph import START, END, StateGraph
+from langgraph_supervisor import create_supervisor
+from langchain_core.messages import HumanMessage
 
 from typing import List, Annotated, TypedDict
 from estalan.agent.graph.slide_generate_agent.planning_agent import create_planning_agent, Section
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
+from estalan.llm.utils import create_chat_model
 import asyncio
 from langgraph.types import Send
 import operator
@@ -12,6 +15,7 @@ import operator
 
 class SlideGenerateAgentState(AgentState):
     topic: str
+    requirements: str
     num_sections: int
 
     sections: List[Section]
@@ -22,18 +26,26 @@ class ExecutorOutput(TypedDict):
     slides: Section
 
 
+class OutputState(TypedDict):
+    topic: str
+    requirements: str
+
 def preprocessing_node(state):
-    topic = state["messages"][0]
-    return {"topic": topic, "num_sections": 5}
+    llm = create_chat_model(provider="azure_openai", model="gpt-4.1").with_structured_output(OutputState)
+
+    msg = HumanMessage(content="슬라이드 topic과 유저 요구사항 requirement를 추출하세요.")
+    updated_state = llm.invoke([msg] + state["messages"])
+    return updated_state | {"num_sections": 5}
 
 
 def post_processing_node(state):
-    print(state)
     # 생성된 HTML을 test.html로 저장
     with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
         f.write(state['html'])
 
-    return {"slides": [state]}
+    msg = HumanMessage(content="슬라이드 생성을 완료했습니다.")
+
+    return {"slides": [state], "messages": [msg]}
 
 def create_graph():
     planning_agent = create_planning_agent()
@@ -76,8 +88,23 @@ def create_graph():
     )
     builder.add_edge("executor", END)
 
-    planning_agent = builder.compile()
-    return planning_agent
+    slide_create_agent = builder.compile(name="slide_create_agent")
+    workflow = create_supervisor(
+        [slide_create_agent],
+        model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
+        prompt= """
+                사용자와 대화를 통해 슬라이드 생성에 필요한 정보들을 수집하세요.
+                충분한 정보가 모이면 slide_create_agent를 이용하여, 슬라이드를 생성하세요.
+                마지막 메시지를 통해 다음 에이전트에 충분한 정보를 전달하세요.
+                다음 에이전트는 마지막 메시지만을 참조합니다.
+            """
+        ,
+        state_schema=SlideGenerateAgentState,
+    )
+
+    # Compile and run
+    app = workflow.compile()
+    return app
 
 
 if __name__ == '__main__':

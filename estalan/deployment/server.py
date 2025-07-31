@@ -46,8 +46,21 @@ from langgraph_runtime.lifespan import lifespan
 from langgraph_runtime.retry import OVERLOADED_EXCEPTIONS
 
 logging.captureWarnings(True)
-logger = structlog.stdlib.get_logger(__name__)
+logger = logging.getLogger("langgraph_license.validation")
+logger.disabled = True
 
+logger = structlog.stdlib.get_logger(__name__)
+welcome = f"""
+
+███████ ███████ ████████ ███████  ██████  ███████ ████████      █████  ██       █████  ███    ██ 
+██      ██         ██    ██      ██    ██ ██         ██        ██   ██ ██      ██   ██ ████   ██ 
+█████   ███████    ██    ███████ ██    ██ █████      ██        ███████ ██      ███████ ██ ██  ██ 
+██           ██    ██         ██ ██    ██ ██         ██        ██   ██ ██      ██   ██ ██  ██ ██ 
+███████ ███████    ██    ███████  ██████  ██         ██        ██   ██ ███████ ██   ██ ██   ████ 
+
+"""
+
+logger.info(welcome)
 middleware = []
 
 if config.ALLOW_PRIVATE_NETWORK:

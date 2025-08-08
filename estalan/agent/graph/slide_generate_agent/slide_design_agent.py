@@ -4,25 +4,18 @@ from langgraph.graph import START, END, StateGraph
 from langgraph.prebuilt.chat_agent_executor import AgentState
 from estalan.agent.graph.slide_generate_agent.prompt.slide_design import *
 from estalan.llm import create_chat_model
+from estalan.agent.graph.slide_generate_agent.planning_agent import Section
 
-class SlideDesignAgentState(AgentState):
-    # Input
-    topic: str
-
-    idx: int
-    name: str
-    description: str
-    content: str
-    img_url: str
-
-    design: str
-    html: str
+class SlideDesignAgentState(Section):
+    pass
 
 class SlideDesignNodeOutput(TypedDict):
     design: str
 
 class HtmlGenerateNodeOutput(TypedDict):
     html: str
+    width: int
+    height: int
 
 class SlideDesignNodeInput(TypedDict):
     # Input
@@ -37,8 +30,6 @@ class SlideDesignNodeInput(TypedDict):
 
 def create_slide_design_node(slide_design_llm):
     def slide_design_node(state: SlideDesignAgentState):
-        print("start slide_design_node")
-        print(state)
         topic = state["topic"]
         name = state["name"]
         description = state["description"]

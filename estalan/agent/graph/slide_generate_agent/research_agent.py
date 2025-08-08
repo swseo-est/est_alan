@@ -10,23 +10,11 @@ from langgraph.prebuilt.chat_agent_executor import AgentState
 from estalan.agent.graph.slide_generate_agent.prompt.research_agent import *
 from estalan.llm import create_chat_model
 from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult
+from estalan.agent.graph.slide_generate_agent.planning_agent import Section
 
 
-
-class ResearchAgentState(AgentState):
-    # Input
-    topic: str # Report topic
-
-    idx: int
-    name: str
-    description: str
-
-    # Research Node
-    research: bool
-    content: str
-
-    # Search Img Node
-    img_url: str
+class ResearchAgentState(Section):
+    pass
 
 class ResearchStateInput(TypedDict):
     topic: str # Report topic

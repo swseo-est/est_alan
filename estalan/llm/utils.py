@@ -3,7 +3,7 @@ from estalan.llm.estalan_google_vertexai import AlanChatVertexAI
 from estalan.llm.estalan_anthropic import AlanChatAnthropic
 
 
-def create_chat_model(provider=None, model=None):
+def create_chat_model(provider=None, model=None, structured_output=None):
     available_providers = [
         "openai",
         "azure_openai",
@@ -22,5 +22,8 @@ def create_chat_model(provider=None, model=None):
         chat_model = AlanChatAnthropic(model=model)
     else:
         raise Exception()
+
+    if structured_output is not None:
+        chat_model = chat_model.with_structured_output(structured_output)
 
     return chat_model

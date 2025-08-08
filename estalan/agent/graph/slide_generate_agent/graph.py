@@ -108,7 +108,6 @@ def create_graph():
 
 
 if __name__ == '__main__':
-    import os
     import time
 
     s = time.time()

@@ -1,6 +1,6 @@
 import json
 
-from langchain_core.messages import ToolMessage
+from langchain_core.messages import ToolMessage, HumanMessage
 
 
 def load_config_json(filename: str) -> dict:
@@ -15,3 +15,13 @@ def get_last_tool_message(llm_response) -> ToolMessage:
             return msg
 
     return None
+
+
+def get_last_human_message(messages) -> HumanMessage:
+    """가장 마지막 human message를 찾아 반환"""
+    for msg in messages[::-1]:
+        if isinstance(msg, HumanMessage):
+            return msg
+    
+    return None
+

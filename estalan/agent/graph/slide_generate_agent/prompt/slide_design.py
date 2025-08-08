@@ -21,6 +21,9 @@ section_inputs="""
 """
 
 
+prompt_tile_slide_design = """"""
+prompt_contents_slide_design = """"""
+
 
 prompt_slide_design = """
 역할

@@ -1,7 +1,0 @@
-{
-  "dependencies": ["."],
-  "graphs": {
-    "agent": "./deployment/simple_chat_model/src/agent/graph.py:get_graph"
-  },
-  "env": ".env"
-}

@@ -39,13 +39,16 @@ def parse_hidden_command_node(state):
     """
     히든 명령어를 파싱하는 노드
     히든 명령어 형식: 
-    /add_design_prompt
+    /add_design_prompt가 포함된 문자열 전체를 design_prompt로 저장
     """
 
     last_message = get_last_human_message(state["messages"]).content
 
     if "/add_design_prompt" in last_message:
-        return {"design_prompt": last_message, "messages": [AIMessage(content="히든 명령어가 적용되었습니다.", name="agent")]}
+        # 문자열 전체를 design_prompt로 저장
+        ai_response = AIMessage(content="히든 명령어가 적용되었습니다.", name="agent")
+        updated_messages = state.get("messages", []) + [ai_response]
+        return {"design_prompt": last_message, "messages": updated_messages}
     else:
         return {"design_prompt": None}
     
@@ -147,20 +150,20 @@ def create_graph():
         ,
         state_schema=SlideGenerateAgentState,
         output_mode="full_history",
-    ).compile()
+    )
 
-    # 메인 그래프 생성 - parse_hidden_command에서 workflow로 연결
-    builder = StateGraph(SlideGenerateAgentState)
-    builder.add_node("parse_hidden_command", parse_hidden_command_node)
-    builder.add_node("workflow", workflow)
+    # # 메인 그래프 생성 - parse_hidden_command에서 workflow로 연결
+    # builder = StateGraph(SlideGenerateAgentState)
+    # builder.add_node("parse_hidden_command", parse_hidden_command_node)
+    # builder.add_node("workflow", workflow)
     
-    # parse_hidden_command에서 workflow로 연결
-    builder.add_edge(START, "parse_hidden_command")
-    builder.add_edge("parse_hidden_command", "workflow")
-    builder.add_edge("workflow", END)
+    # # parse_hidden_command에서 workflow로 연결
+    # builder.add_edge(START, "parse_hidden_command")
+    # builder.add_edge("parse_hidden_command", "workflow")
+    # builder.add_edge("workflow", END)
     
     # Compile and run
-    app = builder.compile()
+    app = workflow.compile()
     return app
 
 

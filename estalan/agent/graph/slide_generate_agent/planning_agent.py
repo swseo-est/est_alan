@@ -31,6 +31,8 @@ class Section(TypedDict):
     width: int
     height: int
 
+    design_prompt: str
+
 class PlanningStateInput(TypedDict):
     topic: str # Report topic
     num_sections: int

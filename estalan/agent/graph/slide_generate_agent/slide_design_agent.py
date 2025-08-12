@@ -54,6 +54,14 @@ def create_html_generate_node(html_generate_llm):
         design_content = state.get("design", "기본 디자인을 적용합니다.")
         print("Design content:", design_content)
         
+        # design_prompt가 존재하면 이를 활용
+        if state.get("design_prompt"):
+            print(f"Design prompt found: {state['design_prompt']}")
+            # design_prompt를 포함한 강화된 디자인 지시사항 생성
+            enhanced_design = f"{design_content}\n\n추가 디자인 요구사항: {state['design_prompt']}"
+            design_content = enhanced_design
+            print("Enhanced design content:", design_content)
+
         try:
             response = html_generate_llm.invoke([
                 HumanMessage(content=state["content"]), 

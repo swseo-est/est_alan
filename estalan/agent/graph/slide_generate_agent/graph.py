@@ -1,16 +1,18 @@
 from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph.graph import START, END, StateGraph
 from langgraph_supervisor import create_supervisor
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage
 
-from typing import List, Annotated, TypedDict
+from typing import List, Annotated, TypedDict, Optional
 from estalan.agent.graph.slide_generate_agent.planning_agent import create_planning_agent, Section
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
 from estalan.llm.utils import create_chat_model
+from estalan.utils import get_last_human_message
 import asyncio
 from langgraph.types import Send
 import operator
+import re
 
 
 class SlideGenerateAgentState(AgentState):
@@ -18,6 +20,7 @@ class SlideGenerateAgentState(AgentState):
     requirements: str
     num_sections: int
     num_slides: int
+    design_prompt: str
 
     sections: List[Section]
     slides: Annotated[List[Section], operator.add]
@@ -26,6 +29,88 @@ class SlideGenerateAgentState(AgentState):
 class OutputState(TypedDict):
     topic: str
     requirements: str
+
+class HiddenCommandState(TypedDict):
+    design_prompt: Optional[str]
+    user_msg: Optional[str]
+    is_hidden_command: bool
+
+def parse_hidden_command_node(state):
+    """
+    히든 명령어를 파싱하는 노드
+    히든 명령어 형식: 
+    /add_design_prompt
+    {
+        "design_prompt": "디자인 프롬프트 내용"
+    }
+    """
+    last_message = get_last_human_message(state["messages"]).content
+    
+    # 히든 명령어 패턴 확인 (/add_design_prompt로 시작하는지)
+    if not last_message.startswith("/add_design_prompt"):
+        return {"is_hidden_command": False}
+    
+    # 히든 명령어 파싱
+    try:
+        # /add_design_prompt 이후의 JSON 부분 추출
+        lines = last_message.split('\n')
+        json_lines = []
+        in_json = False
+        brace_count = 0
+        found_command = False
+        
+        for line in lines:
+            line = line.strip()
+            if line == "/add_design_prompt":
+                found_command = True
+                continue
+            elif found_command and line == "{":
+                in_json = True
+                brace_count += 1
+                json_lines.append(line)
+            elif in_json:
+                json_lines.append(line)
+                # 중괄호 개수로 JSON 블록의 끝을 정확히 판단
+                brace_count += line.count('{') - line.count('}')
+                if brace_count == 0:
+                    break
+        
+        if not json_lines:
+            print("JSON 형식이 올바르지 않습니다.")
+            return {"is_hidden_command": False}
+        
+        json_part = '\n'.join(json_lines)
+        print(f"추출된 JSON 부분: {json_part}")
+        
+        # JSON 파싱
+        import json
+        try:
+            json_data = json.loads(json_part)
+        except json.JSONDecodeError as e:
+            print(f"JSON 파싱에 실패했습니다. 오류: {e}")
+            print(f"파싱 시도한 JSON: {json_part}")
+            return {"is_hidden_command": False}
+        
+        parsed_data = {
+            "design_prompt": json_data.get("design_prompt"),
+            "user_msg": json_data.get("user_msg"),
+            "is_hidden_command": True
+        }
+        
+        # messages state에 새로운 HumanMessage와 AI 응답 메시지 추가
+        new_human_message = HumanMessage(content=parsed_data["user_msg"])
+        ai_response = AIMessage(content=f"히든 명령어가 적용되었습니다. 디자인 프롬프트: {parsed_data['design_prompt']}", name="agent")
+        updated_messages = state.get("messages", []) + [ai_response, new_human_message]
+        
+        print(f"히든 명령어 파싱 결과: {parsed_data}")
+        return parsed_data | {"messages": updated_messages}
+        
+    except Exception as e:
+        print(f"히든 명령어 파싱 중 오류 발생: {e}")
+        ai_response = AIMessage(content=f"히든 명령어 파싱 중 오류 발생: {e}", name="agent")
+        updated_messages = state.get("messages", []) + [ai_response]
+
+        return {"is_hidden_command": False, "messages": updated_messages}
 
 def preprocessing_node(state):
     llm = create_chat_model(provider="azure_openai", model="gpt-4.1").with_structured_output(OutputState)
@@ -53,7 +138,17 @@ def post_processing_node(state):
     # executor의 output이 ExecutorOutput 형태이므로 slides 필드를 그대로 반환
     return {"slides": [state]}
 
-def create_graph():
+def create_parse_hidden_command_graph():
+    """히든 명령어 파싱을 위한 별도 그래프"""
+    builder = StateGraph(SlideGenerateAgentState)
+    builder.add_node("parse_hidden_command", parse_hidden_command_node)
+    builder.add_edge(START, "parse_hidden_command")
+    builder.add_edge("parse_hidden_command", END)
+    
+    return builder.compile(name="parse_hidden_command_tool")
+
+def create_slide_generate_graph():
+    """슬라이드 생성 메인 그래프"""
     planning_agent = create_planning_agent()
 
     ## subroutine
@@ -77,16 +172,23 @@ def create_graph():
     builder.add_node("planning_agent", planning_agent)
     builder.add_node("executor", executor.compile(name="executor"))
 
-
     builder.add_edge(START, "preprocessing_node")
     builder.add_edge("preprocessing_node", "planning_agent")
 
     def generate_slide(state):
-        return[
-            Send(
-                "executor",
-                s
-            ) for s in state["sections"]]
+        # design_prompt가 존재할 때만 추가
+        if state.get("design_prompt"):
+            return[
+                Send(
+                    "executor",
+                    s | {"design_prompt": state["design_prompt"]}
+                ) for s in state["sections"]]
+        else:
+            return[
+                Send(
+                    "executor",
+                    s
+                ) for s in state["sections"]]
 
     builder.add_conditional_edges(
         "planning_agent",
@@ -95,13 +197,26 @@ def create_graph():
     )
     builder.add_edge("executor", END)
 
-    slide_create_agent = builder.compile(name="slide_create_agent")
+    return builder.compile(name="slide_generate_agent")
+
+def create_graph():
+    # 히든 명령어 파싱 그래프 생성
+    parse_hidden_command_graph = create_parse_hidden_command_graph()
+    
+    # 슬라이드 생성 그래프 생성
+    slide_generate_graph = create_slide_generate_graph()
+    
+    # Supervisor 생성
     workflow = create_supervisor(
-        [slide_create_agent],
+        [parse_hidden_command_graph, slide_generate_graph],
         model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
         prompt= """
                 사용자와 대화를 통해 슬라이드 생성에 필요한 정보들을 수집하세요.
-                충분한 정보가 모이면 slide_create_agent를 이용하여, 슬라이드를 생성하세요.
+                
+                만약 사용자가 /add_design_prompt로 시작하는 히든 명령어를 사용한다면,
+                parse_hidden_command_tool을 사용하여 디자인 프롬프트를 파싱하세요.
+                
+                충분한 정보가 모이면 slide_generate_agent를 이용하여, 슬라이드를 생성하세요.
                 마지막 메시지를 통해 다음 에이전트에 충분한 정보를 전달하세요.
                 다음 에이전트는 마지막 메시지만을 참조합니다.
             """

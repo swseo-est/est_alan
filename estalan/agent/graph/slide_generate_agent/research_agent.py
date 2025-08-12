@@ -9,7 +9,7 @@ from langgraph.prebuilt.chat_agent_executor import AgentState
 
 from estalan.agent.graph.slide_generate_agent.prompt.research_agent import *
 from estalan.llm import create_chat_model
-from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult
+from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult, is_cors_violation
 from estalan.agent.graph.slide_generate_agent.planning_agent import Section
 
 
@@ -31,6 +31,7 @@ class ResearchAgentOutput(TypedDict):
 
     # Search Img Node
     img_url: str
+    is_cors_violation: bool
 
 class ResearchNodeOutput(TypedDict):
     research: bool
@@ -38,7 +39,7 @@ class ResearchNodeOutput(TypedDict):
 
 class SearchImgNodeOutput(TypedDict):
     img_url: str
-
+    is_cors_violation: bool
 
 
 def create_research_node(llm):
@@ -89,7 +90,7 @@ def create_search_img_node(llm):
                     [
                         SystemMessage(content=section_search_img_instruction),
                         HumanMessage(content=section_writer_inputs_formatted),
-                        HumanMessage(content="search_tool을 사용하세요."),
+                        HumanMessage(content="search_tool을 사용하세요. CORS 정책에 위배되지 않은 이미지만 수집"),
                     ]
             }
         )
@@ -127,7 +128,7 @@ def create_research_agent(name=None):
 
     search_img_agent = create_react_agent(
         search_img_llm,
-        tools =[search_img_tool],
+        tools =[search_img_tool, is_cors_violation],
         response_format = SearchImgNodeOutput,
     )
     search_img_node = create_search_img_node(

@@ -17,14 +17,11 @@ class SlideGenerateAgentState(AgentState):
     topic: str
     requirements: str
     num_sections: int
+    num_slides: int
 
     sections: List[Section]
     slides: Annotated[List[Section], operator.add]
     status: str
-
-class ExecutorOutput(TypedDict):
-    slides: Section
-
 
 class OutputState(TypedDict):
     topic: str
@@ -35,25 +32,35 @@ def preprocessing_node(state):
 
     msg = HumanMessage(content="슬라이드 topic과 유저 요구사항 requirement를 추출하세요.")
     updated_state = llm.invoke([msg] + state["messages"])
-    return updated_state | {"num_sections": 5}
+    return updated_state | {"num_sections": 5, "num_slides": 7}
+
+
+class ExecutorInput(Section):
+    pass
+
+class ExecutorOutput(TypedDict):
+    # executor에서 출력되는 결과
+    slides: List[Section]
 
 
 def post_processing_node(state):
     # 생성된 HTML을 test.html로 저장
-    with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
-        f.write(state['html'])
+    # with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
+    #     f.write(state['html'])
 
-    msg = HumanMessage(content="슬라이드 생성을 완료했습니다.")
+    print("Post processing state:", state)
 
-    return {"slides": [state], "messages": [msg]}
+    # executor의 output이 ExecutorOutput 형태이므로 slides 필드를 그대로 반환
+    return {"slides": [state]}
 
 def create_graph():
     planning_agent = create_planning_agent()
-    research_agent = create_research_agent()
-    slide_create_agent = create_slide_create_agent()
 
     ## subroutine
-    executor = StateGraph(Section, output=ExecutorOutput)
+    executor = StateGraph(ExecutorInput, output=ExecutorOutput)
+
+    research_agent = create_research_agent()
+    slide_create_agent = create_slide_create_agent()
 
     executor.add_node("research_agent", research_agent)
     executor.add_node("slide_create_agent", slide_create_agent)

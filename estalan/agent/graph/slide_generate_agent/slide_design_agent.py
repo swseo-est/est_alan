@@ -17,15 +17,9 @@ class HtmlGenerateNodeOutput(TypedDict):
     width: int
     height: int
 
-class SlideDesignNodeInput(TypedDict):
+class SlideDesignNodeInput(Section):
     # Input
-    topic: str
-
-    idx: int
-    name: str
-    description: str
-    content: str
-    img_url: str
+    pass
 
 
 def create_slide_design_node(slide_design_llm):
@@ -47,15 +41,34 @@ def create_slide_design_node(slide_design_llm):
         response = slide_design_llm.invoke(
             [HumanMessage(content=content_info), system_instruction]
         )
-        return response
+        # response를 dict 형태로 반환하여 state에 병합되도록 함
+        return {"design": response["design"]}
     return slide_design_node
 
 def create_html_generate_node(html_generate_llm):
     def html_generate_node(state: SlideDesignAgentState):
-        print(state)
+        print("Current state:", state)
         system_instruction = SystemMessage(content=prompt_html_generator)
-        response = html_generate_llm.invoke([HumanMessage(content=state["content"])] +[HumanMessage(content=state["design"])] + [system_instruction])
-        return response
+        
+        # design이 없으면 기본값 사용
+        design_content = state.get("design", "기본 디자인을 적용합니다.")
+        print("Design content:", design_content)
+        
+        try:
+            response = html_generate_llm.invoke([
+                HumanMessage(content=state["content"]), 
+                HumanMessage(content=design_content), 
+                system_instruction
+            ])
+            return response
+        except Exception as e:
+            print(f"Error in html_generate_node: {e}")
+            # 에러 발생 시 기본 HTML 반환
+            return {
+                "html": f"<div>Error generating HTML: {str(e)}</div>",
+                "width": 1280,
+                "height": 720
+            }
     return html_generate_node
 
 def create_slide_create_agent(name=None):

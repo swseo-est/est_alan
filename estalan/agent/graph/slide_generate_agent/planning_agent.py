@@ -24,6 +24,7 @@ class Section(TypedDict):
 
     content: str
     img_url: str
+    is_cors_violation: bool
 
     design: str
     html: str
@@ -33,12 +34,14 @@ class Section(TypedDict):
 class PlanningStateInput(TypedDict):
     topic: str # Report topic
     num_sections: int
+    num_slides: int
 
 class PlanningAgentState(AgentState):
     topic: str
     num_sections: int
+    num_slides: int
 
-    sections: List[str]
+    sections: List[Section]
 
 class GenerateSectionsOutput(TypedDict):
     sections: List[Section]
@@ -94,6 +97,7 @@ def create_generate_sections_node(llm):
         }
         )
 
+        print(results)
         msg_result = generate_section_result_msg(results['structured_response']['sections'])
         updated_state = {"messages": [msg_result]}
         updated_state = updated_state | results['structured_response']

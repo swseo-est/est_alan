@@ -18,6 +18,7 @@ from estalan.tools.base import AsyncTool
 from estalan.tools.summarize import MapReduceSummarizationSubgraph
 from estalan.tools.url import BaseHTTPTool
 from estalan.tools.utils import noop, retry_on_api_empty
+import requests
 
 logger = get_logger(__name__)
 
@@ -478,3 +479,41 @@ class RapidYoutubeSearchResult(AsyncTool):
         except Exception as e:
             logger.error(f"Error in YouTube video search: {str(e)}")
             raise
+
+
+import requests
+from urllib.parse import urlparse
+from langchain_core.tools import tool
+
+def multiply(a: int, b: int) -> int:
+    """Multiply two numbers."""
+    return a * b
+
+def get_origin_from_url(url: str) -> str:
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}"
+
+@tool
+def is_cors_violation(url: str, method="GET", headers=None) -> bool:
+    """check cors violation."""
+    origin = get_origin_from_url(url)  # URL에서 자동 추출
+
+    request_headers = headers.copy() if headers else {}
+    request_headers["Origin"] = origin
+
+    response = requests.request(method, url, headers=request_headers)
+
+    allow_origin = response.headers.get("Access-Control-Allow-Origin")
+    allow_methods = response.headers.get("Access-Control-Allow-Methods", "")
+    allow_headers = response.headers.get("Access-Control-Allow-Headers", "")
+
+    if allow_origin not in (origin, "*"):
+        return True
+    if method.upper() not in allow_methods.upper():
+        return True
+    if headers:
+        allowed_headers_list = [h.strip().lower() for h in allow_headers.split(",")]
+        for h in headers.keys():
+            if h.lower() != "origin" and h.lower() not in allowed_headers_list:
+                return True
+    return False

@@ -100,6 +100,7 @@ def create_graph():
             """
         ,
         state_schema=SlideGenerateAgentState,
+        output_mode="full_history"
     )
 
     # Compile and run

@@ -45,7 +45,7 @@ class GenerateSectionsOutput(TypedDict):
 
 def create_init_planning_agent_node():
     def init_planning_agent_node(state: PlanningAgentState):
-        init_msg = AIMessage(content="검색 도구를 사용하여 목차를 생성하기 위한 조사를 시작합니다.")
+        init_msg = AIMessage(content="검색 도구를 사용하여 목차를 생성하기 위한 조사를 시작합니다.", name="init_planning_agent_node")
         return {"messages": [init_msg]}
     return init_planning_agent_node
 
@@ -56,7 +56,7 @@ def create_generate_sections_node(llm):
             msg_section = f"""{section["idx"]}. {section["topic"]} - {section["description"]} \n"""
             msg += msg_section
 
-        msg = AIMessage(content=msg)
+        msg = AIMessage(content=msg, name="generate_sections_node")
         return msg
 
 

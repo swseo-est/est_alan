@@ -90,7 +90,7 @@ def create_search_img_node(llm):
                     [
                         SystemMessage(content=section_search_img_instruction),
                         HumanMessage(content=section_writer_inputs_formatted),
-                        HumanMessage(content="search_tool을 사용하세요. CORS 정책에 위배되지 않은 이미지만 수집"),
+                        HumanMessage(content="search_tool을 사용하세요. CORS 정책에 위배되지 않은 이미지만 수집하세요."),
                     ]
             }
         )

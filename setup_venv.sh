@@ -34,7 +34,7 @@ fi
 
 # Install dependencies
 echo "Installing dependencies..."
-uv pip install -e .
+uv pip install -e src
 if [ $? -ne 0 ]; then
     echo "Error: Failed to install dependencies"
     exit 1

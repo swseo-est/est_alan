@@ -37,7 +37,7 @@ if %errorlevel% neq 0 (
 
 REM Install dependencies
 echo Installing dependencies...
-uv pip install -e .
+uv pip install -e src
 if %errorlevel% neq 0 (
     echo Error: Failed to install dependencies
     pause

@@ -56,8 +56,11 @@ def post_processing_executor_node(state):
 
     print("Post processing state:", state)
 
+    # state에서 messages를 제거하고 반환
+    state_without_messages = {k: v for k, v in state.items() if k != 'messages'}
+    
     # executor의 output이 ExecutorOutput 형태이므로 slides 필드를 그대로 반환
-    return {"slides": [state]}
+    return {"slides": [state_without_messages]}
 
 def post_processing_node(state):
 

@@ -35,12 +35,13 @@ def pre_processing_research_node(state):
     name = state["name"]
 
     content = f"""
-    {name} 페이지에 대한 조사를 시작합니다.
+    슬라이드 생성에 필요한 조사를 시작합니다.
     """
 
     msg = create_ai_message(
         content=content,
-        name="msg_research_start"
+        name="msg_research_start",
+        id="msg_research_start"
     )
     print(msg)
 
@@ -55,22 +56,24 @@ def post_processing_research_node(state):
 
     msg = create_ai_message(
         content=content,
-        name="msg_research_end"
+        name="msg_research_end",
+        id = "msg_research_end"
     )
     print(msg)
 
-    return {"messages": [msg]}
+    return {}
 
 def pre_processing_image_search_node(state):
     name = state["name"]
 
     content = f"""
-    {name} 페이지에 사용할 이미지를 검색하고 있습니다.
+    슬라이드에 사용할 이미지를 검색하고 있습니다.
     """
 
     msg = create_ai_message(
         content=content,
-        name="msg_image_search_start"
+        name="msg_image_search_start",
+        id="msg_image_search_start"
     )
 
     print(msg)
@@ -86,11 +89,12 @@ def post_processing_image_search_node(state):
 
     msg = create_ai_message(
         content=content,
-        name="msg_image_search_end"
+        name="msg_image_search_end",
+        id="msg_image_search_end"
     )
     print(msg)
 
-    return {"messages": [msg]}
+    return {}
 
 def create_research_node(llm):
     async def research_node(state: ResearchAgentState):

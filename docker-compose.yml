@@ -1,56 +1,65 @@
 volumes:
-    langgraph-data:
-        driver: local
+  langgraph-data:
+    driver: local
 
 services:
-    langgraph-redis:
-        image: redis:6
-        healthcheck:
-            test: redis-cli ping
-            interval: 5s
-            timeout: 1s
-            retries: 5
+  langgraph-redis:
+    image: redis:6
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 1s
+      retries: 5
 
-    langgraph-postgres:
-        image: pgvector/pgvector:pg16
-        ports:
-            - "5433:5432"
-        environment:
-            POSTGRES_DB: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-        command:
-            - postgres
-            - -c
-            - shared_preload_libraries=vector
-        volumes:
-            - langgraph-data:/var/lib/postgresql/data
-        healthcheck:
-            test: pg_isready -U postgres
-            start_period: 10s
-            timeout: 1s
-            retries: 5
-            interval: 60s
-            start_interval: 1s
+  langgraph-postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "5433:5432"  # host:5433 -> container:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=vector
+    volumes:
+      - langgraph-data:/var/lib/postgresql/data
+      # 초기화 스크립트로 확장 자동 생성
+      - ./db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres -h 127.0.0.1"]
+      start_period: 10s
+      timeout: 2s
+      retries: 10
+      interval: 10s
 
-    langgraph-api:
-        ports:
-            - "8000:8000"
-        depends_on:
-            langgraph-redis:
-                condition: service_healthy
-            langgraph-postgres:
-                condition: service_healthy
-        environment:
-            REDIS_URI: redis://langgraph-redis:6379
-            POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
-        healthcheck:
-            test: python /api/healthcheck.py
-            interval: 60s
-            start_interval: 1s
-            start_period: 10s
-        env_file:
-            - .env.dockerfile
-        build:
-            context: .
-            dockerfile: Dockerfile
+  langgraph-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      langgraph-redis:
+        condition: service_healthy
+      langgraph-postgres:
+        condition: service_healthy
+    environment:
+      # 표준 키(겹으로 넣기)
+      LANGGRAPH_DB_URL: postgresql+psycopg://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
+      LANGGRAPH_REDIS_URL: redis://langgraph-redis:6379/0
+      DATABASE_URL: postgresql://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
+      REDIS_URL: redis://langgraph-redis:6379/0
+      # 기존 키도 유지(혹시 앱이 이 키를 읽는 경우)
+      POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
+      REDIS_URI: redis://langgraph-redis:6379
+      # 디버깅 강화(선택)
+      PYTHONFAULTHANDLER: "1"
+      LOG_LEVEL: DEBUG
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 10
+      start_period: 20s

@@ -75,7 +75,7 @@ def post_processing_html_generate_node(state):
     name = state["name"]
 
     content = f"""
-    {name} 페이지 라이드를 생성하였습니다.
+    {name} 페이지 슬라이드를 생성하였습니다.
     """
 
     msg = create_ai_message(

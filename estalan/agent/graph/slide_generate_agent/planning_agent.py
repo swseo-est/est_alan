@@ -10,6 +10,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preliminary_investigation_instructions
 from estalan.tools.search import GoogleSerperSearchResult
 from estalan.llm import create_chat_model
+from estalan.messages.utils import create_ai_message
 
 class Section(TypedDict):
     slide_type: str # title, contents, etc
@@ -116,7 +117,7 @@ def create_add_tile_slide_node():
             "slide_type": "title",
             "topic": title,
             "idx": 0,  # 타이틀 슬라이드는 첫 번째
-            "name": "타이틀 슬라이드",
+            "name": "타이틀",
             "description": f"{title}에 대한 프레젠테이션 타이틀 페이지",
             "requirements": ["타이틀 텍스트", "부제목 또는 설명"],
             "research": False, 
@@ -154,7 +155,7 @@ def create_add_toc_slide_node():
             "slide_type": "toc",
             "topic": topic,
             "idx": 1,
-            "name": "목차 슬라이드",
+            "name": "목차",
             "description": f"{topic}에 대한 프레젠테이션 목차 페이지\n\n{contents_text}",
             "requirements": ["목차 항목들"],
             "research": False,

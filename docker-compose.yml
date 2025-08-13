@@ -32,19 +32,6 @@ services:
       retries: 20
       start_period: 10s
 
-  migrator:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      langgraph-postgres:
-        condition: service_healthy
-    environment:
-      POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
-    command: >
-      sh -c "alembic upgrade head"
-    restart: "no"
-
   langgraph-api:
     build:
       context: .
@@ -56,8 +43,6 @@ services:
         condition: service_healthy
       langgraph-postgres:
         condition: service_healthy
-      migrator:
-        condition: service_completed_successfully
     environment:
       REDIS_URI: redis://langgraph-redis:6379
       POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable

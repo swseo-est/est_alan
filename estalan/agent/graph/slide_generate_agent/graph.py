@@ -46,7 +46,7 @@ def preprocessing_node(state):
 class ExecutorOutput(TypedDict):
     # executor에서 출력되는 결과
     slides: List[Section]
-    messages: Sequence[BaseMessage]
+    # messages: Sequence[BaseMessage]
 
 
 def post_processing_executor_node(state):

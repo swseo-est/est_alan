@@ -11,37 +11,11 @@ from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preli
 from estalan.tools.search import GoogleSerperSearchResult
 from estalan.llm import create_chat_model
 from estalan.messages.utils import create_ai_message
+from estalan.agent.graph.slide_generate_agent.state import SlideGenerateAgentMetadata, Section
 
-class Section(TypedDict):
-    slide_type: str # title, contents, etc
-
-    topic: str
-
-    idx: int
-    name: str
-    description: str
-    requirements: List[str]
-    research: bool
-
-    content: str
-    img_url: str
-
-    design: str
-    html: str
-    width: int
-    height: int
-
-    design_prompt: str
-
-class PlanningStateInput(TypedDict):
-    topic: str # Report topic
-    num_sections: int
-    num_slides: int
 
 class PlanningAgentState(AgentState):
-    topic: str
-    num_sections: int
-    num_slides: int
+    metadata: SlideGenerateAgentMetadata
 
     sections: List[Section]
 
@@ -66,8 +40,8 @@ def create_generate_sections_node(llm):
 
 
     async def generate_sections_node(state: PlanningAgentState):
-        topic = state["topic"]
-        num_sections = state["num_sections"]
+        topic = state["metadata"]["topic"]
+        num_sections = state["metadata"]["num_sections"]
 
         # Format system instructions
         system_instructions_query = preliminary_investigation_instructions.format(
@@ -110,7 +84,7 @@ def create_generate_sections_node(llm):
 
 def create_add_tile_slide_node():
     def add_title_slide(state: PlanningAgentState):
-        title = state["topic"]
+        title = state["metadata"]["topic"]
         
         # 타이틀 슬라이드에 해당하는 section 정의
         title_section: Section = {
@@ -138,7 +112,7 @@ def create_add_tile_slide_node():
 
 def create_add_toc_slide_node():
     def add_toc_slide(state: PlanningAgentState):
-        topic = state["topic"]
+        topic = state["metadata"]["topic"]
         current_sections = state.get("sections", [])
         
         # 기존 섹션들에서 목차 정보 추출

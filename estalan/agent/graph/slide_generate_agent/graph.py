@@ -5,28 +5,29 @@ from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 from estalan.messages.utils import create_ai_message
 
 from typing import List, Annotated, TypedDict, Optional, Sequence
-from estalan.agent.graph.slide_generate_agent.planning_agent import create_planning_agent, Section
+from estalan.agent.graph.slide_generate_agent.planning_agent import create_planning_agent
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
-from estalan.agent.graph.slide_generate_agent.state import ExecutorState
+from estalan.agent.graph.slide_generate_agent.state import ExecutorState, SlideGenerateAgentMetadata, Section
 
 from estalan.llm.utils import create_chat_model
 from estalan.messages.utils import create_ai_message
+from estalan.agent.base.state import BaseAlanAgentState
 
 import asyncio
 from langgraph.types import Send
 import operator
 
 
-class SlideGenerateAgentState(AgentState):
-    topic: str
-    requirements: str
-    num_sections: int
-    num_slides: int
 
+
+
+class SlideGenerateAgentState(BaseAlanAgentState):
     sections: List[Section]
     slides: Annotated[List[Section], operator.add]
-    status: str
+
+    metadata: SlideGenerateAgentMetadata
+
 
 class OutputState(TypedDict):
     topic: str
@@ -40,7 +41,16 @@ def preprocessing_node(state):
     updated_state = llm.invoke([msg] + state["messages"])
 
     node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.", name="msg_planning_start")
-    return updated_state | {"num_sections": 5, "num_slides": 7, "messages": [node_message]}
+
+    metadata = {
+        "topic": updated_state["topic"],
+        "requirements": updated_state["requirements"],
+        "num_sections": 5,
+        "num_slides": 7,
+        "status": "start"
+    }
+
+    return {"metadata": metadata, "messages": [node_message]}
 
 
 class ExecutorOutput(TypedDict):
@@ -146,7 +156,16 @@ if __name__ == '__main__':
     s = time.time()
 
     graph = create_graph()
-    result = asyncio.run(graph.ainvoke({"topic": "제주도 여행 가이드", "num_sections": 5}))
+    result = asyncio.run(graph.ainvoke({
+        "messages": [HumanMessage(content="제주도 여행 가이드에 대한 슬라이드를 만들어주세요.")],
+        "metadata": {
+            "topic": "제주도 여행 가이드",
+            "requirements": "제주도 여행 가이드 슬라이드",
+            "num_sections": 5,
+            "num_slides": 7,
+            "status": "start"
+        }
+    }))
     print(result)
 
     e = time.time()

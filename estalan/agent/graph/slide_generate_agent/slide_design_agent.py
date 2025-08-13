@@ -48,7 +48,7 @@ def create_slide_design_node(slide_design_llm):
 def create_html_generate_node(html_generate_llm):
     def html_generate_node(state: SlideDesignAgentState):
         print("Current state:", state)
-        system_instruction = SystemMessage(content=prompt_html_generator)
+        system_instruction = SystemMessage(content=prompt_html_generator + prompt_slide_style)
         
         # design이 없으면 기본값 사용
         design_content = state.get("design", "기본 디자인을 적용합니다.")

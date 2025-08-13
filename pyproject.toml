@@ -37,6 +37,7 @@ dependencies = [
     "langgraph-checkpoint-postgres",
     "langgraph-sdk>=0.1.70",
     "langgraph-api==0.2.110",
+    "pytest>=8.4.1",
 ]
 
 [tool.poetry.dependencies]

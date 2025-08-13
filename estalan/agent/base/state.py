@@ -1,5 +1,4 @@
-from langgraph.prebuilt.chat_agent_executor import AgentState
+from langgraph.prebuilt.chat_agent_executor import AgentState, AgentStateWithStructuredResponse
 
-class BaseAlanAgentState(AgentState):
-    next_step: str
-    last_step: str
+class BaseAlanAgentState(AgentStateWithStructuredResponse):
+    pass

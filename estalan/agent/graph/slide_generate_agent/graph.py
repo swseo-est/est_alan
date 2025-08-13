@@ -8,11 +8,9 @@ from estalan.agent.graph.slide_generate_agent.planning_agent import create_plann
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
 from estalan.llm.utils import create_chat_model
-from estalan.utils import get_last_human_message
 import asyncio
 from langgraph.types import Send
 import operator
-import re
 
 
 class SlideGenerateAgentState(AgentState):

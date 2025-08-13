@@ -5,8 +5,6 @@ from langgraph.graph.message import add_messages
 
 
 class Section(TypedDict):
-
-
     description: str
     requirements: List[str]
     research: bool

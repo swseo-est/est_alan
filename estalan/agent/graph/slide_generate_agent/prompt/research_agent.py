@@ -11,7 +11,7 @@ section_writer_instructions = """Write one section of a research report.
 <Writing Guidelines>
 - If existing section content is not populated, write from scratch
 - If existing section content is populated, synthesize it with the source material
-- Strict 800-1500 word limit
+- Strict 500-700 word limit
 - Use simple, clear language
 - Use short paragraphs (2-3 sentences max)
 - Use ## for section title (Markdown format)

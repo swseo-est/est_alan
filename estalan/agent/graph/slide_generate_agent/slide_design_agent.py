@@ -11,11 +11,11 @@ from langchain_core.prompts import PromptTemplate
 from estalan.agent.graph.slide_generate_agent.utils import get_html_template_list, get_html_template_content_tool
 
 class SlideDesignAgentState(ExecutorState):
-    pass
+    remaining_steps: int
+    structured_response: dict
 
 
 class SlideDesignNodeOutput(TypedDict):
-    design: str
     html_template: str
 
 class HtmlGenerateNodeOutput(TypedDict):
@@ -58,6 +58,8 @@ def post_processing_slide_design_node(state):
         id="msg_slide_design_end"
     )
 
+    print(msg)
+
     return {}
 
 
@@ -73,6 +75,7 @@ def pre_processing_html_generate_node(state):
         name="msg_html_generate_start",
         id="msg_html_generate_start"
     )
+    print(msg)
 
     return {"messages": [msg], "name": state["name"]}
 
@@ -88,6 +91,7 @@ def post_processing_html_generate_node(state):
         name="msg_html_generate_end",
         id="msg_html_generate_end"
     )
+    print(msg)
 
     return {}
 
@@ -107,6 +111,7 @@ def create_slide_design_node(slide_design_react_agent):
         react_prompt = f"""
 당신은 슬라이드 디자인 전문가입니다. 주어진 내용에 가장 적합한 HTML 템플릿을 선택하고 디자인을 제안해야 합니다.
 
+## 데이터
 주제: {topic}
 섹션명: {name}
 섹션 설명: {description}
@@ -116,40 +121,28 @@ def create_slide_design_node(slide_design_react_agent):
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
 
-사용 가능한 HTML 템플릿 목록:
-{list_html_file}
 
-다음 단계를 따라 작업하세요:
-
-1. 위의 템플릿 목록에서 내용에 가장 적합한 템플릿을 선택하세요.
-2. 선택한 템플릿의 내용을 get_html_template_content_tool 도구로 확인하여 구체적인 구조를 파악하세요.
-3. 만일, template의 html 코드가 내용에 적합하지 않다면 다른 template를 조회하세요.
-4. template은 html_template에 변경없이 넣으세요
-
-템플릿 선택 기준:
+## 템플릿 선택 기준:
 - 슬라이드 타입 (title, contents 등)에 따른 적합성
 - 내용의 성격 (텍스트 중심, 이미지 중심, 데이터 시각화 등)
 - 레이아웃의 적합성 (가로/세로 배치, 그리드 레이아웃 등)
 - 시각적 효과의 필요성
 - 요구사항과 디자인 프롬프트의 반영
 
-최종 답변에는 다음을 포함하세요:
-- 선택한 템플릿명과 선택 이유
-- 구체적인 디자인 제안사항
-- 색상, 폰트, 레이아웃 조정사항
-- 요구사항 및 디자인 프롬프트 반영 방안
+## html_template 작성 규칙
+### 사용 가능한 HTML 템플릿 목록:
+{list_html_file}
 
+1. 위의 템플릿 목록에서 내용에 가장 적합한 템플릿을 선택하세요.
+2. 선택한 템플릿의 내용을 get_html_template_content_tool 도구로 확인하여 구체적인 구조를 파악하세요.
+3. 만일, template의 html 코드가 내용에 적합하지 않다면 다른 template를 조회하세요.
+4. 조회한 template html 코드를 html_template에 변경없이 넣으세요
 """
+        input_state = state.copy()
+        input_state["messages"] = [HumanMessage(content=react_prompt)]
 
         # 에이전트 실행
-        result = slide_design_react_agent.invoke(
-                    {
-                        "messages":
-                            [
-                                HumanMessage(content=react_prompt),
-                            ]
-                    }
-                )
+        result = slide_design_react_agent.invoke(input_state)
 
         # 결과에서 디자인 정보 추출
         print(result['structured_response'])
@@ -159,6 +152,7 @@ def create_slide_design_node(slide_design_react_agent):
 
 def create_html_generate_node(html_generate_llm):
     def html_generate_node(state: SlideDesignAgentState):
+        print(state)
 
         # design이 없으면 기본값 사용
         design_content = state.get("design", "기본 디자인을 적용합니다.")
@@ -194,7 +188,10 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 디자인 프롬프트: {state.get("design_prompt", "")}
 
 # content
-{state["content"]}
+{content}
+
+# img_url
+{img_url}
 
 # design guide
 {design_content}
@@ -231,6 +228,7 @@ def create_slide_create_agent(name=None):
     slide_design_react_agent = create_react_agent(
         model=slide_design_llm,
         tools=tools,
+        state_schema=SlideDesignAgentState,
         response_format=SlideDesignNodeOutput
     )
 

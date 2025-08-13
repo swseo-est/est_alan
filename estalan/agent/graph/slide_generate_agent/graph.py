@@ -59,10 +59,6 @@ class ExecutorOutput(TypedDict):
 
 
 def post_processing_executor_node(state):
-    # 생성된 HTML을 test.html로 저장
-    # with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
-    #     f.write(state['html'])
-
     print("Post processing state:", state)
 
     # state에서 messages를 제거하고 반환
@@ -74,7 +70,7 @@ def post_processing_executor_node(state):
 
 def post_processing_node(state):
     msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name="msg_slide_generation_finish")
-
+    print(msg)
     return {"messages": [msg]}
 
 
@@ -83,7 +79,7 @@ def create_slide_generate_graph(name="slide_generate_agent"):
     planning_agent = create_planning_agent(name="planning_agent")
 
     ## subroutine
-    executor = StateGraph(ExecutorState, output=ExecutorOutput)
+    executor = StateGraph(ExecutorState)
 
     research_agent = create_research_agent()
     slide_create_agent = create_slide_create_agent()
@@ -160,6 +156,9 @@ if __name__ == '__main__':
         "messages": [HumanMessage(content="제주도 여행 가이드에 대한 슬라이드를 만들어주세요.")],
     }))
     print(result)
+    for state in result['slides']:
+        with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
+            f.write(state['html'])
 
     e = time.time()
     print(e - s)

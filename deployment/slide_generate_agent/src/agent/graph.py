@@ -1,5 +1,5 @@
 import asyncio
-from estalan.agent.graph.slide_generate_agent import graph
+from estalan.agent.graph.slide_generate_agent import get_
 
 _graph = None
 _lock = asyncio.Lock()

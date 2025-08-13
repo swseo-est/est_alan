@@ -11,16 +11,7 @@ from langchain_core.prompts import PromptTemplate
 from estalan.agent.graph.slide_generate_agent.utils import get_html_template_list, get_html_template_content_tool
 
 class SlideDesignAgentState(ExecutorState):
-    slide_type: str # title, contents, etc
-    topic: str
-    idx: int
-    name: str
-
-    content: str
-    img_url: str
-
-    design: str
-    html_template: str
+    pass
 
 
 class SlideDesignNodeOutput(TypedDict):
@@ -161,6 +152,7 @@ def create_slide_design_node(slide_design_react_agent):
                 )
 
         # 결과에서 디자인 정보 추출
+        print(result['structured_response'])
         return result['structured_response']
     
     return slide_design_node

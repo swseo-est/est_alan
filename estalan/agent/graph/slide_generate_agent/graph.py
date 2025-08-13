@@ -158,13 +158,6 @@ if __name__ == '__main__':
     graph = create_graph()
     result = asyncio.run(graph.ainvoke({
         "messages": [HumanMessage(content="제주도 여행 가이드에 대한 슬라이드를 만들어주세요.")],
-        "metadata": {
-            "topic": "제주도 여행 가이드",
-            "requirements": "제주도 여행 가이드 슬라이드",
-            "num_sections": 5,
-            "num_slides": 7,
-            "status": "start"
-        }
     }))
     print(result)
 

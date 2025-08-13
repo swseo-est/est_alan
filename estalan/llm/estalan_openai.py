@@ -19,17 +19,16 @@ class AlanChatOpenAI(AlanBaseChatModelWrapper):
         super().__init__(ChatOpenAI(**kwargs))
 
 
-class AlanAzureChatOpenAI(AzureChatOpenAI):
+class AlanAzureChatOpenAI(AlanBaseChatModelWrapper):
     def __init__(self, **kwargs):
         # kwargs와 DEFAULT_AZUREOPENAI_KWARGS를 병합할 때,
         # kwargs에 없는 값은 DEFAULT_AZUREOPENAI_KWARGS에서 가져오고,
         # kwargs에 있는 값은 DEFAULT_AZUREOPENAI_KWARGS의 값을 덮어씁니다.
         super().__init__(
+            AzureChatOpenAI(
                 **{**DEFAULT_AZUREOPENAI_KWARGS, **kwargs}
+            )
         )
-
-    def with_structured_output(self, *args, method="function_calling", **kwargs):
-        return super().with_structured_output(*args, method="function_calling")
 
 if __name__ == '__main__':
     from typing import TypedDict

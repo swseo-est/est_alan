@@ -2,7 +2,6 @@
 
 # API 서버 로그 보기 스크립트
 # Usage: ./logs.sh [service_name] [options]
-
 # 색상 정의
 RED='\033[0;31m'
 GREEN='\033[0;32m'

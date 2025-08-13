@@ -369,6 +369,11 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                 "type": "image",
             }
 
+            # cors_violation = is_cors_violation(result["link"])
+            # if cors_violation:
+            #     logger.warning(f"CORS violation detected for {result['link']}")
+            #     continue
+
             docs.append(
                 {
                     "page_content": result["title"],
@@ -485,15 +490,10 @@ import requests
 from urllib.parse import urlparse
 from langchain_core.tools import tool
 
-def multiply(a: int, b: int) -> int:
-    """Multiply two numbers."""
-    return a * b
-
 def get_origin_from_url(url: str) -> str:
     parsed = urlparse(url)
     return f"{parsed.scheme}://{parsed.netloc}"
 
-@tool
 def is_cors_violation(url: str, method="GET", headers=None) -> bool:
     """check cors violation."""
     origin = get_origin_from_url(url)  # URL에서 자동 추출

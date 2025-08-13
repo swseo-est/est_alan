@@ -9,29 +9,13 @@ from langgraph.prebuilt.chat_agent_executor import AgentState
 
 from estalan.agent.graph.slide_generate_agent.prompt.research_agent import *
 from estalan.llm import create_chat_model
-from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult, is_cors_violation
-from estalan.agent.graph.slide_generate_agent.planning_agent import Section
+from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult
+from estalan.messages.utils import create_ai_message
+from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 
 
-class ResearchAgentState(Section):
+class ResearchAgentState(ExecutorState):
     pass
-
-class ResearchStateInput(TypedDict):
-    topic: str # Report topic
-    name: str
-    description: str
-
-class ResearchAgentOutput(TypedDict):
-    name: str
-    description: str
-
-    # Research Node
-    research: bool
-    content: str
-
-    # Search Img Node
-    img_url: str
-    is_cors_violation: bool
 
 class ResearchNodeOutput(TypedDict):
     research: bool
@@ -39,8 +23,74 @@ class ResearchNodeOutput(TypedDict):
 
 class SearchImgNodeOutput(TypedDict):
     img_url: str
-    is_cors_violation: bool
 
+
+def pre_processing_node(state):
+    return state
+
+def post_processing_node(state):
+    return state
+
+def pre_processing_research_node(state):
+    name = state["name"]
+
+    content = f"""
+    {name} 페이지에 대한 조사를 시작합니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_research_start"
+    )
+    print(msg)
+
+    return {"messages": [msg], "name": state["name"]}
+
+def post_processing_research_node(state):
+    name = state["name"]
+
+    content = f"""
+    {name} 페이지에 대한 조사를 완료하였습니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_research_end"
+    )
+    print(msg)
+
+    return {"messages": [msg]}
+
+def pre_processing_image_search_node(state):
+    name = state["name"]
+
+    content = f"""
+    {name} 페이지에 사용할 이미지를 검색하고 있습니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_image_search_start"
+    )
+
+    print(msg)
+
+    return {"messages": [msg]}
+
+def post_processing_image_search_node(state):
+    name = state["name"]
+
+    content = f"""
+    {name} 페이지에 사용할 이미지를 검색하였습니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_image_search_end"
+    )
+    print(msg)
+
+    return {"messages": [msg]}
 
 def create_research_node(llm):
     async def research_node(state: ResearchAgentState):
@@ -128,20 +178,34 @@ def create_research_agent(name=None):
 
     search_img_agent = create_react_agent(
         search_img_llm,
-        tools =[search_img_tool, is_cors_violation],
+        tools =[search_img_tool],
         response_format = SearchImgNodeOutput,
     )
     search_img_node = create_search_img_node(
         search_img_agent
     )
 
-    builder = StateGraph(ResearchAgentState, output=ResearchAgentOutput)
-    builder.add_node("research_node", research_node)
-    builder.add_node("search_img_node", search_img_node)
+    builder = StateGraph(ResearchAgentState)
+    builder.add_node("pre_processing_node", pre_processing_node)
+    builder.add_node("post_processing_node", post_processing_node)
 
-    builder.add_edge(START, "research_node")
-    builder.add_edge("research_node", "search_img_node")
-    builder.add_edge("search_img_node", END)
+    builder.add_node("pre_processing_research_node", pre_processing_research_node)
+    builder.add_node("research_node", research_node)
+    builder.add_node("post_processing_research_node", post_processing_research_node)
+
+    builder.add_node("pre_processing_image_search_node", pre_processing_image_search_node)
+    builder.add_node("search_img_node", search_img_node)
+    builder.add_node("post_processing_image_search_node", post_processing_image_search_node)
+
+    builder.add_edge(START, "pre_processing_node")
+    builder.add_edge("pre_processing_node", "pre_processing_research_node")
+    builder.add_edge("pre_processing_research_node", "research_node")
+    builder.add_edge("research_node", "pre_processing_image_search_node")
+    builder.add_edge("pre_processing_image_search_node", "search_img_node")
+    builder.add_edge("search_img_node", "post_processing_image_search_node")
+    builder.add_edge("post_processing_image_search_node", "post_processing_research_node")
+    builder.add_edge("post_processing_research_node", "post_processing_node")
+    builder.add_edge("post_processing_node", END)
 
     research_agent = builder.compile(name=name)
     return research_agent

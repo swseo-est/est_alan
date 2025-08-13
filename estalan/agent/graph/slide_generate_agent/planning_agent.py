@@ -24,7 +24,6 @@ class Section(TypedDict):
 
     content: str
     img_url: str
-    is_cors_violation: bool
 
     design: str
     html: str
@@ -58,7 +57,7 @@ def create_generate_sections_node(llm):
     def generate_section_result_msg(sections):
         msg = "생성된 목차는 다음과 같습니다. \n\n"
         for section in sections:
-            msg_section = f"""{section["idx"]}. {section["topic"]} - {section["description"]} \n"""
+            msg_section = f"""{section["idx"]}. {section["name"]} - {section["description"]} \n"""
             msg += msg_section
 
         msg = AIMessage(content=msg, name="planning_agent")

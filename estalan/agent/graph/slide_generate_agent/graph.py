@@ -1,13 +1,17 @@
 from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph.graph import START, END, StateGraph
 from langgraph_supervisor import create_supervisor
-from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
+from estalan.messages.utils import create_ai_message
 
-from typing import List, Annotated, TypedDict, Optional
+from typing import List, Annotated, TypedDict, Optional, Sequence
 from estalan.agent.graph.slide_generate_agent.planning_agent import create_planning_agent, Section
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
+from estalan.agent.graph.slide_generate_agent.state import ExecutorState
+
 from estalan.llm.utils import create_chat_model
+
 import asyncio
 from langgraph.types import Send
 import operator
@@ -33,15 +37,17 @@ def preprocessing_node(state):
 
     msg = HumanMessage(content="슬라이드 topic과 유저 요구사항 requirement를 추출하세요.")
     updated_state = llm.invoke([msg] + state["messages"])
-    return updated_state | {"num_sections": 5, "num_slides": 7}
+
+    node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.", name="msg_planning_start")
+    return updated_state | {"num_sections": 5, "num_slides": 7, "messages": [node_message]}
 
 
-class ExecutorInput(Section):
-    pass
+
 
 class ExecutorOutput(TypedDict):
     # executor에서 출력되는 결과
     slides: List[Section]
+    messages: Sequence[BaseMessage]
 
 
 def post_processing_executor_node(state):
@@ -63,10 +69,10 @@ def post_processing_node(state):
 
 def create_slide_generate_graph(name="slide_generate_agent"):
     """슬라이드 생성 메인 그래프"""
-    planning_agent = create_planning_agent()
+    planning_agent = create_planning_agent(name="planning_agent")
 
     ## subroutine
-    executor = StateGraph(ExecutorInput, output=ExecutorOutput)
+    executor = StateGraph(ExecutorState, output=ExecutorOutput)
 
     research_agent = create_research_agent()
     slide_create_agent = create_slide_create_agent()

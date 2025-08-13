@@ -4,9 +4,10 @@ from langgraph.graph import START, END, StateGraph
 from langgraph.prebuilt.chat_agent_executor import AgentState
 from estalan.agent.graph.slide_generate_agent.prompt.slide_design import *
 from estalan.llm import create_chat_model
-from estalan.agent.graph.slide_generate_agent.planning_agent import Section
+from estalan.messages.utils import create_ai_message
+from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 
-class SlideDesignAgentState(Section):
+class SlideDesignAgentState(ExecutorState):
     pass
 
 class SlideDesignNodeOutput(TypedDict):
@@ -17,9 +18,73 @@ class HtmlGenerateNodeOutput(TypedDict):
     width: int
     height: int
 
-class SlideDesignNodeInput(Section):
-    # Input
-    pass
+def pre_processing_node(state):
+    return state
+
+def post_processing_node(state):
+    return state
+
+
+def pre_processing_slide_design_node(state):
+    name = state["name"]
+
+    content = f"""
+    {name} 페이지 디자인을 시작합니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_slide_design_start"
+    )
+    print(msg)
+
+    return {"messages": [msg], "name": state["name"]}
+
+def post_processing_slide_design_node(state):
+    name = state["name"]
+
+    content = f"""
+    {name} 페이지 디자인을 완료하였습니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_slide_design_end"
+    )
+    print(msg)
+
+    return {"messages": [msg], "name": state["name"]}
+
+
+def pre_processing_html_generate_node(state):
+    name = state["name"]
+
+    content = f"""
+    {name} 페이지 슬라이드를 생성하고 있습니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_html_generate_start"
+    )
+    print(msg)
+
+    return {"messages": [msg], "name": state["name"]}
+
+def post_processing_html_generate_node(state):
+    name = state["name"]
+
+    content = f"""
+    {name} 페이지 라이드를 생성하였습니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_html_generate_end"
+    )
+    print(msg)
+
+    return {"messages": [msg], "name": state["name"]}
 
 
 def create_slide_design_node(slide_design_llm):
@@ -86,14 +151,25 @@ def create_slide_create_agent(name=None):
     slide_design_node = create_slide_design_node(slide_design_llm)
     html_generate_node = create_html_generate_node(html_generate_llm)
 
-    builder = StateGraph(SlideDesignAgentState, input=SlideDesignNodeInput)
+    builder = StateGraph(SlideDesignAgentState)
+    builder.add_node("pre_processing_node", pre_processing_node)
+    builder.add_node("post_processing_node", post_processing_node)
+    builder.add_node("pre_processing_slide_design_node", pre_processing_slide_design_node)
+    builder.add_node("post_processing_slide_design_node", post_processing_slide_design_node)
+    builder.add_node("pre_processing_html_generate_node", pre_processing_html_generate_node)
+    builder.add_node("post_processing_html_generate_node", post_processing_html_generate_node)
     builder.add_node("slide_design_node", slide_design_node)
     builder.add_node("html_generate_node", html_generate_node)
 
-    builder.add_edge(START, "slide_design_node")
-    builder.add_edge("slide_design_node", "html_generate_node")
+    builder.add_edge(START, "pre_processing_node")
+    builder.add_edge("pre_processing_node", "pre_processing_slide_design_node")
+    builder.add_edge("pre_processing_slide_design_node", "slide_design_node")
+    builder.add_edge("slide_design_node", "pre_processing_html_generate_node")
+    builder.add_edge("pre_processing_html_generate_node", "html_generate_node")
+    builder.add_edge("html_generate_node", "post_processing_html_generate_node")
+    builder.add_edge("post_processing_html_generate_node", "post_processing_node")
+    builder.add_edge("post_processing_node", END)
 
-    builder.add_edge("html_generate_node", END)
 
     slide_crate_agent = builder.compile(name=name)
     return slide_crate_agent

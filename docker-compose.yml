@@ -1,74 +1,56 @@
 volumes:
-  langgraph-data:
-    driver: local
+    langgraph-data:
+        driver: local
 
 services:
-  langgraph-redis:
-    image: redis:6
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping || exit 1"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 5s
+    langgraph-redis:
+        image: redis:6
+        healthcheck:
+            test: redis-cli ping
+            interval: 5s
+            timeout: 1s
+            retries: 5
 
-  langgraph-postgres:
-    image: pgvector/pgvector:pg16
-    ports:
-      - "5433:5432"  # host:container
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    command: ["postgres", "-c", "shared_preload_libraries=vector"]
-    volumes:
-      - langgraph-data:/var/lib/postgresql/data
-      - ./initdb:/docker-entrypoint-initdb.d  # put 001_vector.sql here (CREATE EXTENSION IF NOT EXISTS vector;)
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres || exit 1"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
-      start_period: 10s
+    langgraph-postgres:
+        image: pgvector/pgvector:pg16
+        ports:
+            - "5433:5432"
+        environment:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        command:
+            - postgres
+            - -c
+            - shared_preload_libraries=vector
+        volumes:
+            - langgraph-data:/var/lib/postgresql/data
+        healthcheck:
+            test: pg_isready -U postgres
+            start_period: 10s
+            timeout: 1s
+            retries: 5
+            interval: 60s
+            start_interval: 1s
 
-  # --- Alembic-based migrator (runs once per 'up', no-op if already up-to-date) ---
-  migrator:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      langgraph-postgres:
-        condition: service_healthy
-    environment:
-      # SQLAlchemy/Alembic style URL (psycopg2)
-      DATABASE_URL: postgresql+psycopg2://postgres:postgres@langgraph-postgres:5432/postgres
-    command: >
-      sh -c "alembic upgrade head"
-    restart: "no"
-
-  langgraph-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    depends_on:
-      langgraph-redis:
-        condition: service_healthy
-      langgraph-postgres:
-        condition: service_healthy
-      migrator:
-        condition: service_completed_successfully
-    environment:
-      REDIS_URI: redis://langgraph-redis:6379
-      POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
-    env_file:
-      - .env.dockerfile
-    healthcheck:
-      test: ["CMD-SHELL", "python /api/healthcheck.py || exit 1"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+    langgraph-api:
+        ports:
+            - "8000:8000"
+        depends_on:
+            langgraph-redis:
+                condition: service_healthy
+            langgraph-postgres:
+                condition: service_healthy
+        environment:
+            REDIS_URI: redis://langgraph-redis:6379
+            POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
+        healthcheck:
+            test: python /api/healthcheck.py
+            interval: 60s
+            start_interval: 1s
+            start_period: 10s
+        env_file:
+            - .env.dockerfile
+        build:
+            context: .
+            dockerfile: Dockerfile

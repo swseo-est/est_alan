@@ -60,8 +60,8 @@ class ExecutorOutput(TypedDict):
 
 def post_processing_executor_node(state):
     # 생성된 HTML을 test.html로 저장
-    with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
-        f.write(state['html'])
+    # with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
+    #     f.write(state['html'])
 
     print("Post processing state:", state)
 

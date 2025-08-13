@@ -5,7 +5,7 @@ from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph.prebuilt import create_react_agent
 from langgraph.graph import START, END, StateGraph
 
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 
 from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preliminary_investigation_instructions
 from estalan.tools.search import GoogleSerperSearchResult
@@ -49,7 +49,7 @@ class GenerateSectionsOutput(TypedDict):
 
 def create_init_planning_agent_node():
     def init_planning_agent_node(state: PlanningAgentState):
-        init_msg = AIMessage(content="검색 도구를 사용하여 목차를 생성하기 위한 조사를 시작합니다.", name="planning_agent")
+        init_msg = create_ai_message(content="검색 도구를 사용하여 목차를 생성하기 위한 조사를 시작합니다.", name="planning_agent")
         return {"messages": [init_msg]}
     return init_planning_agent_node
 
@@ -60,7 +60,7 @@ def create_generate_sections_node(llm):
             msg_section = f"""{section["idx"]}. {section["name"]} - {section["description"]} \n"""
             msg += msg_section
 
-        msg = AIMessage(content=msg, name="planning_agent")
+        msg = create_ai_message(content=msg, name="planning_agent")
         return msg
 
 

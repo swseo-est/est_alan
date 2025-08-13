@@ -19,10 +19,10 @@ class HtmlGenerateNodeOutput(TypedDict):
     height: int
 
 def pre_processing_node(state):
-    return state
+    return {}
 
 def post_processing_node(state):
-    return state
+    return {}
 
 
 def pre_processing_slide_design_node(state):

@@ -1,8 +1,11 @@
+import uuid
+from typing import Optional
+from pydantic import Field
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, BaseMessage, ToolMessage
 
 
 class BaseAlanMessage(BaseMessage):
-    pass
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), coerce_numbers_to_str=True)
 
 
 class AlanAIMessage(AIMessage, BaseAlanMessage):

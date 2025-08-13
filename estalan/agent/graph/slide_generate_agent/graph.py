@@ -11,6 +11,7 @@ from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_s
 from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 
 from estalan.llm.utils import create_chat_model
+from estalan.messages.utils import create_ai_message
 
 import asyncio
 from langgraph.types import Send
@@ -42,8 +43,6 @@ def preprocessing_node(state):
     return updated_state | {"num_sections": 5, "num_slides": 7, "messages": [node_message]}
 
 
-
-
 class ExecutorOutput(TypedDict):
     # executor에서 출력되는 결과
     slides: List[Section]
@@ -62,7 +61,7 @@ def post_processing_executor_node(state):
 
 def post_processing_node(state):
 
-    msg = AIMessage(content="슬라이드 생성이 완료되었습니다.", name="msg_slide_generation_finish")
+    msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name="msg_slide_generation_finish")
 
     return {"messages" : [msg]}
 

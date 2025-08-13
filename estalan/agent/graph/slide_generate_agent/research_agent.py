@@ -26,10 +26,10 @@ class SearchImgNodeOutput(TypedDict):
 
 
 def pre_processing_node(state):
-    return state
+    return {}
 
 def post_processing_node(state):
-    return state
+    return {}
 
 def pre_processing_research_node(state):
     name = state["name"]

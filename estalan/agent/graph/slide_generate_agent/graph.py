@@ -30,6 +30,7 @@ class OutputState(TypedDict):
     requirements: str
 
 def preprocessing_node(state):
+    print(state)
     llm = create_chat_model(provider="azure_openai", model="gpt-4.1").with_structured_output(OutputState)
 
     msg = HumanMessage(content="슬라이드 topic과 유저 요구사항 requirement를 추출하세요.")
@@ -47,8 +48,8 @@ class ExecutorOutput(TypedDict):
 
 def post_processing_node(state):
     # 생성된 HTML을 test.html로 저장
-    # with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
-    #     f.write(state['html'])
+    with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
+        f.write(state['html'])
 
     print("Post processing state:", state)
 

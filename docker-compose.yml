@@ -1,14 +1,15 @@
+version: "3.9"
+
 volumes:
   langgraph-data:
     driver: local
   langgraph-wal:
-   driver: local
+    driver: local
 
 services:
   langgraph-redis:
     image: redis:7
-    ports:
-      - "6379:6379"
+    ports: ["6379:6379"]
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping || exit 1"]
       interval: 5s
@@ -19,8 +20,7 @@ services:
 
   langgraph-postgres:
     image: pgvector/pgvector:pg16
-    ports:
-      - "5433:5432"
+    ports: ["5433:5432"]
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -46,21 +46,20 @@ services:
       - bgwriter_lru_multiplier=2.0
     volumes:
       - langgraph-data:/var/lib/postgresql/data
-      - langgraph-wal:/var/lib/postgresql/data/pg_wal   # (옵션) 사전 복사/권한 설정 후 사용
+      - langgraph-wal:/var/lib/postgresql/data/pgdata/pg_wal
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d postgres || exit 1"]
       interval: 5s
-      timeout: 3s
-      retries: 20
-      start_period: 10s
+      timeout: 5s
+      retries: 40         # 여유
+      start_period: 30s   # 여유
     restart: unless-stopped
 
   langgraph-api:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
+    ports: ["8000:8000"]
     depends_on:
       langgraph-redis:
         condition: service_healthy

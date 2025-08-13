@@ -46,7 +46,7 @@ class ExecutorOutput(TypedDict):
     slides: List[Section]
 
 
-def post_processing_node(state):
+def post_processing_executor_node(state):
     # 생성된 HTML을 test.html로 저장
     with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
         f.write(state['html'])
@@ -56,7 +56,14 @@ def post_processing_node(state):
     # executor의 output이 ExecutorOutput 형태이므로 slides 필드를 그대로 반환
     return {"slides": [state]}
 
-def create_slide_generate_graph():
+def post_processing_node(state):
+
+    msg = AIMessage(content="슬라이드 생성이 완료되었습니다.", name="msg_slide_generation_finish")
+
+    return {"messages" : [msg]}
+
+
+def create_slide_generate_graph(name="slide_generate_agent"):
     """슬라이드 생성 메인 그래프"""
     planning_agent = create_planning_agent()
 
@@ -68,18 +75,19 @@ def create_slide_generate_graph():
 
     executor.add_node("research_agent", research_agent)
     executor.add_node("slide_create_agent", slide_create_agent)
-    executor.add_node("post_processing_node", post_processing_node)
+    executor.add_node("post_processing_executor_node", post_processing_executor_node)
 
     executor.add_edge(START, "research_agent")
     executor.add_edge("research_agent", "slide_create_agent")
-    executor.add_edge("slide_create_agent", "post_processing_node")
-    executor.add_edge("post_processing_node", END)
+    executor.add_edge("slide_create_agent", "post_processing_executor_node")
+    executor.add_edge("post_processing_executor_node", END)
 
     # main graph
     builder = StateGraph(SlideGenerateAgentState)
     builder.add_node("preprocessing_node", preprocessing_node)
     builder.add_node("planning_agent", planning_agent)
     builder.add_node("executor", executor.compile(name="executor"))
+    builder.add_node("post_processing_node", post_processing_node)
 
     builder.add_edge(START, "preprocessing_node")
     builder.add_edge("preprocessing_node", "planning_agent")
@@ -96,33 +104,34 @@ def create_slide_generate_graph():
         generate_slide,
         ["executor"]
     )
-    builder.add_edge("executor", END)
+    builder.add_edge("executor", "post_processing_node")
+    builder.add_edge("post_processing_node", END)
 
-    return builder.compile(name="slide_generate_agent")
+    return builder.compile(name=name)
 
 def create_graph():
     # 슬라이드 생성 그래프 생성
     slide_generate_graph = create_slide_generate_graph()
     
-    # Supervisor 생성
-    workflow = create_supervisor(
-        [slide_generate_graph],
-        model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
-        prompt= """
-                사용자와 대화를 통해 슬라이드 생성에 필요한 정보들을 수집하세요.
-                                
-                충분한 정보가 모이면 slide_generate_agent를 이용하여, 슬라이드를 생성하세요.
-                마지막 메시지를 통해 다음 에이전트에 충분한 정보를 전달하세요.
-                다음 에이전트는 마지막 메시지만을 참조합니다.
-            """
-        ,
-        state_schema=SlideGenerateAgentState,
-        output_mode="full_history",
-    )
-
-    # Compile and run
-    app = workflow.compile()
-    return app
+    # # Supervisor 생성
+    # workflow = create_supervisor(
+    #     [slide_generate_graph],
+    #     model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
+    #     prompt= """
+    #             사용자와 대화를 통해 슬라이드 생성에 필요한 정보들을 수집하세요.
+    #
+    #             충분한 정보가 모이면 slide_generate_agent를 이용하여, 슬라이드를 생성하세요.
+    #             마지막 메시지를 통해 다음 에이전트에 충분한 정보를 전달하세요.
+    #             다음 에이전트는 마지막 메시지만을 참조합니다.
+    #         """
+    #     ,
+    #     state_schema=SlideGenerateAgentState,
+    #     output_mode="full_history",
+    # )
+    #
+    # # Compile and run
+    # app = workflow.compile()
+    return slide_generate_graph
 
 
 if __name__ == '__main__':

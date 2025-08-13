@@ -1,10 +1,12 @@
 volumes:
   langgraph-data:
     driver: local
+  langgraph-wal:
+   driver: local
 
 services:
   langgraph-redis:
-    image: redis:6
+    image: redis:7
     ports:
       - "6379:6379"
     healthcheck:
@@ -13,6 +15,7 @@ services:
       timeout: 3s
       retries: 10
       start_period: 5s
+    restart: unless-stopped
 
   langgraph-postgres:
     image: pgvector/pgvector:pg16
@@ -22,15 +25,35 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    command: ["postgres", "-c", "shared_preload_libraries=vector"]
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=vector
+      - -c
+      - checkpoint_timeout=15min
+      - -c
+      - max_wal_size=8GB
+      - -c
+      - min_wal_size=2GB
+      - -c
+      - checkpoint_completion_target=0.9
+      - -c
+      - wal_compression=on
+      - -c
+      - bgwriter_lru_maxpages=1000
+      - -c
+      - bgwriter_lru_multiplier=2.0
     volumes:
       - langgraph-data:/var/lib/postgresql/data
+      - langgraph-wal:/var/lib/postgresql/data/pg_wal   # (옵션) 사전 복사/권한 설정 후 사용
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d postgres || exit 1"]
       interval: 5s
       timeout: 3s
       retries: 20
       start_period: 10s
+    restart: unless-stopped
 
   langgraph-api:
     build:
@@ -54,5 +77,4 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-
-
+    restart: unless-stopped

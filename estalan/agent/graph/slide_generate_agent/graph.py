@@ -55,7 +55,7 @@ def preprocessing_node(state):
 class ExecutorOutput(TypedDict):
     # executor에서 출력되는 결과
     slides: List[Section]
-    # messages: Sequence[BaseMessage]
+    messages: Sequence[BaseMessage]
 
 
 def post_processing_executor_node(state):
@@ -79,7 +79,7 @@ def create_slide_generate_graph(name="slide_generate_agent"):
     planning_agent = create_planning_agent(name="planning_agent")
 
     ## subroutine
-    executor = StateGraph(ExecutorState)
+    executor = StateGraph(ExecutorState, output=ExecutorOutput)
 
     research_agent = create_research_agent()
     slide_create_agent = create_slide_create_agent()

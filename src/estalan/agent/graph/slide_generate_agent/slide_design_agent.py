@@ -205,8 +205,8 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
 5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
 """
-        with open("used_template.html", "w", encoding="utf-8") as f:
-            f.write(html_template)
+        # with open("used_template.html", "w", encoding="utf-8") as f:
+        #     f.write(html_template)
 
         response = html_generate_llm.invoke([
             HumanMessage(content=msg_content),
@@ -225,7 +225,6 @@ def create_slide_create_agent(name=None):
     slide_design_react_agent = create_react_agent(
         model=slide_design_llm,
         tools=tools,
-        state_schema=SlideDesignAgentState,
         response_format=SlideDesignNodeOutput
     )
 
@@ -239,6 +238,9 @@ def create_slide_create_agent(name=None):
     builder.add_node("post_processing_slide_design_node", post_processing_slide_design_node)
     builder.add_node("pre_processing_html_generate_node", pre_processing_html_generate_node)
     builder.add_node("post_processing_html_generate_node", post_processing_html_generate_node)
+
+
+
     builder.add_node("slide_design_node", slide_design_node)
     builder.add_node("html_generate_node", html_generate_node)
 

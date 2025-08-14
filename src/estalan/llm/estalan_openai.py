@@ -38,6 +38,6 @@ if __name__ == '__main__':
         msg: str
         response: str
 
-    llm = AlanAzureChatOpenAI(model="gpt-5", **DEFAULT_AZUREOPENAI_KWARGS).with_structured_output(TestOutput)
+    llm = AlanAzureChatOpenAI(**DEFAULT_AZUREOPENAI_KWARGS).with_structured_output(TestOutput)
     result = llm.invoke("hi")
     print(result)

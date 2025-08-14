@@ -36,7 +36,7 @@ dependencies = [
     "pydantic>=2.11.5",
     "langgraph-checkpoint-postgres",
     "langgraph-sdk>=0.1.70",
-    "langgraph-api==0.2.130",
+    "langgraph-api==0.2.110",
     "pytest>=8.4.1",
     "coverage>=7.10.3",
 ]

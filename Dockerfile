@@ -1,6 +1,6 @@
 FROM docker.io/langchain/langgraph-api:3.11
 
-# (필수) pg_isready 제공 패키지 설치
+# (필수) pg_isready 제공 패키지
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client \
  && rm -rf /var/lib/apt/lists/*
@@ -11,9 +11,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends postgresql-clie
 ADD src /deps/est_alan
 
 # --- 로컬 의존성 설치 ---
+# /api/constraints.txt 를 최대한 존중해서 설치
 RUN PYTHONDONTWRITEBYTECODE=1 uv pip install --system --no-cache-dir -c /api/constraints.txt -e /deps/*
 
-# --- langgraph-api 보존 재설치 ---
+# --- LangGraph 체크포인터(+psycopg3) 설치 ---
+# constraints에 없을 수 있으므로 별도 단계에서 설치
+RUN PYTHONDONTWRITEBYTECODE=1 uv pip install --system --no-cache-dir \
+    langgraph-checkpoint-postgres \
+    "psycopg[binary]"
+
+# --- langgraph-api 재설치(원 이미지 레이아웃 유지) ---
 RUN mkdir -p /api/langgraph_api /api/langgraph_runtime /api/langgraph_license \
  && touch /api/langgraph_api/__init__.py /api/langgraph_runtime/__init__.py /api/langgraph_license/__init__.py
 RUN PYTHONDONTWRITEBYTECODE=1 uv pip install --system --no-cache-dir --no-deps -e /api

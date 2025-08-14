@@ -57,6 +57,8 @@ def create_generate_sections_node(llm):
                     content=system_instructions_query),
                 SystemMessage(
                     content="""
+                        목차를 한글로 작성하세요.
+                    
                         search queries that will help with planning the sections of the report.  
                         Please use the search_tool.  
                         Generate the sections of the report. Your response must include a 'sections' field containing a list of sections.  

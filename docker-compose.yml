@@ -51,6 +51,21 @@ services:
       # 기본값 제공(새 환경에서도 동작)
       REDIS_URI: ${REDIS_URI:-redis://langgraph-redis:6379}
       POSTGRES_URI: ${POSTGRES_URI:-postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable}
+
+      # 최초 1회 LangGraph 체크포인터 스키마 생성
+      MIGRATE_CMD: |
+        python - <<'PY'
+        import os, asyncio
+        from langgraph.checkpoint.postgres import PostgresSaver
+
+        async def main():
+            uri = os.environ["POSTGRES_URI"]
+            cp = PostgresSaver.from_conn_string(uri)
+            await cp.setup()
+            print("✅ LangGraph Postgres checkpointer tables are ready.")
+
+        asyncio.run(main())
+        PY
     command: ["/bin/bash", "-lc", "/app/entrypoint.sh"]
     healthcheck:
       test: ["CMD-SHELL", "python /api/healthcheck.py"]

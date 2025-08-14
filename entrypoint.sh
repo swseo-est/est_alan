@@ -1,24 +1,36 @@
 #!/usr/bin/env sh
-set -e
+set -eu
 
-# 기존 동작 유지
-export LANGSERVE_GRAPHS="$(cat /graph.json)"
+# --- LangServe 그래프 로드(선택) ---
+if [ -f /graph.json ]; then
+  export LANGSERVE_GRAPHS="$(cat /graph.json)"
+fi
 
-# --- DB Ready 대기 ---
+# --- Postgres Ready 대기 ---
 if [ -n "${POSTGRES_URI:-}" ]; then
   echo "⏳ Waiting for Postgres to be ready..."
-  # pg_isready는 libpq URI를 -d 로 받을 수 있습니다.
+  TIMEOUT="${POSTGRES_READY_TIMEOUT:-120}"   # seconds
+  START="$(date +%s)"
   until pg_isready -d "$POSTGRES_URI" >/dev/null 2>&1; do
+    NOW="$(date +%s)"
+    if [ $((NOW - START)) -ge "$TIMEOUT" ]; then
+      echo "❌ Postgres not ready within ${TIMEOUT}s. Check POSTGRES_URI or DB logs."
+      exit 1
+    fi
     sleep 1
   done
+  echo "✅ Postgres is ready."
 fi
 
-# --- 선택: 마이그레이션 실행 ---
+# --- (최초 1회) 마이그레이션 실행(선택) ---
 if [ -n "${MIGRATE_CMD:-}" ]; then
-  echo "🛠  Running migrations: $MIGRATE_CMD"
+  echo "🛠  Running migrations..."
+  # heredoc/multiline 안전 실행
   sh -lc "$MIGRATE_CMD"
+  echo "✅ Migrations completed."
 fi
 
+# --- API 기동 ---
 echo "🚀 Starting API..."
 exec uvicorn estalan.deployment.server:app \
   --host 0.0.0.0 \

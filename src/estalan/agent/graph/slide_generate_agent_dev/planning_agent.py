@@ -1,11 +1,11 @@
-import os
 from typing import TypedDict, List
+import os
 
 from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph.prebuilt import create_react_agent
 from langgraph.graph import START, END, StateGraph
 
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage
 
 from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preliminary_investigation_instructions
 from estalan.tools.search import GoogleSerperSearchResult
@@ -57,6 +57,8 @@ def create_generate_sections_node(llm):
                     content=system_instructions_query),
                 SystemMessage(
                     content="""
+                        목차를 한글로 작성하세요.
+                    
                         search queries that will help with planning the sections of the report.  
                         Please use the search_tool.  
                         Generate the sections of the report. Your response must include a 'sections' field containing a list of sections.  
@@ -150,7 +152,6 @@ def create_add_toc_slide_node():
 def create_planning_agent(name="planning_agent"):
     init_planning_agent_node = create_init_planning_agent_node()
 
-
     serper_api_key = os.getenv("SERPER_API_KEY")
 
     search_tool = GoogleSerperSearchResult.from_api_key(
@@ -158,7 +159,7 @@ def create_planning_agent(name="planning_agent"):
         k=15,
     )
 
-    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-4.1")
+    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5")
 
     generate_sections_node_agent = create_react_agent(
         generate_sections_node_llm,

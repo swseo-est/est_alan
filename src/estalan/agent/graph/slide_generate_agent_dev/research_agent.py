@@ -5,7 +5,6 @@ from langchain_core.messages import SystemMessage, HumanMessage
 
 from langgraph.prebuilt import create_react_agent
 from langgraph.graph import START, END, StateGraph
-from langgraph.prebuilt.chat_agent_executor import AgentState
 
 from estalan.agent.graph.slide_generate_agent.prompt.research_agent import *
 from estalan.llm import create_chat_model

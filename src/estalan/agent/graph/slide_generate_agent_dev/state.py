@@ -5,20 +5,21 @@ from langgraph.graph.message import add_messages
 
 
 class Section(TypedDict):
-    slide_type: str # title, contents, etc
-
-    topic: str
-
-    idx: int
-    name: str
     description: str
     requirements: List[str]
     research: bool
+
+    slide_type: str # title, contents, etc
+    topic: str
+    idx: int
+    name: str
 
     content: str
     img_url: str
 
     design: str
+    html_template: str
+
     html: str
     width: int
     height: int

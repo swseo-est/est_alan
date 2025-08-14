@@ -1,0 +1,67 @@
+{
+    "templates": [
+        {
+            "filename": "slide1_title.html",
+            "description": "slide1_title.html 템플릿은 발표의 메인 타이틀 슬라이드로, 파란색 그라데이션 배경에 흰색 테두리를 사용한 고전적인 타이틀 디자인입니다.",
+            "role": "메인 타이틀 및 발표 제목",
+            "layout": "중앙 정렬된 제목과 부제목",
+            "use_case": "발표의 메인 타이틀과 주제를 소개하는 첫 번째 슬라이드"
+        },
+        {
+            "filename": "slide2_split_intro.html",
+            "description": "slide2_split_intro.html 템플릿은 화면을 좌우로 분할하여 왼쪽에 글머리 기호 리스트, 오른쪽에 제목을 배치한 소개 슬라이드입니다.",
+            "role": "발표 소개 및 목차",
+            "layout": "좌측 글머리 기호 리스트 + 우측 제목",
+            "use_case": "발표 시작 시 주요 내용을 글머리 기호로 소개하는 슬라이드"
+        },
+        {
+            "filename": "slide3_bulleted.html",
+            "description": "slide3_bulleted.html 템플릿은 제목과 글머리 기호 리스트를 포함한 기본적인 내용 전달 슬라이드입니다.",
+            "role": "주요 내용 전달",
+            "layout": "상단 제목 + 하단 글머리 기호 리스트",
+            "use_case": "핵심 내용을 체계적으로 정리하여 전달하는 슬라이드"
+        },
+        {
+            "filename": "slide4_chart.html",
+            "description": "slide4_chart.html 템플릿은 제목과 차트 영역을 포함하여 데이터 시각화에 특화된 슬라이드입니다.",
+            "role": "데이터 시각화 및 차트",
+            "layout": "상단 제목 + 하단 차트 영역",
+            "use_case": "통계, 분석 결과, 트렌드 등을 차트로 시각화하여 제시하는 슬라이드"
+        },
+        {
+            "filename": "slide5_table.html",
+            "description": "slide5_table.html 템플릿은 제목과 표를 포함하여 구조화된 데이터를 효과적으로 전달하는 슬라이드입니다.",
+            "role": "구조화된 데이터 표시",
+            "layout": "상단 제목 + 하단 테이블",
+            "use_case": "비교 데이터, 통계, 일정 등을 표 형태로 정리하여 제시하는 슬라이드"
+        },
+        {
+            "filename": "slide6_image_table.html",
+            "description": "slide6_image_table.html 템플릿은 제목, 이미지, 표를 함께 사용하여 시각적 요소와 데이터를 결합한 슬라이드입니다.",
+            "role": "이미지와 데이터 결합",
+            "layout": "상단 제목 + 하단 이미지와 테이블 조합",
+            "use_case": "제품 소개, 비교 분석 등 이미지와 데이터를 함께 제시하는 슬라이드"
+        },
+        {
+            "filename": "slide7_detailed_table.html",
+            "description": "slide7_detailed_table.html 템플릿은 제목과 상세한 표를 포함하여 복잡한 데이터를 체계적으로 정리하는 슬라이드입니다.",
+            "role": "상세 데이터 분석",
+            "layout": "상단 제목 + 하단 상세 테이블",
+            "use_case": "복잡한 분석 결과, 상세한 비교 데이터 등을 체계적으로 정리하는 슬라이드"
+        },
+        {
+            "filename": "slide8_process.html",
+            "description": "slide8_process.html 템플릿은 제목과 프로세스 다이어그램을 포함하여 단계별 과정을 시각화하는 슬라이드입니다.",
+            "role": "프로세스 및 워크플로우",
+            "layout": "상단 제목 + 하단 프로세스 다이어그램",
+            "use_case": "업무 프로세스, 방법론, 단계별 절차 등을 시각적으로 설명하는 슬라이드"
+        },
+        {
+            "filename": "slide9_closing.html",
+            "description": "slide9_closing.html 템플릿은 발표 마무리를 위한 슬라이드로, 왼쪽에 이미지 오른쪽에 메시지를 배치한 디자인입니다.",
+            "role": "발표 마무리",
+            "layout": "좌측 이미지 + 우측 마무리 메시지",
+            "use_case": "발표 종료 시 감사 인사나 핵심 메시지를 전달하는 마무리 슬라이드"
+        }
+    ]
+}

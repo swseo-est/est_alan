@@ -57,11 +57,9 @@ def post_processing_research_node(state):
         id = "msg_research_end"
     )
     print(msg)
-
-    return {}
+    return {"messages": [msg]}
 
 def pre_processing_image_search_node(state):
-    name = state["name"]
 
     content = f"""
     슬라이드에 사용할 이미지를 검색하고 있습니다.
@@ -74,7 +72,6 @@ def pre_processing_image_search_node(state):
     )
 
     print(msg)
-
     return {"messages": [msg]}
 
 def post_processing_image_search_node(state):
@@ -91,10 +88,11 @@ def post_processing_image_search_node(state):
     )
     print(msg)
 
-    return {}
+    return {"messages": [msg]}
 
 def create_research_node(llm):
-    async def research_node(state: ResearchAgentState):
+    def research_node(state: ResearchAgentState):
+        print("dddddddddddddddddddddddddddddddddddd")
         print(state)
         topic = state["topic"]
         name = state["name"]
@@ -106,7 +104,7 @@ def create_research_node(llm):
                                                                        content="")
 
         # Format system instructions
-        results = await llm.ainvoke(
+        results = llm.invoke(
             {
                 "messages":
                     [
@@ -122,7 +120,7 @@ def create_research_node(llm):
     return research_node
 
 def create_search_img_node(llm):
-    async def search_img_node(state: ResearchAgentState):
+    def search_img_node(state: ResearchAgentState):
         topic = state["topic"]
         name = state["name"]
         description = state["description"]
@@ -135,7 +133,7 @@ def create_search_img_node(llm):
                                                                        )
 
         # Format system instructions
-        results = await llm.ainvoke(
+        results = llm.invoke(
             {
                 "messages":
                     [

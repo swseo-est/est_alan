@@ -140,9 +140,13 @@ if __name__ == '__main__':
     s = time.time()
 
     graph = create_graph()
-    result = asyncio.run(graph.ainvoke({
-        "messages": [HumanMessage(content="100만원 이하 가성비 자전거 비교해줘")],
-    }))
+    result = asyncio.run(
+        graph.ainvoke(
+            {
+                "messages": [HumanMessage(content="100만원 이하 가성비 자전거 비교해줘")]
+            }
+        )
+    )
     print(result)
     for state in result['slides']:
         with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:

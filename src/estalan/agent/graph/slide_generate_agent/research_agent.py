@@ -162,7 +162,7 @@ def create_research_agent(name=None):
         k=5,
     )
 
-    research_node_llm = create_chat_model(provider="azure_openai", model="gpt-4.1")
+    research_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
 
     research_node_agent = create_react_agent(
         research_node_llm,
@@ -173,7 +173,7 @@ def create_research_agent(name=None):
         research_node_agent
     )
 
-    search_img_llm = create_chat_model(provider="azure_openai", model="gpt-4.1")
+    search_img_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
 
     search_img_agent = create_react_agent(
         search_img_llm,

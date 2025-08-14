@@ -254,9 +254,9 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 
 def create_slide_create_agent(name=None):
     # React 에이전트용 LLM (structured output 불필요)
-    slide_template_select_llm = create_chat_model(provider="azure_openai", model="gpt-4.1")
-    slide_design_llm = create_chat_model(provider="azure_openai", model="gpt-4.1").with_structured_output(SlideDesignNodeOutput)
-    html_generate_llm = create_chat_model(provider="azure_openai", model="gpt-4.1").with_structured_output(HtmlGenerateNodeOutput)
+    slide_template_select_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    slide_design_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(SlideDesignNodeOutput)
+    html_generate_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(HtmlGenerateNodeOutput)
 
     # React 에이전트 생성
     tools = [get_html_template_content_tool]

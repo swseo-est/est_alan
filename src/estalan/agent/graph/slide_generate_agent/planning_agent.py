@@ -159,7 +159,7 @@ def create_planning_agent(name="planning_agent"):
         k=15,
     )
 
-    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5")
+    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
 
     generate_sections_node_agent = create_react_agent(
         generate_sections_node_llm,

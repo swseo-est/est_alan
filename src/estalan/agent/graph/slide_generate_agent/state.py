@@ -2,23 +2,26 @@ from langchain_core.messages import BaseMessage
 
 from typing import List, Annotated, TypedDict, Optional, Sequence
 from langgraph.graph.message import add_messages
+from estalan.agent.base.state import BaseAlanAgentState
+import operator
 
 
 class Section(TypedDict):
-    slide_type: str # title, contents, etc
-
-    topic: str
-
-    idx: int
-    name: str
     description: str
     requirements: List[str]
     research: bool
+
+    slide_type: str # title, contents, etc
+    topic: str
+    idx: int
+    name: str
 
     content: str
     img_url: str
 
     design: str
+    html_template: str
+
     html: str
     width: int
     height: int
@@ -36,3 +39,10 @@ class SlideGenerateAgentMetadata(TypedDict):
     num_sections: int
     num_slides: int
     status: str
+
+
+class SlideGenerateAgentState(BaseAlanAgentState):
+    sections: List[Section]
+    slides: Annotated[List[Section], operator.add]
+
+    metadata: SlideGenerateAgentMetadata

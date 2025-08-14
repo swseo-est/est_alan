@@ -1,7 +1,6 @@
 import os
 
 from google.oauth2 import service_account
-
 from langchain_google_vertexai import ChatVertexAI
 from estalan.llm.base import AlanBaseChatModelWrapper
 

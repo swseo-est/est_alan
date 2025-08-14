@@ -5,7 +5,6 @@ from langchain_core.messages import SystemMessage, HumanMessage
 
 from langgraph.prebuilt import create_react_agent
 from langgraph.graph import START, END, StateGraph
-from langgraph.prebuilt.chat_agent_executor import AgentState
 
 from estalan.agent.graph.slide_generate_agent.prompt.research_agent import *
 from estalan.llm import create_chat_model
@@ -32,8 +31,6 @@ def post_processing_node(state):
     return {}
 
 def pre_processing_research_node(state):
-    name = state["name"]
-
     content = f"""
     슬라이드 생성에 필요한 조사를 시작합니다.
     """
@@ -45,7 +42,7 @@ def pre_processing_research_node(state):
     )
     print(msg)
 
-    return {"messages": [msg], "name": state["name"]}
+    return {"messages": [msg]}
 
 def post_processing_research_node(state):
     name = state["name"]

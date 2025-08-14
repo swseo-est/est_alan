@@ -1,7 +1,0 @@
-{
-  "dependencies": ["."],
-  "graphs": {
-    "slide_generate_agent": "./src/agent/graph.py:get_graph"
-  },
-  "env": ".env"
-}

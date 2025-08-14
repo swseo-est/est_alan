@@ -1,37 +1,23 @@
-from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph.graph import START, END, StateGraph
-from langgraph_supervisor import create_supervisor
-from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
-from estalan.messages.utils import create_ai_message
+from langchain_core.messages import HumanMessage, BaseMessage
 
-from typing import List, Annotated, TypedDict, Optional, Sequence
+from typing import List, Annotated, TypedDict, Sequence
 from estalan.agent.graph.slide_generate_agent.planning_agent import create_planning_agent
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
-from estalan.agent.graph.slide_generate_agent.state import ExecutorState, SlideGenerateAgentMetadata, Section
+from estalan.agent.graph.slide_generate_agent.state import ExecutorState, Section, SlideGenerateAgentState
 
 from estalan.llm.utils import create_chat_model
 from estalan.messages.utils import create_ai_message
-from estalan.agent.base.state import BaseAlanAgentState
 
 import asyncio
 from langgraph.types import Send
-import operator
-
-
-
-
-
-class SlideGenerateAgentState(BaseAlanAgentState):
-    sections: List[Section]
-    slides: Annotated[List[Section], operator.add]
-
-    metadata: SlideGenerateAgentMetadata
 
 
 class OutputState(TypedDict):
     topic: str
     requirements: str
+
 
 def preprocessing_node(state):
     print(state)
@@ -40,7 +26,8 @@ def preprocessing_node(state):
     msg = HumanMessage(content="슬라이드 topic과 유저 요구사항 requirement를 추출하세요.")
     updated_state = llm.invoke([msg] + state["messages"])
 
-    node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.", name="msg_planning_start")
+    node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.",
+                                     name="msg_planning_start")
 
     metadata = {
         "topic": updated_state["topic"],
@@ -56,27 +43,23 @@ def preprocessing_node(state):
 class ExecutorOutput(TypedDict):
     # executor에서 출력되는 결과
     slides: List[Section]
-    # messages: Sequence[BaseMessage]
+    messages: Sequence[BaseMessage]
 
 
 def post_processing_executor_node(state):
-    # 생성된 HTML을 test.html로 저장
-    with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
-        f.write(state['html'])
-
     print("Post processing state:", state)
 
     # state에서 messages를 제거하고 반환
     state_without_messages = {k: v for k, v in state.items() if k != 'messages'}
-    
+
     # executor의 output이 ExecutorOutput 형태이므로 slides 필드를 그대로 반환
     return {"slides": [state_without_messages]}
 
+
 def post_processing_node(state):
-
     msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name="msg_slide_generation_finish")
-
-    return {"messages" : [msg]}
+    print(msg)
+    return {"messages": [msg]}
 
 
 def create_slide_generate_graph(name="slide_generate_agent"):
@@ -84,7 +67,7 @@ def create_slide_generate_graph(name="slide_generate_agent"):
     planning_agent = create_planning_agent(name="planning_agent")
 
     ## subroutine
-    executor = StateGraph(ExecutorState, output=ExecutorOutput)
+    executor = StateGraph(ExecutorState, output_schema=ExecutorOutput)
 
     research_agent = create_research_agent()
     slide_create_agent = create_slide_create_agent()
@@ -109,7 +92,7 @@ def create_slide_generate_graph(name="slide_generate_agent"):
     builder.add_edge("preprocessing_node", "planning_agent")
 
     def generate_slide(state):
-        return[
+        return [
             Send(
                 "executor",
                 s
@@ -125,10 +108,11 @@ def create_slide_generate_graph(name="slide_generate_agent"):
 
     return builder.compile(name=name)
 
+
 def create_graph():
     # 슬라이드 생성 그래프 생성
     slide_generate_graph = create_slide_generate_graph()
-    
+
     # # Supervisor 생성
     # workflow = create_supervisor(
     #     [slide_generate_graph],
@@ -157,16 +141,12 @@ if __name__ == '__main__':
 
     graph = create_graph()
     result = asyncio.run(graph.ainvoke({
-        "messages": [HumanMessage(content="제주도 여행 가이드에 대한 슬라이드를 만들어주세요.")],
-        "metadata": {
-            "topic": "제주도 여행 가이드",
-            "requirements": "제주도 여행 가이드 슬라이드",
-            "num_sections": 5,
-            "num_slides": 7,
-            "status": "start"
-        }
+        "messages": [HumanMessage(content="100만원 이하 가성비 자전거 비교해줘")],
     }))
     print(result)
+    for state in result['slides']:
+        with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
+            f.write(state['html'])
 
     e = time.time()
     print(e - s)

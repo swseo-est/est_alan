@@ -5,7 +5,7 @@ from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph.prebuilt import create_react_agent
 from langgraph.graph import START, END, StateGraph
 
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 
 from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preliminary_investigation_instructions
 from estalan.tools.search import GoogleSerperSearchResult
@@ -59,7 +59,7 @@ def create_generate_sections_node(llm):
             [
                 SystemMessage(
                     content=system_instructions_query),
-                SystemMessage(
+                HumanMessage(
                     content="""
                         목차를 한글로 작성하세요.
                     

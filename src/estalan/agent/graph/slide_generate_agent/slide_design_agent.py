@@ -42,6 +42,7 @@ def pre_processing_slide_design_node(state):
         name="msg_slide_design_start",
         id="msg_slide_design_start"
     )
+    print(msg)
 
     return {"messages": [msg], "name": state["name"]}
 

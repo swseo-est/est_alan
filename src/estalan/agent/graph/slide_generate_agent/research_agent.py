@@ -102,6 +102,7 @@ def create_research_node(llm):
                                                                        section_name=name,
                                                                        section_topic=description,
                                                                        content="")
+        print("cccccccccccccccccccccccccccccccccccccc")
 
         # Format system instructions
         results = llm.invoke(
@@ -114,6 +115,7 @@ def create_research_node(llm):
                     ]
             }
         )
+        print("assssssssssssdfsdfsdfsdfsdfsdf")
 
         print(results['structured_response'])
         return results['structured_response']

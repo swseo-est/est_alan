@@ -364,10 +364,10 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                 "type": "image",
             }
 
-            cors_violation = is_cors_violation(result["link"])
-            if cors_violation:
-                logger.warning(f"CORS violation detected for {result['link']}")
-                continue
+            # cors_violation = is_cors_violation(result["link"])
+            # if cors_violation:
+            #     logger.warning(f"CORS violation detected for {result['link']}")
+            #     continue
 
             docs.append(
                 {

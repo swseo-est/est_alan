@@ -170,6 +170,8 @@ def create_slide_design_node(slide_design_llm):
 
         # React 에이전트를 위한 프롬프트 템플릿
         msg = f"""
+## guide
+{prompt_slide_design}
 
 ## 데이터
 주제: {topic}
@@ -182,13 +184,10 @@ def create_slide_design_node(slide_design_llm):
 
 ## html_template
 {html_template}
-
-## guide
-{prompt_slide_design}
 """
 
         result = await slide_design_llm.ainvoke([
-            HumanMessage(content=msg)
+            HumanMessage(content=msg),
         ])
 
         design = result['design']

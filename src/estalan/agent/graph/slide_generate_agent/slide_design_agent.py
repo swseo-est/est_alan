@@ -264,6 +264,7 @@ def create_html_generate_node(html_generate_llm):
         list_image = state["list_image"]
 
         str_list_image = ""
+        print(list_image)
         for img in list_image:
             str_list_image += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
 

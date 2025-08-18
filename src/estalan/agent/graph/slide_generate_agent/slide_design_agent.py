@@ -117,7 +117,6 @@ def create_slide_template_select_node(slide_design_react_agent):
 섹션명: {name}
 섹션 설명: {description}
 내용: {content}
-이미지 URL: {img_url}
 슬라이드 타입: {state.get("slide_type", "contents")}
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
@@ -171,7 +170,6 @@ def create_slide_design_node(slide_design_llm):
 섹션명: {name}
 섹션 설명: {description}
 내용: {content}
-이미지 URL: {img_url}
 슬라이드 타입: {state.get("slide_type", "contents")}
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}

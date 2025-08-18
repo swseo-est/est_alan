@@ -29,17 +29,20 @@ def create_init_planning_agent_node():
     return init_planning_agent_node
 
 def create_generate_sections_node(llm):
-    def generate_section_result_msg(sections):
-        msg = "생성된 목차는 다음과 같습니다. \n\n"
-        for section in sections:
-            msg_section = f"""{section["idx"]}. {section["name"]} - {section["description"]} \n"""
-            msg += msg_section
-
-        msg = create_ai_message(content=msg, name="planning_agent")
-        return msg
-
-
     async def generate_sections_node(state: PlanningAgentState):
+        def generate_section_result_msg(sections):
+            msg = "생성된 목차는 다음과 같습니다. \n\n"
+
+            msg += "1. 타이틀 페이지\n"
+            msg += "2. 목차 페이지\n"
+
+            for section in sections:
+                msg_section = f"""{section["idx"] + 1}. {section["name"]} - {section["description"]} \n"""
+                msg += msg_section
+
+            msg = create_ai_message(content=msg, name="planning_agent")
+            return msg
+
         topic = state["metadata"]["topic"]
         num_sections = state["metadata"]["num_sections"]
 

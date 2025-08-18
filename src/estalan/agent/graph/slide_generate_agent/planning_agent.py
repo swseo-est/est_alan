@@ -94,8 +94,11 @@ def create_generate_sections_node(llm):
             except Exception as e:
                 print(e)
 
+        metadata = state["metadata"].copy()
+        metadata["num_sections"] = len(results['structured_response']['sections'])
+
         updated_state = {"messages": [msg_result]}
-        updated_state = updated_state | results['structured_response'] | {"metadata": {"num_sections": len(results['structured_response']['sections'])}}
+        updated_state = updated_state | results['structured_response'] | {"metadata": metadata}
         return updated_state
 
     return generate_sections_node

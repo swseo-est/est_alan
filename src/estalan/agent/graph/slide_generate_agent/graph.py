@@ -47,7 +47,7 @@ class ExecutorOutput(TypedDict):
 
 
 def post_processing_executor_node(state):
-    print("Post processing state:", state)
+    # print("Post processing state:", state)
 
     # state에서 messages를 제거하고 반환
     state_without_messages = {k: v for k, v in state.items() if k != 'messages'}

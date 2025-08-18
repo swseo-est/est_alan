@@ -307,6 +307,7 @@ def create_slide_create_agent(name=None):
 
 if __name__ == '__main__':
     from dotenv import load_dotenv
+    import asyncio
 
     load_dotenv()
 
@@ -327,7 +328,7 @@ if __name__ == '__main__':
         }
     }
 
-    response = slide_create_agent.invoke(test_state)
+    response = asyncio.run(slide_create_agent.ainvoke(test_state))
     print("생성된 HTML:")
     print(response.get('html', 'HTML이 생성되지 않았습니다.'))
 

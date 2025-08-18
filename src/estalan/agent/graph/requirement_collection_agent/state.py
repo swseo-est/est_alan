@@ -16,7 +16,6 @@ class ExtractRequirementOutput(TypedDict):
 
 
 # Requirement Collection Agent
-
 class Requirement(TypedDict):
     requirement_id: str  # 요구사항 id
     origin: str  # 'question' | 'user'
@@ -34,5 +33,4 @@ class RequirementCollectionAgentState(AgentState):
 
     last_step: str
     next_step: str
-
 

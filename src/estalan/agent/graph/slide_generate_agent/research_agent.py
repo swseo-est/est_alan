@@ -91,7 +91,7 @@ def post_processing_image_search_node(state):
     return {"messages": [msg]}
 
 def create_research_node(llm):
-    def research_node(state: ResearchAgentState):
+    async def research_node(state: ResearchAgentState):
         print("dddddddddddddddddddddddddddddddddddd")
         print(state)
         topic = state["topic"]
@@ -105,7 +105,7 @@ def create_research_node(llm):
         print("cccccccccccccccccccccccccccccccccccccc")
 
         # Format system instructions
-        results = llm.invoke(
+        results = await llm.ainvoke(
             {
                 "messages":
                     [

@@ -164,7 +164,7 @@ def create_planning_agent(name="planning_agent"):
     generate_sections_node_agent = create_react_agent(
         generate_sections_node_llm,
         tools =[search_tool],
-        response_format = GenerateSectionsOutput,
+        response_format=GenerateSectionsOutput,
     )
     generate_sections_node = create_generate_sections_node(
         generate_sections_node_agent

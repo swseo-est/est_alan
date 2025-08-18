@@ -184,9 +184,6 @@ def create_slide_design_node(slide_design_llm):
 슬라이드 타입: {state.get("slide_type", "contents")}
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
-
-## html_template
-{html_template}
 """
 
         result = await slide_design_llm.ainvoke([

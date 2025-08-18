@@ -144,7 +144,7 @@ def create_slide_template_select_node(slide_design_react_agent):
 ## 사용 가능한 HTML 템플릿 목록:
 {list_html_file}
 
-## tool parameter
+## get_html_template_content_tool parameter
 template_folder: {template_folder}
 
 ## 규칙

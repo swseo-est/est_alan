@@ -24,6 +24,7 @@ class GenerateSectionsOutput(TypedDict):
 
 def create_init_planning_agent_node():
     def init_planning_agent_node(state: PlanningAgentState):
+        print(state)
         init_msg = create_ai_message(content="검색 도구를 사용하여 목차를 생성하기 위한 조사를 시작합니다.", name="planning_agent")
         return {"messages": [init_msg]}
     return init_planning_agent_node

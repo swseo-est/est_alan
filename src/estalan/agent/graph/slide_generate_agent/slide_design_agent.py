@@ -114,7 +114,9 @@ def create_slide_template_select_node(slide_design_react_agent):
         content = state["content"]
         img_url = state["img_url"]
 
-        list_html_file = get_html_template_list()
+        template_folder = state["template_folder"]
+
+        list_html_file = get_html_template_list(template_folder)
 
 
         # React 에이전트를 위한 프롬프트 템플릿
@@ -138,10 +140,11 @@ def create_slide_template_select_node(slide_design_react_agent):
 - 시각적 효과의 필요성
 - 요구사항과 디자인 프롬프트의 반영
 
-## html_template 작성 규칙
+# template_folder: {template_folder}
 ### 사용 가능한 HTML 템플릿 목록:
 {list_html_file}
 
+## html_template 작성 규칙
 1. 위의 템플릿 목록에서 내용에 가장 적합한 템플릿을 선택하세요.
 2. 선택한 템플릿의 내용을 get_html_template_content_tool 도구로 확인하여 구체적인 구조를 파악하세요.
 3. 만일, template의 html 코드가 내용에 적합하지 않다면 다른 template를 조회하세요.
@@ -374,6 +377,7 @@ if __name__ == '__main__':
         'description': '제주도의 기본 정보와 특징을 소개하는 섹션',
         'content': '## 제주도 소개\n\n제주도는 한국의 가장 큰 섬으로, 아름다운 자연과 독특한 문화를 가지고 있습니다. 화산 활동으로 형성된 섬으로, 한라산을 중심으로 한 자연 경관이 뛰어납니다.\n\n### 주요 특징\n- 화산섬으로 형성된 독특한 지형\n- 아름다운 해변과 바다 경관\n- 독특한 제주 문화와 전통\n- 다양한 관광 명소와 활동',
         'img_url': 'https://example.com/jeju-image.jpg',
+        "template_folder": "general",
         'metadata': {
             'topic': '제주도 여행 가이드',
             'requirements': '제주도 여행 가이드 슬라이드',

@@ -365,10 +365,22 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                 "type": "image",
             }
 
-            # cors_violation = is_cors_violation(result["link"])
-            # if cors_violation:
-            #     print(f"CORS violation detected for {result['link']}")
-            #     continue
+
+            if result["imageUrl"] is None:
+                continue
+
+            cors_violation = is_cors_violation(result["imageUrl"])
+            if cors_violation:
+                print(f"CORS violation detected for {result['imageUrl']}")
+                continue
+            else:
+                print(f"Pass CORS for {result['imageUrl']}")
+
+
+            # 이미지 URL 확장자 필터링 (jpg, jpeg, png만 허용)
+            image_url = result["imageUrl"].lower()
+            if not any(image_url.endswith(ext) for ext in ['.jpg', '.jpeg', '.png']):
+                continue
 
             docs.append(
                 {

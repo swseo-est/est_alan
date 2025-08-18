@@ -17,13 +17,28 @@ from langgraph.types import Send
 class OutputState(TypedDict):
     topic: str
     requirements: str
+    template_folder: str
 
+LIST_TEMPLATE_FOLDER = {
+    "general": "일반적인 주제에 대해 사용",
+    "compare": "전문적인 주제에 대해 사용"
+}
 
 def preprocessing_node(state):
     print(state)
     llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(OutputState)
 
-    msg = HumanMessage(content="슬라이드 topic과 유저 요구사항 requirement를 추출하세요. topic을 한글로 추출하세요")
+    list_tempalte_folder = ""
+    for key in LIST_TEMPLATE_FOLDER.keys():
+        list_tempalte_folder += f"{key}: {LIST_TEMPLATE_FOLDER[key]}\n"
+
+    msg = f"""
+    슬라이드 topic과 유저 요구사항 requirement 그리고 template_folder를 추출하세요. topic을 한글로 추출하세요.
+    
+    template_folder는 아래와 같은 기준을 가지고 선정하세요
+    {list_tempalte_folder}
+    """
+    msg = HumanMessage(content=msg)
     updated_state = llm.invoke([msg] + state["messages"])
 
     node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.",
@@ -32,10 +47,12 @@ def preprocessing_node(state):
     metadata = {
         "topic": updated_state["topic"],
         "requirements": updated_state["requirements"],
+        "template_folder": updated_state["template_folder"],
         "num_sections": 5,
         "num_slides": 7,
         "status": "start"
     }
+    print(metadata)
 
     return {"metadata": metadata, "messages": [node_message]}
 
@@ -98,7 +115,7 @@ def create_slide_generate_graph(name="slide_generate_agent"):
             Send(
                 "executor",
                 s
-            ) for s in state["sections"]]
+            ) for s in state["sections"] | state["metadata"]["template_folder"]]
 
     builder.add_conditional_edges(
         "planning_agent",

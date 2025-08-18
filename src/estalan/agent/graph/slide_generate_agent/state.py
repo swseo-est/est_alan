@@ -31,6 +31,7 @@ class Section(TypedDict):
 
 class ExecutorState(Section):
     messages: Annotated[Sequence[BaseMessage], add_messages]
+    template_folder: str
 
 
 class SlideGenerateAgentMetadata(TypedDict):

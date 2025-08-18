@@ -185,16 +185,28 @@ def clear_template_cache():
 # 기본 템플릿 디렉토리
 # 현재 스크립트의 디렉토리를 기준으로 절대 경로 생성
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_TEMPLATE_DIR = os.path.join(SCRIPT_DIR, "slide_template", "general")
-# DEFAULT_TEMPLATE_DIR = os.path.join(SCRIPT_DIR, "slide_template", "compare")
 
 
-def get_html_template_list() -> str:
+def get_template_dir(template_folder: str = "general") -> str:
+    """
+    템플릿 폴더명을 받아서 전체 경로를 반환합니다.
+    
+    Args:
+        template_folder (str): 템플릿 폴더명 (예: "general", "compare")
+        
+    Returns:
+        str: 템플릿 디렉토리의 전체 경로
+    """
+    return os.path.join(SCRIPT_DIR, "slide_template", template_folder)
+
+
+def get_html_template_list(template_folder: str = "general") -> str:
     """사용 가능한 HTML 템플릿 파일들의 리스트를 조회합니다."""
     import json
     
+    template_dir = get_template_dir(template_folder)
     # info.json 파일 경로
-    info_json_path = os.path.join(DEFAULT_TEMPLATE_DIR, "info.json")
+    info_json_path = os.path.join(template_dir, "info.json")
     
     try:
         # info.json 파일 읽기
@@ -225,7 +237,7 @@ def get_html_template_list() -> str:
         
     except FileNotFoundError:
         # info.json이 없으면 기존 방식으로 fallback
-        html_files = get_html_template_files(DEFAULT_TEMPLATE_DIR)
+        html_files = get_html_template_files(template_dir)
         
         if not html_files:
             return "사용 가능한 HTML 템플릿 파일이 없습니다."
@@ -239,7 +251,7 @@ def get_html_template_list() -> str:
     except Exception as e:
         print(f"info.json 파일을 읽는 중 오류 발생: {e}")
         # 오류 발생 시 기존 방식으로 fallback
-        html_files = get_html_template_files(DEFAULT_TEMPLATE_DIR)
+        html_files = get_html_template_files(template_dir)
         
         if not html_files:
             return "사용 가능한 HTML 템플릿 파일이 없습니다."
@@ -250,15 +262,16 @@ def get_html_template_list() -> str:
         
         return result
 
-
 @tool
-def get_html_template_content_tool(filename: str) -> str:
+def get_html_template_content_tool(filename: str, template_folder: str = "general") -> str:
     """지정된 HTML 템플릿 파일의 내용을 가져옵니다.
     
     Args:
         filename: 읽어올 HTML 템플릿 파일명 (확장자 포함)
+        template_folder: 템플릿 폴더명 (기본값: "general")
     """
-    content = get_html_template_content(DEFAULT_TEMPLATE_DIR, filename)
+    template_dir = get_template_dir(template_folder)
+    content = get_html_template_content(template_dir, filename)
     
     if content is None:
         return f"파일 '{filename}'을 찾을 수 없거나 읽을 수 없습니다."
@@ -267,8 +280,25 @@ def get_html_template_content_tool(filename: str) -> str:
 
 
 if __name__ == '__main__':
-    result = get_html_template_list()
+    # 기본 템플릿 디렉토리 테스트
+    print("=== 기본 템플릿 디렉토리 (general) 테스트 ===")
+    result = get_html_template_list("general")
     print(result)
 
-    html = get_html_template_content(DEFAULT_TEMPLATE_DIR, "index.html")
-    print(html)
+    # compare 템플릿 디렉토리 테스트
+    print("\n=== compare 템플릿 디렉토리 테스트 ===")
+    result_compare = get_html_template_list("compare")
+    print(result_compare)
+
+    # 템플릿 디렉토리 경로 확인
+    print(f"\n=== 템플릿 디렉토리 경로 확인 ===")
+    print(f"General: {get_template_dir('general')}")
+    print(f"Compare: {get_template_dir('compare')}")
+
+    # HTML 파일 내용 읽기 테스트
+    print(f"\n=== HTML 파일 내용 읽기 테스트 ===")
+    html = get_html_template_content(get_template_dir("general"), "index.html")
+    if html:
+        print("HTML 파일을 성공적으로 읽었습니다.")
+    else:
+        print("HTML 파일을 읽을 수 없습니다.")

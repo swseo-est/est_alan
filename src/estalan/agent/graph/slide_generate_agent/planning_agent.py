@@ -66,8 +66,15 @@ def create_generate_sections_node(llm):
                         Please use the search_tool.  
                         Generate the sections of the report. Your response must include a 'sections' field containing a list of sections.  
                         Each section must have: topic, idx, name, description, research, content, img and html fields.  
+                        
                         slide_type: content
                         research : False  
+                        
+                        topic: str
+                        idx: str
+                        description: str
+                        name: str
+                        
                         content: ""  
                         img: ""  
                         html: ""  

@@ -41,18 +41,24 @@ def preprocessing_node(state):
     msg = HumanMessage(content=msg)
     updated_state = llm.invoke([msg] + state["messages"])
 
-    node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.",
-                                     name="msg_planning_start")
+    num_retry = 10
+    for i in range(num_retry):
+        try:
+            node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.",
+                                             name="msg_planning_start")
 
-    metadata = {
-        "topic": updated_state["topic"],
-        "requirements": updated_state["requirements"],
-        "template_folder": updated_state["template_folder"],
-        "num_sections": 5,
-        "num_slides": 7,
-        "status": "start"
-    }
-    print(metadata)
+            metadata = {
+                "topic": updated_state["topic"],
+                "requirements": updated_state["requirements"],
+                "template_folder": updated_state["template_folder"],
+                "num_sections": 5,
+                "num_slides": 7,
+                "status": "start"
+            }
+            print(metadata)
+            break
+        except Exception as e:
+            print(e)
 
     return {"metadata": metadata, "messages": [node_message]}
 

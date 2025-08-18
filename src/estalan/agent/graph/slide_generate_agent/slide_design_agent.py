@@ -173,7 +173,6 @@ def create_slide_design_node(slide_design_llm):
 
         # React 에이전트를 위한 프롬프트 템플릿
         msg = f"""
-## guide
 {prompt_slide_design}
 
 ## 데이터

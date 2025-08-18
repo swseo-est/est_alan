@@ -32,6 +32,7 @@ class AlanBaseChatModelWrapper(ABC):
         for i in range(10):
             try:
                 result = await self._model.ainvoke(*args, **kwargs)
+                break
             except Exception as e:
                 print(f"retry {num_retry}")
                 print(e)

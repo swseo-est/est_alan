@@ -191,6 +191,7 @@ def create_slide_design_node(slide_design_llm):
         ])
 
         design = result['design']
+        print(design)
 
         msg2 = f"아래 design에서 list_image를 추출하세요. \n {design}"
         result2 = await slide_design_llm.ainvoke([

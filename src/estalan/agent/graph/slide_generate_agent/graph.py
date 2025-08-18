@@ -21,8 +21,8 @@ class OutputState(TypedDict):
 
 LIST_TEMPLATE_FOLDER = {
     "general": "일반적인 주제에 대해 사용",
-    "travel": "여행과 관련된 주제에 사용"
-    # "compare": "전문적인 주제에 대해 사용"
+    "travel": "여행과 관련된 주제에 사용",
+    "compare": "비교와 관련된 주제에 사용"
 }
 
 def preprocessing_node(state):

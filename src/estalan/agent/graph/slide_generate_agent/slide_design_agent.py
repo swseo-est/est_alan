@@ -204,7 +204,7 @@ def create_slide_design_node(slide_design_llm):
 
         list_image = result2['list_image']
 
-        design += f"\n\n {content}"
+        # design += f"\n\n {content}"
 
 
         return {'design': design, "list_image": list_image}

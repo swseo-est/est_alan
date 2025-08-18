@@ -112,7 +112,7 @@ def create_slide_template_select_node(slide_design_react_agent):
         name = state["name"]
         description = state["description"]
         content = state["content"]
-        img_url = state["img_url"]
+        # img_url = state["img_url"]
 
         template_folder = state["template_folder"]
 
@@ -172,7 +172,7 @@ def create_slide_design_node(slide_design_llm):
         name = state["name"]
         description = state["description"]
         content = state["content"]
-        img_url = state["img_url"]
+        # img_url = state["img_url"]
 
         # React 에이전트를 위한 프롬프트 템플릿
         msg = f"""

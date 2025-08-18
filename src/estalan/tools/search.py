@@ -342,8 +342,9 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
         if "images" not in results:
             logger.warning("No images found in search results")
             return docs
-        image_results = results["images"][: self.k]
+        image_results = results["images"]
 
+        num_pass = 0
         for result in image_results:
             # 필수 필드 확인
             if not all(key in result for key in ["title", "imageUrl", "link"]):
@@ -364,10 +365,10 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                 "type": "image",
             }
 
-            # cors_violation = is_cors_violation(result["link"])
-            # if cors_violation:
-            #     logger.warning(f"CORS violation detected for {result['link']}")
-            #     continue
+            cors_violation = is_cors_violation(result["link"])
+            if cors_violation:
+                logger.warning(f"CORS violation detected for {result['link']}")
+                continue
 
             docs.append(
                 {
@@ -375,6 +376,9 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                     "metadata": {k: v for k, v in metadata.items() if v is not None},
                 }
             )
+            num_pass += 1
+            if num_pass > self.k:
+                break
 
         logger.debug(f"Parsed {len(docs)} image results")
         return docs

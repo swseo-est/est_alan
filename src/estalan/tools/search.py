@@ -509,22 +509,18 @@ def is_cors_violation(url: str, method="GET", headers=None) -> bool:
     """check cors violation."""
     origin = get_origin_from_url(url)  # URL에서 자동 추출
 
-    request_headers = headers.copy() if headers else {}
-    request_headers["Origin"] = origin
+    try:
+        response = requests.head(url, timeout=5)
+        allow_origin = response.headers.get("Access-Control-Allow-Origin")
 
-    response = requests.request(method, url, headers=request_headers)
+        # CORS 헤더가 없거나 요청 origin과 매칭되지 않으면 False
+        if not allow_origin:
+            return True
 
-    allow_origin = response.headers.get("Access-Control-Allow-Origin")
-    allow_methods = response.headers.get("Access-Control-Allow-Methods", "")
-    allow_headers = response.headers.get("Access-Control-Allow-Headers", "")
+        if allow_origin == "*" or allow_origin == origin:
+            return False
 
-    if allow_origin not in (origin, "*"):
         return True
-    if method.upper() not in allow_methods.upper():
+
+    except requests.RequestException:
         return True
-    if headers:
-        allowed_headers_list = [h.strip().lower() for h in allow_headers.split(",")]
-        for h in headers.keys():
-            if h.lower() != "origin" and h.lower() not in allowed_headers_list:
-                return True
-    return False

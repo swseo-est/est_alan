@@ -369,18 +369,19 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
             if result["imageUrl"] is None:
                 continue
 
-            cors_violation = is_cors_violation(result["imageUrl"])
-            if cors_violation:
-                print(f"CORS violation detected for {result['imageUrl']}")
-                continue
-            else:
-                print(f"Pass CORS for {result['imageUrl']}")
-
-
             # 이미지 URL 확장자 필터링 (jpg, jpeg, png만 허용)
             image_url = result["imageUrl"].lower()
             if not any(image_url.endswith(ext) for ext in ['.jpg', '.jpeg', '.png']):
                 continue
+
+            # cors_violation = is_cors_violation(result["imageUrl"])
+            # if cors_violation:
+            #     print(f"CORS violation detected for {result['imageUrl']}")
+            # else:
+            #     print(f"Pass CORS for {result['imageUrl']}")
+            #
+            # num_pass += 1
+            # print(f"{num_pass} / {self.k}")
 
             docs.append(
                 {
@@ -388,7 +389,7 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                     "metadata": {k: v for k, v in metadata.items() if v is not None},
                 }
             )
-            num_pass += 1
+            print(f"docs : {len(docs)}")
             if num_pass > self.k:
                 break
 

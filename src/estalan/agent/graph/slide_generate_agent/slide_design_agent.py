@@ -202,8 +202,17 @@ def create_slide_design_node(slide_design_llm):
         ])
         print("slide_design_llm 호출 완료")
 
-        print(result["list_image"])
-        return {'design': result['design'], "list_image": result['list_image']}
+        design = result['design']
+
+        msg2 = f"아래 design에서 list_image를 추출하세요. \n {design}"
+        result2 = await slide_design_llm.ainvoke([
+            HumanMessage(content=msg2)
+        ])
+
+        list_image = result2['list_image']
+
+
+        return {'design': design, "list_image": list_image}
     return slide_design_node
 
 

@@ -146,9 +146,7 @@ def create_slide_template_select_node(slide_design_react_agent):
 
 ## html_template 작성 규칙
 1. 위의 템플릿 목록에서 내용에 가장 적합한 템플릿을 선택하세요.
-2. 선택한 템플릿의 내용을 get_html_template_content_tool 도구로 확인하여 구체적인 구조를 파악하세요.
-3. 만일, template의 html 코드가 내용에 적합하지 않다면 다른 template를 조회하세요.
-4. 조회한 template html 코드를 html_template에 변경없이 넣으세요
+2. 조회한 template html 코드를 html_template에 변경없이 넣으세요
 """
         input_state = state.copy()
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]

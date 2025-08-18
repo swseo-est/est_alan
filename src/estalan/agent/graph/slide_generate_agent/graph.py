@@ -35,7 +35,7 @@ def preprocessing_node(state):
     msg = f"""
     슬라이드 topic과 유저 요구사항 requirement 그리고 template_folder를 추출하세요. topic을 한글로 추출하세요.
     
-    template_folder는 아래와 같은 기준을 가지고 선정하세요
+    template_folder는 아래 중 하나를 선택하세요
     {list_tempalte_folder}
     """
     msg = HumanMessage(content=msg)

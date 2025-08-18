@@ -4,6 +4,7 @@ from abc import ABC
 from typing import Any, Dict, Iterable
 
 from langchain.chat_models.base import BaseChatModel
+import time
 
 
 class AlanBaseChatModelWrapper(ABC):
@@ -26,7 +27,16 @@ class AlanBaseChatModelWrapper(ABC):
     async def ainvoke(self, *args: Any, **kwargs: Any):
         """비동기 호출 전/후에 훅을 실행."""
         self._pre_hook(*args, **kwargs)
-        result = await self._model.ainvoke(*args, **kwargs)
+        num_retry = 0
+
+        for i in range(10):
+            try:
+                result = await self._model.ainvoke(*args, **kwargs)
+            except Exception as e:
+                print(f"retry {num_retry}")
+                print(e)
+                num_retry += 1
+                time.sleep(1)
         return self._post_hook(result)
 
     def invoke(self, *args: Any, **kwargs: Any):

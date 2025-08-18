@@ -284,7 +284,6 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
 5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
 6. 이미지가 영역을 초과하지 않도록, 적절리 resize하거나 crop 하세요
-7. 글자가 영역을 초과하지 않도록, 내용을 요약해서 출력하세요.
 """
         response = await html_generate_llm.ainvoke([
             HumanMessage(content=msg_content),

@@ -274,9 +274,11 @@ def get_html_template_content_tool(filename: str, template_folder: str = "genera
     content = get_html_template_content(template_dir, filename)
     
     if content is None:
-        return f"파일 '{filename}'을 찾을 수 없거나 읽을 수 없습니다."
+        msg = f"파일 '{filename}'을 찾을 수 없거나 읽을 수 없습니다."
+        print(msg)
+        return msg
     
-    return f"HTML 템플릿 '{filename}' 내용:\n\n{content}"
+    return f"{content}"
 
 
 if __name__ == '__main__':

@@ -95,7 +95,7 @@ def create_generate_sections_node(llm):
                 print(e)
 
         updated_state = {"messages": [msg_result]}
-        updated_state = updated_state | results['structured_response']
+        updated_state = updated_state | results['structured_response'] | {"metadata": {"num_sections": len(results['structured_response']['sections'])}}
         return updated_state
 
     return generate_sections_node

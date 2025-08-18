@@ -3,3 +3,4 @@
 .idea
 /est-alan-dev-account.json
 /.env.dockerfile
+__pycache__

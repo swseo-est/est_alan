@@ -185,8 +185,8 @@ def clear_template_cache():
 # 기본 템플릿 디렉토리
 # 현재 스크립트의 디렉토리를 기준으로 절대 경로 생성
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_TEMPLATE_DIR = os.path.join(SCRIPT_DIR, "slide_template", "template1")
-# DEFAULT_TEMPLATE_DIR = os.path.join(SCRIPT_DIR, "slide_template", "morden template")
+DEFAULT_TEMPLATE_DIR = os.path.join(SCRIPT_DIR, "slide_template", "general")
+DEFAULT_TEMPLATE_DIR = os.path.join(SCRIPT_DIR, "slide_template", "compare")
 
 
 def get_html_template_list() -> str:

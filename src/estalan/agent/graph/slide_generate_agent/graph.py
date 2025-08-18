@@ -114,8 +114,8 @@ def create_slide_generate_graph(name="slide_generate_agent"):
         return [
             Send(
                 "executor",
-                s
-            ) for s in state["sections"] | {"template_folder": state["metadata"]["template_folder"]}]
+                s  | {"template_folder": state["metadata"]["template_folder"]}
+            ) for s in state["sections"]]
 
     builder.add_conditional_edges(
         "planning_agent",

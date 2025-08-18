@@ -121,7 +121,7 @@ def create_slide_template_select_node(slide_design_react_agent):
 
         # React 에이전트를 위한 프롬프트 템플릿
         prompt_slide_template_select = f"""
-당신은 슬라이드 디자인 전문가입니다. 주어진 내용에 가장 적합한 HTML 템플릿을 선택하고 디자인을 제안해야 합니다.
+당신은 슬라이드 디자인 전문가입니다. 주어진 내용에 가장 적합한 HTML 템플릿을 선택해야 합니다.
 
 ## 데이터
 주제: {topic}
@@ -140,13 +140,18 @@ def create_slide_template_select_node(slide_design_react_agent):
 - 시각적 효과의 필요성
 - 요구사항과 디자인 프롬프트의 반영
 
-# template_folder: {template_folder}
-### 사용 가능한 HTML 템플릿 목록:
+
+## 사용 가능한 HTML 템플릿 목록:
 {list_html_file}
 
-## html_template 작성 규칙
+## tool parameter
+template_folder: {template_folder}
+
+## 규칙
 1. 위의 템플릿 목록에서 내용에 가장 적합한 템플릿을 선택하세요.
 2. 조회한 template html 코드를 html_template에 변경없이 넣으세요
+3. get_html_template_content_tool을 통해 조회된 template을 넣으세요.
+4. ** 임의로 html을 생성하면 안됩니다. **
 """
         input_state = state.copy()
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]

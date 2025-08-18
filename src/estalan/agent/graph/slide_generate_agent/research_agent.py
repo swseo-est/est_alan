@@ -122,7 +122,7 @@ def create_research_node(llm):
     return research_node
 
 def create_search_img_node(llm):
-    def search_img_node(state: ResearchAgentState):
+    async def search_img_node(state: ResearchAgentState):
         topic = state["topic"]
         name = state["name"]
         description = state["description"]
@@ -135,7 +135,7 @@ def create_search_img_node(llm):
                                                                        )
 
         # Format system instructions
-        results = llm.invoke(
+        results = await llm.ainvoke(
             {
                 "messages":
                     [

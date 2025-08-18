@@ -98,7 +98,7 @@ def post_processing_html_generate_node(state):
 
 
 def create_slide_template_select_node(slide_design_react_agent):
-    def slide_template_select_node(state: SlideDesignAgentState):
+    async def slide_template_select_node(state: SlideDesignAgentState):
         topic = state["topic"]
         name = state["name"]
         description = state["description"]
@@ -143,7 +143,7 @@ def create_slide_template_select_node(slide_design_react_agent):
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
 
         # 에이전트 실행
-        result = slide_design_react_agent.invoke(input_state)
+        result = await slide_design_react_agent.ainvoke(input_state)
 
         # 결과에서 디자인 정보 추출
         print(result['structured_response'])    
@@ -153,7 +153,7 @@ def create_slide_template_select_node(slide_design_react_agent):
 
 
 def create_slide_design_node(slide_design_llm):
-    def slide_design_node(state: SlideDesignAgentState):
+    async def slide_design_node(state: SlideDesignAgentState):
         html_template = state["html_template"]
         topic = state["topic"]
         name = state["name"]
@@ -180,7 +180,7 @@ def create_slide_design_node(slide_design_llm):
 ## guide
 {prompt_slide_design}
 """
-        result = slide_design_llm.invoke([
+        result = await slide_design_llm.ainvoke([
             HumanMessage(content=msg)
         ])
 
@@ -190,7 +190,7 @@ def create_slide_design_node(slide_design_llm):
 
 
 def create_html_generate_node(html_generate_llm):
-    def html_generate_node(state: SlideDesignAgentState):
+    async def html_generate_node(state: SlideDesignAgentState):
         print(state)
 
         # design이 없으면 기본값 사용
@@ -247,7 +247,7 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
 5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
 """
-        response = html_generate_llm.invoke([
+        response = await html_generate_llm.ainvoke([
             HumanMessage(content=msg_content),
         ])
         return response

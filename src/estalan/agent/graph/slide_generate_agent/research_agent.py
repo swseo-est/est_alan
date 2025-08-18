@@ -134,6 +134,7 @@ def create_search_img_node(llm):
                                                                        content=content
                                                                        )
 
+        print("이미지 검색 호출 전")
         # Format system instructions
         results = await llm.ainvoke(
             {
@@ -145,6 +146,7 @@ def create_search_img_node(llm):
                     ]
             }
         )
+        print("이미지 검색 호출 완료")
 
         print(results['structured_response'])
         return results['structured_response']

@@ -271,16 +271,12 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 슬라이드 타입: {state.get("slide_type", "contents")}
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
-디자인 프롬프트: {state.get("design_prompt", "")}
 
 # content
 {content}
 
 # 사용가능한 이미지 정보
 {str_list_image}
-
-# design guide
-{design_content}
 
 # html template
 {html_template}

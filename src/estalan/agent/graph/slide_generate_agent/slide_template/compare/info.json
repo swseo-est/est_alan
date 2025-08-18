@@ -8,8 +8,8 @@
             "use_case": "발표의 메인 타이틀과 주제를 소개하는 첫 번째 슬라이드"
         },
         {
-            "filename": "quote_description&image_slide.html",
-            "description": "2. quote_description&image_slide.html 템플릿은 인용구와 설명을 포함하며, 좌측에 텍스트 우측에 이미지를 배치한 디자인입니다.",
+            "filename": "quote_description_image_slide.html",
+            "description": "2. quote_description_image_slide.html 템플릿은 인용구와 설명을 포함하며, 좌측에 텍스트 우측에 이미지를 배치한 디자인입니다.",
             "role": "인용구 및 주요 내용 소개",
             "layout": "좌측 인용구 및 설명 + 우측 이미지",
             "use_case": "핵심 주제나 주요 특징을 인용구와 함께 설명하는 슬라이드"
@@ -29,29 +29,29 @@
             "use_case": "주요 특징, 장점, 확인사항 등을 체크리스트로 정리하는 슬라이드"
         },
         {
-            "filename": "content_comparison.table_slide.html",
-            "description": "5. content_comparison.table_slide.html 템플릿은 테이블 형태로 비교 정보를 체계적으로 정리하여 대조 분석을 효과적으로 전달하는 디자인입니다.",
+            "filename": "content_comparison_table_slide.html",
+            "description": "5. content_comparison_table_slide.html 템플릿은 테이블 형태로 비교 정보를 체계적으로 정리하여 대조 분석을 효과적으로 전달하는 디자인입니다.",
             "role": "테이블 형태 비교 분석",
             "layout": "상단 제목 + 중앙 비교 테이블 + 하단 이미지",
             "use_case": "제품 비교, 기능 비교, 성능 비교 등을 테이블로 정리하는 슬라이드"
         },
         {
-            "filename": "content_grid.card_slide.html",
-            "description": "6. content_grid.card_slide.html 템플릿은 카드 형태의 그리드 레이아웃으로 여러 항목을 시각적으로 정리하여 정보를 효과적으로 전달하는 디자인입니다.",
+            "filename": "content_grid_card_slide.html",
+            "description": "6. content_grid_card_slide.html 템플릿은 카드 형태의 그리드 레이아웃으로 여러 항목을 시각적으로 정리하여 정보를 효과적으로 전달하는 디자인입니다.",
             "role": "카드 그리드 및 다중 항목 정리",
             "layout": "상단 제목 + 중앙 카드 그리드 + 하단 상세 정보",
             "use_case": "제품 목록, 카테고리별 정리, 다중 옵션 비교 등을 카드로 정리하는 슬라이드"
         },
         {
-            "filename": "content_comparison.vs_slide.html",
+            "filename": "content_comparison_vs_slide.html",
             "description": "7. content_comparison.vs_slide.html 템플릿은 VS 형태로 두 항목을 대조하여 비교 분석을 효과적으로 전달하는 디자인입니다.",
             "role": "VS 형태 비교 분석",
             "layout": "좌측 항목 A + 중앙 VS + 우측 항목 B",
             "use_case": "두 제품, 두 방법, 두 옵션 등을 대조적으로 비교하는 슬라이드"
         },
         {
-            "filename": "quote_step&checklist_slide.html",
-            "description": "8. quote_step&checklist_slide.html 템플릿은 인용구와 단계별 체크리스트를 결합하여 복합적인 정보를 효과적으로 전달하는 디자인입니다.",
+            "filename": "quote_step_checklist_slide.html",
+            "description": "8. quote_step_checklist_slide.html 템플릿은 인용구와 단계별 체크리스트를 결합하여 복합적인 정보를 효과적으로 전달하는 디자인입니다.",
             "role": "인용구 및 단계별 체크리스트",
             "layout": "상단 인용구 + 중앙 단계별 체크리스트 + 하단 추가 정보",
             "use_case": "인용구와 함께 단계별 진행사항이나 확인사항을 정리하는 슬라이드"

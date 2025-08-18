@@ -32,10 +32,10 @@ def create_init_planning_agent_node():
 def create_generate_sections_node(llm):
     async def generate_sections_node(state: PlanningAgentState):
         def generate_section_result_msg(sections):
-            msg = "생성된 목차는 다음과 같습니다. \n\n"
+            msg = "슬라이드 구성은 다음과 같습니다. \n\n"
 
             msg += "1. 타이틀 페이지\n"
-            msg += "2. 목차 페이지\n"
+            msg += "2. 목차\n"
 
             for section in sections:
                 msg_section = f"""{int(section["idx"]) + 1}. {section["name"]} - {section["description"]} \n"""
@@ -53,40 +53,47 @@ def create_generate_sections_node(llm):
             number_of_queries=num_sections,
         )
 
+        num_try = 10
         # Generate queries
-        results = await llm.ainvoke({
-            "messages":
-            [
-                SystemMessage(
-                    content=system_instructions_query),
-                HumanMessage(
-                    content="""
-                        목차를 한글로 작성하세요.
-                    
-                        search queries that will help with planning the sections of the report.  
-                        Please use the search_tool.  
-                        Generate the sections of the report. Your response must include a 'sections' field containing a list of sections.  
-                        
-                        Each section must have: 
-                            - slide_type: content
-                            - research : False  
+        for i in range(num_try):
+            try:
+                results = await llm.ainvoke({
+                    "messages":
+                    [
+                        SystemMessage(
+                            content=system_instructions_query),
+                        HumanMessage(
+                            content="""
+                                목차를 한글로 작성하세요.
                             
-                            - topic: str
-                            - idx: int
-                            - description: str
-                            - name: str
-                            
-                            - content: ""  
-                            - img: ""  
-                            - html: ""  
-                        
-                        **Note:** Start the idx from 2.
-                    """)
-            ]
-        }
-        )
+                                search queries that will help with planning the sections of the report.  
+                                Please use the search_tool.  
+                                Generate the sections of the report. Your response must include a 'sections' field containing a list of sections.  
+                                
+                                Each section must have: 
+                                    - slide_type: content
+                                    - research : False  
+                                    
+                                    - topic: str
+                                    - idx: int
+                                    - description: str
+                                    - name: str
+                                    
+                                    - content: ""  
+                                    - img: ""  
+                                    - html: ""  
+                                
+                                **Note:** Start the idx from 2.
+                            """)
+                    ]
+                }
+                )
 
-        msg_result = generate_section_result_msg(results['structured_response']['sections'])
+                msg_result = generate_section_result_msg(results['structured_response']['sections'])
+                break
+            except Exception as e:
+                print(e)
+
         updated_state = {"messages": [msg_result]}
         updated_state = updated_state | results['structured_response']
         return updated_state

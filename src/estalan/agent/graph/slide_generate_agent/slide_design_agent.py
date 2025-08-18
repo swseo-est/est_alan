@@ -276,9 +276,7 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 {design_content}
 
 # html template
-```html
 {html_template}
-```
 
 # 생성 지침
 1. HTML 템플릿을 참고해서 슬라이드를 생성하세요.

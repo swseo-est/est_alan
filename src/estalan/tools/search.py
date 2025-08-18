@@ -389,7 +389,7 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                     "metadata": {k: v for k, v in metadata.items() if v is not None},
                 }
             )
-            print(f"docs : {len(docs)}")
+            # print(f"docs : {len(docs)}")
             if num_pass > self.k:
                 break
 

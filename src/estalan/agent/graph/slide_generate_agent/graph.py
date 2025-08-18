@@ -59,7 +59,9 @@ def post_processing_executor_node(state):
 def post_processing_node(state):
     msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name="msg_slide_generation_finish")
     print(msg)
-    return {"messages": [msg]}
+    metadata = state["metadata"].copy()
+    metadata["status"] = "finish"
+    return {"messages": [msg], "metadata": metadata}
 
 
 def create_slide_generate_graph(name="slide_generate_agent"):

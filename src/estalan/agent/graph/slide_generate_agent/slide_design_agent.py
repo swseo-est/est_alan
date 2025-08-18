@@ -143,7 +143,9 @@ def create_slide_template_select_node(slide_design_react_agent):
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
 
         # 에이전트 실행
+        print("slide_design_react_agent 호출 전")
         result = await slide_design_react_agent.ainvoke(input_state)
+        print("slide_design_react_agent 호출 완료")
 
         # 결과에서 디자인 정보 추출
         print(result['structured_response'])    
@@ -180,9 +182,12 @@ def create_slide_design_node(slide_design_llm):
 ## guide
 {prompt_slide_design}
 """
+        print("slide_design_llm 호출 전")
+
         result = await slide_design_llm.ainvoke([
             HumanMessage(content=msg)
         ])
+        print("slide_design_llm 호출 완료")
 
 
         return {'design': result['design']}
@@ -247,9 +252,11 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
 5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
 """
+        print("html_generate_node 호출 전")
         response = await html_generate_llm.ainvoke([
             HumanMessage(content=msg_content),
         ])
+        print("html_generate_node 호출 완료")
         return response
     return html_generate_node
 

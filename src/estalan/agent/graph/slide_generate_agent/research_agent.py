@@ -57,7 +57,7 @@ def post_processing_research_node(state):
         id = "msg_research_end"
     )
     print(msg)
-    return {"messages": [msg]}
+    return {}
 
 def pre_processing_image_search_node(state):
 
@@ -88,7 +88,7 @@ def post_processing_image_search_node(state):
     )
     print(msg)
 
-    return {"messages": [msg]}
+    return {}
 
 def create_research_node(llm):
     async def research_node(state: ResearchAgentState):

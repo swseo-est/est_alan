@@ -39,11 +39,12 @@ def preprocessing_node(state):
     {list_tempalte_folder}
     """
     msg = HumanMessage(content=msg)
-    updated_state = llm.invoke([msg] + state["messages"])
 
     num_retry = 10
     for i in range(num_retry):
         try:
+            updated_state = llm.invoke([msg] + state["messages"])
+
             node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.",
                                              name="msg_planning_start")
 

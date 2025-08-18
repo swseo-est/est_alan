@@ -23,7 +23,7 @@ def preprocessing_node(state):
     print(state)
     llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(OutputState)
 
-    msg = HumanMessage(content="슬라이드 topic과 유저 요구사항 requirement를 추출하세요.")
+    msg = HumanMessage(content="슬라이드 topic과 유저 요구사항 requirement를 추출하세요. topic을 한글로 추출하세요")
     updated_state = llm.invoke([msg] + state["messages"])
 
     node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.",

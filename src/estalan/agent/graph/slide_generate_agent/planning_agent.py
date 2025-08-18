@@ -85,7 +85,6 @@ def create_generate_sections_node(llm):
         }
         )
 
-        print(results)
         msg_result = generate_section_result_msg(results['structured_response']['sections'])
         updated_state = {"messages": [msg_result]}
         updated_state = updated_state | results['structured_response']

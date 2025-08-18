@@ -57,7 +57,6 @@ def pre_processing_slide_design_node(state):
         name="msg_slide_design_start",
         id="msg_slide_design_start"
     )
-    print(msg)
 
     return {"messages": [msg], "name": state["name"]}
 
@@ -73,9 +72,6 @@ def post_processing_slide_design_node(state):
         name="msg_slide_design_end",
         id="msg_slide_design_end"
     )
-
-    print(msg)
-
     return {}
 
 
@@ -91,7 +87,6 @@ def pre_processing_html_generate_node(state):
         name="msg_html_generate_start",
         id="msg_html_generate_start"
     )
-    print(msg)
 
     return {"messages": [msg], "name": state["name"]}
 
@@ -107,7 +102,6 @@ def post_processing_html_generate_node(state):
         name="msg_html_generate_end",
         id="msg_html_generate_end"
     )
-    print(msg)
 
     return {}
 
@@ -157,12 +151,9 @@ def create_slide_template_select_node(slide_design_react_agent):
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
 
         # 에이전트 실행
-        print("slide_design_react_agent 호출 전")
         result = await slide_design_react_agent.ainvoke(input_state)
-        print("slide_design_react_agent 호출 완료")
 
         # 결과에서 디자인 정보 추출
-        print(result['structured_response'])    
         return {"html_template": result['structured_response']['html_template']}
     
     return slide_template_select_node
@@ -195,12 +186,10 @@ def create_slide_design_node(slide_design_llm):
 ## guide
 {prompt_slide_design}
 """
-        print("slide_design_llm 호출 전")
 
         result = await slide_design_llm.ainvoke([
             HumanMessage(content=msg)
         ])
-        print("slide_design_llm 호출 완료")
 
         design = result['design']
 
@@ -219,7 +208,6 @@ def create_slide_design_node(slide_design_llm):
 def create_image_search_agent(agent):
     async def image_search_agent(state: SlideDesignAgentState):
         list_image = state["list_image"]
-        print(list_image)
 
         str_list_image = "list_image 정보\n"
         for img in list_image:
@@ -233,8 +221,6 @@ def create_image_search_agent(agent):
                 "list_image": list_image,
             }
         )
-        print(result)
-        print(result['structured_response']["list_image"])
         return {"list_image": result['structured_response']['list_image']}
     return image_search_agent
 
@@ -242,8 +228,6 @@ def create_image_search_agent(agent):
 
 def create_html_generate_node(html_generate_llm):
     async def html_generate_node(state: SlideDesignAgentState):
-        print(state)
-
         # design이 없으면 기본값 사용
         design_content = state.get("design", "기본 디자인을 적용합니다.")
 
@@ -251,11 +235,9 @@ def create_html_generate_node(html_generate_llm):
         
         # design_prompt가 존재하면 이를 활용
         if state.get("design_prompt"):
-            print(f"Design prompt found: {state['design_prompt']}")
             # design_prompt를 포함한 강화된 디자인 지시사항 생성
             enhanced_design = f"{design_content}\n\n추가 디자인 요구사항: {state['design_prompt']}"
             design_content = enhanced_design
-            print("Enhanced design content:", design_content)
 
         topic = state["topic"]
         name = state["name"]
@@ -264,7 +246,6 @@ def create_html_generate_node(html_generate_llm):
         list_image = state["list_image"]
 
         str_list_image = ""
-        print(list_image)
         for img in list_image:
             str_list_image += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
 
@@ -305,11 +286,9 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 6. 이미지가 영역을 초과하지 않도록, 적절리 resize하거나 crop 하세요
 7. 글자가 영역을 초과하지 않도록, 내용을 요약해서 출력하세요.
 """
-        print("html_generate_node 호출 전")
         response = await html_generate_llm.ainvoke([
             HumanMessage(content=msg_content),
         ])
-        print("html_generate_node 호출 완료")
         return response
     return html_generate_node
 

@@ -37,7 +37,7 @@ def create_generate_sections_node(llm):
             msg += "2. 목차 페이지\n"
 
             for section in sections:
-                msg_section = f"""{section["idx"] + 1}. {section["name"]} - {section["description"]} \n"""
+                msg_section = f"""{int(section["idx"]) + 1}. {section["name"]} - {section["description"]} \n"""
                 msg += msg_section
 
             msg = create_ai_message(content=msg, name="planning_agent")
@@ -71,7 +71,7 @@ def create_generate_sections_node(llm):
                         research : False  
                         
                         topic: str
-                        idx: str
+                        idx: int
                         description: str
                         name: str
                         

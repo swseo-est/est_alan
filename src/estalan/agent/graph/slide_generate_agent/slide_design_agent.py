@@ -1,5 +1,6 @@
+import os
 from langchain_core.messages import HumanMessage
-from typing import TypedDict
+from typing import TypedDict, List
 from langgraph.graph import START, END, StateGraph
 from estalan.llm import create_chat_model
 from estalan.messages.utils import create_ai_message
@@ -7,16 +8,30 @@ from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 from langgraph.prebuilt import create_react_agent
 from estalan.agent.graph.slide_generate_agent.utils import get_html_template_list, get_html_template_content_tool
 from estalan.agent.graph.slide_generate_agent.prompt.slide_design import prompt_slide_design
+from langgraph.prebuilt.chat_agent_executor import AgentState, AgentStateWithStructuredResponse
+from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult
+
+
+
+class Image(TypedDict):
+    title: str
+    description: str
+    url: str
+
 
 class SlideDesignAgentState(ExecutorState):
-    pass
+    list_image: List[Image]
+
+
+class ImageSearchAgentOutput(TypedDict):
+    list_image: List[Image]
 
 class SlideTemplateSelectNodeOutput(TypedDict):
     html_template: str
 
-
 class SlideDesignNodeOutput(TypedDict):
     design: str
+    list_image: List[Image]
 
 class HtmlGenerateNodeOutput(TypedDict):
     html: str
@@ -187,9 +202,33 @@ def create_slide_design_node(slide_design_llm):
         ])
         print("slide_design_llm 호출 완료")
 
+        print(result["list_image"])
+        return {'design': result['design'], "list_image": result['list_image']}
+    return slide_design_node
 
-        return {'design': result['design']}
-    return slide_design_node    
+
+def create_image_search_agent(agent):
+    async def image_search_agent(state: SlideDesignAgentState):
+        list_image = state["list_image"]
+        print(list_image)
+
+        str_list_image = "list_image 정보\n"
+        for img in list_image:
+            str_list_image += f"title: {img['title']}\ndescription: {img['description']}\n\n"
+        
+        msg = create_ai_message(content=f"list_image의 title과 description에 맞는 이미지를 검색하고, url을 업데이트 하세요. 추가 질문은 하지말고 작업을 수행하세요. \n\n{str_list_image}")
+
+        result = await agent.ainvoke(
+            {
+                "messages": [msg],
+                "list_image": list_image,
+            }
+        )
+        print(result)
+        print(result['structured_response']["list_image"])
+        return {"list_image": result['structured_response']['list_image']}
+    return image_search_agent
+
 
 
 def create_html_generate_node(html_generate_llm):
@@ -213,7 +252,11 @@ def create_html_generate_node(html_generate_llm):
         name = state["name"]
         description = state["description"]
         content = state["content"]
-        img_url = state["img_url"]
+        list_image = state["list_image"]
+
+        str_list_image = ""
+        for img in list_image:
+            str_list_image += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
 
 
         msg_content = f"""
@@ -232,8 +275,8 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 # content
 {content}
 
-# img_url
-{img_url}
+# 사용가능한 이미지 정보
+{str_list_image}
 
 # design guide
 {design_content}
@@ -259,9 +302,18 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
     return html_generate_node
 
 def create_slide_create_agent(name=None):
+    serper_api_key = os.getenv("SERPER_API_KEY")
+
+    search_img_tool = GoogleSerperImageSearchResult.from_api_key(
+        api_key=serper_api_key,
+        k=5,
+    )
+
+
     # React 에이전트용 LLM (structured output 불필요)
     slide_template_select_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
     slide_design_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(SlideDesignNodeOutput)
+    image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
     html_generate_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(HtmlGenerateNodeOutput)
 
     # React 에이전트 생성
@@ -273,8 +325,16 @@ def create_slide_create_agent(name=None):
         response_format=SlideTemplateSelectNodeOutput
     )
 
+    image_search_agent = create_react_agent(
+        model=image_search_llm,
+        tools=[search_img_tool],
+        response_format=ImageSearchAgentOutput
+    )
+
+
     slide_template_select_node = create_slide_template_select_node(slide_design_react_agent)
     slide_design_node = create_slide_design_node(slide_design_llm)
+    image_search_node = create_image_search_agent(image_search_agent)
     html_generate_node = create_html_generate_node(html_generate_llm)
 
     builder = StateGraph(SlideDesignAgentState)
@@ -288,13 +348,15 @@ def create_slide_create_agent(name=None):
 
     builder.add_node("slide_template_select_node", slide_template_select_node)
     builder.add_node("slide_design_node", slide_design_node)
+    builder.add_node("image_search_node", image_search_node)
     builder.add_node("html_generate_node", html_generate_node)
 
     builder.add_edge(START, "pre_processing_node")
     builder.add_edge("pre_processing_node", "pre_processing_slide_design_node")
     builder.add_edge("pre_processing_slide_design_node", "slide_template_select_node")
     builder.add_edge("slide_template_select_node", "slide_design_node")
-    builder.add_edge("slide_design_node", "pre_processing_html_generate_node")
+    builder.add_edge("slide_design_node", "image_search_node")
+    builder.add_edge("image_search_node", "pre_processing_html_generate_node")
     builder.add_edge("pre_processing_html_generate_node", "html_generate_node")
     builder.add_edge("html_generate_node", "post_processing_html_generate_node")
     builder.add_edge("post_processing_html_generate_node", "post_processing_node")
@@ -308,9 +370,12 @@ def create_slide_create_agent(name=None):
 if __name__ == '__main__':
     from dotenv import load_dotenv
     import asyncio
+    import os
 
     load_dotenv()
 
+    # 1. 전체 슬라이드 생성 에이전트 테스트
+    print("=== 전체 슬라이드 생성 에이전트 테스트 ===")
     slide_create_agent = create_slide_create_agent()
 
     test_state = {
@@ -338,3 +403,23 @@ if __name__ == '__main__':
             f.write(response['html'])
         print("\nHTML이 test_slide.html 파일로 저장되었습니다.")
 
+    # serper_api_key = os.getenv("SERPER_API_KEY")
+    #
+    # search_img_tool = GoogleSerperImageSearchResult.from_api_key(
+    #     api_key=serper_api_key,
+    #     k=5,
+    # )
+    #
+    #
+    # image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    # image_search_agent = create_react_agent(
+    #     model=image_search_llm,
+    #     tools=[search_img_tool],
+    #     response_format=ImageSearchAgentOutput
+    # )
+    #
+    # image_search_node = create_image_search_agent(image_search_agent)
+    #
+    # state = {"list_image": [{'title': '제주 풍경(한라산과 해안)', 'description': '슬라이드 전체 배경으로 사용. 하늘·바다·산이 함께 보이는 넓은 가로 비율의 풍경 이미지.'}, {'title': '한라산 클로즈업', 'description': '소개 문구 옆이나 카드의 작은 일러스트로 사용 가능한 세로 또는 정사각형 이미지.'}, {'title': '제주 해변(맑은 바다)', 'description': '카드나 체크리스트 옆 비주얼로 활용 가능한 가로 이미지.'}, {'title': '제주 문화/전통 이미지', 'description': "해녀나 전통가옥 등 '독특한 제주 문화'를 시각화하기 위한 작은 사진 또는 아이콘형 이미지."}, {'title': '활동 이미지(관광·하이킹·레저)', 'description': '다양한 관광 명소와 활동을 나타내는 장면 이미지로 카드 썸네일에 사용.'}]}
+    # result = asyncio.run(image_search_node(state))
+    # print(result)

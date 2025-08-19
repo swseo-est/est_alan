@@ -271,7 +271,6 @@ def create_html_generate_node(html_generate_llm):
 
         msg_content = f"""
 아래 내용을 기반으로 슬라이드를 생성하세요.
-html template과 동일한 포맷으로 슬라이드를 생성하세요
 
 # 슬라이드 정보
 주제: {topic}
@@ -294,16 +293,26 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 {html_template}
 
 # 생성 지침
-1. HTML 템플릿을 참고해서 슬라이드를 생성하세요.
-2. 슬라이드 타입에 맞는 적절한 제목과 레이아웃을 사용하세요
-3. 요구사항과 디자인 프롬프트를 반영하여 슬라이드를 구성하세요
-4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
-5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
-6. 이미지가 영역을 초과하지 않도록, 적절리 resize하거나 crop 하세요
-7. 텍스트 영역을 최대한 활용하여 풍부한 내용을 담되, 가독성을 해치지 않는 선에서 정보량을 극대화하세요
-8. 단순한 키워드 나열이 아닌 구체적인 예시와 부연설명을 포함하여 내용을 풍성하게 전개하세요
-9. 단, 내용은 guideline에 명시된 이상을 넘지 않아야 합니다.
-10. **메타적 설명("~슬라이드를 작성하겠습니다", "~이 목적입니다" 등)은 제외하고, 청중이 실제로 봐야 할 핵심 내용만 포함하세요**
+## 금지사항
+
+HTML 태그 구조 변경 금지: <div>, <h3>, <p>, <i> 등의 태그 구조를 변경하지 마세요
+CSS 클래스명 변경 금지: class="text-2xl font-bold mb-3 title-text" 등의 클래스를 변경하지 마세요
+템플릿 레이아웃 변경 금지: 기존 컨테이너 구조를 유지하세요
+새로운 HTML 요소 추가 금지: 템플릿에 없는 새로운 태그나 구조를 추가하지 마세요
+
+## 허용되는 작업
+텍스트 내용만 교체: <p>, <h3> 태그 내부의 텍스트만 변경
+아이콘 변경: <i class="fas fa-hiking"> 에서 fa-hiking 부분만 적절한 아이콘으로 변경
+이미지 URL 교체: src 속성 값만 변경
+
+## 기타 지침
+1. 슬라이드 타입에 맞는 적절한 제목과 레이아웃을 사용하세요
+2. 요구사항과 디자인 프롬프트를 반영하여 슬라이드를 구성하세요
+3. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
+4. 텍스트 영역을 최대한 활용하여 풍부한 내용을 담되, 가독성을 해치지 않는 선에서 정보량을 극대화하세요
+5. 단순한 키워드 나열이 아닌 구체적인 예시와 부연설명을 포함하여 내용을 풍성하게 전개하세요
+6. 단, 내용은 guideline에 명시된 이상을 넘지 않아야 합니다.
+7. **메타적 설명("~슬라이드를 작성하겠습니다", "~이 목적입니다" 등)은 제외하고, 청중이 실제로 봐야 할 핵심 내용만 포함하세요**
 
 ## ❌ 잘못된 예시 (메타적 설명 포함):
 ```html
@@ -353,7 +362,8 @@ def create_slide_create_agent(name=None):
 
 
     # React 에이전트용 LLM (structured output 불필요)
-    slide_template_select_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
+    # slide_template_select_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
+    slide_template_select_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
     slide_design_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(SlideDesignNodeOutput)
     image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
     html_generate_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(HtmlGenerateNodeOutput)

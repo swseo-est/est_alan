@@ -153,7 +153,9 @@ def create_add_toc_slide_node():
             "idx": 1,
             "name": "목차",
             "description": f"{topic}에 대한 프레젠테이션 목차 페이지\n\n{contents_text}",
-            "requirements": ["목차 항목들"],
+            "requirements": [
+                "content slide_type에 대해서 목차를 나열시 idx 번호를 제거하고 출력하세요"
+            ],
             "research": False,
             "content": "", 
             "img_url": "",

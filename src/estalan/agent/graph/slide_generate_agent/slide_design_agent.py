@@ -1,4 +1,5 @@
 import os
+import json
 from langchain_core.messages import HumanMessage
 from typing import TypedDict, List
 from langgraph.graph import START, END, StateGraph
@@ -21,6 +22,7 @@ class Image(TypedDict):
 
 class SlideDesignAgentState(ExecutorState):
     list_image: List[Image]
+    guideline: dict
 
 
 class ImageSearchAgentOutput(TypedDict):
@@ -28,6 +30,7 @@ class ImageSearchAgentOutput(TypedDict):
 
 class SlideTemplateSelectNodeOutput(TypedDict):
     html_template: str
+    guideline: dict
 
 class SlideDesignNodeOutput(TypedDict):
     design: str
@@ -181,9 +184,16 @@ template_folder: {template_folder}
 
         # 에이전트 실행
         result = await slide_design_react_agent.ainvoke(input_state)
+        
+        for message in result['messages']:
+            if message.type == "tool":
+                tool_result = json.loads(message.content)
 
         # 결과에서 디자인 정보 추출
-        return {"html_template": result['structured_response']['html_template']}
+        return {
+            "html_template": tool_result['content'],
+            "guideline": tool_result['guideline']
+        }
     
     return slide_template_select_node
 
@@ -262,6 +272,7 @@ def create_html_generate_node(html_generate_llm):
         design_content = state.get("design", "기본 디자인을 적용합니다.")
 
         html_template = state["html_template"]
+        guideline = state["guideline"]
         
         # design_prompt가 존재하면 이를 활용
         if state.get("design_prompt"):
@@ -302,6 +313,9 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 # 사용가능한 이미지 정보
 {str_list_image}
 
+# guideline
+{guideline}
+
 # html template
 {html_template}
 
@@ -314,8 +328,8 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 6. 이미지가 영역을 초과하지 않도록, 적절리 resize하거나 crop 하세요
 7. 텍스트 영역을 최대한 활용하여 풍부한 내용을 담되, 가독성을 해치지 않는 선에서 정보량을 극대화하세요
 8. 단순한 키워드 나열이 아닌 구체적인 예시와 부연설명을 포함하여 내용을 풍성하게 전개하세요
-9. **메타적 설명("~슬라이드를 작성하겠습니다", "~이 목적입니다" 등)은 제외하고, 청중이 실제로 봐야 할 핵심 내용만 포함하세요**
-
+9. 단, 내용은 guideline에 명시된 이상을 넘지 않아야 합니다.
+10. **메타적 설명("~슬라이드를 작성하겠습니다", "~이 목적입니다" 등)은 제외하고, 청중이 실제로 봐야 할 핵심 내용만 포함하세요**
 
 ## ❌ 잘못된 예시 (메타적 설명 포함):
 ```html

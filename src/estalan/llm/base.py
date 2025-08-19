@@ -43,7 +43,18 @@ class AlanBaseChatModelWrapper(ABC):
     def invoke(self, *args: Any, **kwargs: Any):
         """동기 호출 전/후에 훅을 실행."""
         self._pre_hook(*args, **kwargs)
-        result = self._model.invoke(*args, **kwargs)
+
+        num_retry = 0
+        for i in range(10):
+            try:
+                result = self._model.invoke(*args, **kwargs)
+                break
+            except Exception as e:
+                print(f"retry {num_retry}")
+                print(e)
+                num_retry += 1
+                time.sleep(1)
+
         return self._post_hook(result)
 
     # ------------------------------------------------------------------

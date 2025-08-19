@@ -175,6 +175,7 @@ def create_slide_template_select_node(slide_design_react_agent):
 3. 조회한 template html 코드를 html_template에 변경없이 넣으세요.
 4. **임의로 html을 생성하면 안됩니다.**
 5. 템플릿이 없거나 적합하지 않은 경우, 가장 유사한 템플릿을 선택하세요.
+6. **이미지 형식 보존**: 템플릿의 이미지 태그 형식, 크기, 스타일을 그대로 유지할 수 있는 템플릿을 선택하세요.
 """
         input_state = state.copy()
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
@@ -209,6 +210,11 @@ def create_slide_design_node(slide_design_llm):
 슬라이드 타입: {state.get("slide_type", "contents")}
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
+
+## 이미지 디자인 지침
+- 템플릿의 이미지 형식과 스타일을 고려하여 이미지를 설계하세요
+- 이미지 크기와 비율이 템플릿에 적합하도록 제안하세요
+- 템플릿의 디자인 시스템과 일치하는 이미지 스타일을 고려하세요
 """
         for i in range(10):
             try:
@@ -306,12 +312,25 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 {html_template}
 
 # 생성 지침
-1. HTML 템플릿을 참고해서 슬라이드를 생성하세요.
-2. 슬라이드 타입에 맞는 적절한 제목과 레이아웃을 사용하세요
-3. 요구사항과 디자인 프롬프트를 반영하여 슬라이드를 구성하세요
-4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
-5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
-6. 이미지가 영역을 초과하지 않도록, 적절리 resize하거나 crop 하세요
+1. **템플릿 이미지 형식 보존**: HTML 템플릿에 이미 정의된 이미지 태그의 형식, 크기, 스타일, 클래스명을 그대로 유지하세요.
+2. **이미지 URL만 교체**: 기존 이미지 태그의 src 속성만 새로운 이미지 URL로 교체하고, 나머지 속성들(width, height, class, style 등)은 변경하지 마세요.
+3. **레이아웃 유지**: 템플릿의 이미지 배치와 레이아웃을 그대로 유지하세요.
+4. **CSS 클래스 보존**: 템플릿에 정의된 CSS 클래스명을 그대로 사용하세요.
+5. **이미지 크기 유지**: 템플릿에서 정의된 이미지 크기(width, height)를 변경하지 마세요.
+6. **스타일 속성 보존**: 템플릿의 이미지 스타일 속성(border, margin, padding 등)을 그대로 유지하세요.
+
+# 예시
+템플릿에 다음과 같은 이미지 태그가 있다면:
+```html
+<img src="placeholder.jpg" class="slide-image" style="width: 300px; height: 200px; border-radius: 10px;" alt="이미지 설명">
+```
+
+다음과 같이 URL만 교체하세요:
+```html
+<img src="https://new-image-url.com/image.jpg" class="slide-image" style="width: 300px; height: 200px; border-radius: 10px;" alt="이미지 설명">
+```
+
+**중요**: 템플릿의 디자인 시스템과 이미지 형식을 완전히 보존하면서 내용만 업데이트하는 것이 목표입니다.
 """
         response = await html_generate_llm.ainvoke([
             HumanMessage(content=msg_content),

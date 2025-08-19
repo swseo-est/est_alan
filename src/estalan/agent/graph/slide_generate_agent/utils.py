@@ -1,7 +1,6 @@
 import os
 import asyncio
 import threading
-import json
 from typing import List, Dict, Optional
 from pathlib import Path
 from functools import lru_cache
@@ -12,6 +11,169 @@ from langchain_core.tools import tool
 # 스레드 안전한 캐시를 위한 락
 _template_cache_lock = threading.Lock()
 _template_cache: Dict[str, str] = {}
+
+
+def get_html_template_files(template_dir: str) -> List[str]:
+    """
+    지정된 템플릿 디렉토리에서 HTML 파일들의 리스트를 반환합니다.
+    
+    Args:
+        template_dir (str): 템플릿 디렉토리 경로
+        
+    Returns:
+        List[str]: HTML 파일명 리스트 (확장자 포함)
+    """
+    try:
+        template_path = Path(template_dir)
+        if not template_path.exists():
+            print(f"템플릿 디렉토리가 존재하지 않습니다: {template_dir}")
+            return []
+        
+        # 스레드 안전한 파일 리스트 읽기
+        with template_path.iterdir() as it:
+            html_files = [f.name for f in it if f.is_file() and f.suffix.lower() == '.html']
+        return sorted(html_files)
+    
+    except Exception as e:
+        print(f"템플릿 파일 리스트를 읽는 중 오류 발생: {e}")
+        return []
+
+
+def get_html_template_content(template_dir: str, filename: str) -> Optional[str]:
+    """
+    지정된 템플릿 디렉토리에서 특정 HTML 파일의 내용을 읽어옵니다.
+    캐싱을 통해 중복 파일 읽기를 방지합니다.
+    
+    Args:
+        template_dir (str): 템플릿 디렉토리 경로
+        filename (str): 읽어올 HTML 파일명
+        
+    Returns:
+        Optional[str]: HTML 파일 내용 또는 None (파일이 없거나 읽기 실패 시)
+    """
+    cache_key = f"{template_dir}:{filename}"
+    
+    # 캐시에서 먼저 확인
+    with _template_cache_lock:
+        if cache_key in _template_cache:
+            return _template_cache[cache_key]
+    
+    try:
+        file_path = Path(template_dir) / filename
+        if not file_path.exists():
+            print(f"템플릿 파일이 존재하지 않습니다: {file_path}")
+            return None
+        
+        # 파일 읽기 시 스레드 안전성 보장
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # 캐시에 저장
+        with _template_cache_lock:
+            _template_cache[cache_key] = content
+        
+        return content
+    
+    except Exception as e:
+        print(f"템플릿 파일을 읽는 중 오류 발생: {e}")
+        return None
+
+
+async def get_html_template_content_async(template_dir: str, filename: str) -> Optional[str]:
+    """
+    비동기적으로 HTML 템플릿 파일 내용을 읽어옵니다.
+    
+    Args:
+        template_dir (str): 템플릿 디렉토리 경로
+        filename (str): 읽어올 HTML 파일명
+        
+    Returns:
+        Optional[str]: HTML 파일 내용 또는 None
+    """
+    loop = asyncio.get_event_loop()
+    
+    # ThreadPoolExecutor를 사용하여 파일 I/O를 별도 스레드에서 실행
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        future = loop.run_in_executor(
+            executor, 
+            get_html_template_content, 
+            template_dir, 
+            filename
+        )
+        return await future
+
+
+def get_all_html_templates(template_dir: str) -> Dict[str, str]:
+    """
+    지정된 템플릿 디렉토리의 모든 HTML 파일을 읽어서 파일명과 내용을 딕셔너리로 반환합니다.
+    병렬처리를 통해 성능을 향상시킵니다.
+    
+    Args:
+        template_dir (str): 템플릿 디렉토리 경로
+        
+    Returns:
+        Dict[str, str]: {파일명: HTML내용} 형태의 딕셔너리
+    """
+    html_files = get_html_template_files(template_dir)
+    templates = {}
+    
+    if not html_files:
+        return templates
+    
+    # 병렬 처리를 위한 ThreadPoolExecutor 사용
+    with ThreadPoolExecutor(max_workers=min(len(html_files), 4)) as executor:
+        # 각 파일에 대해 비동기 작업 생성
+        future_to_filename = {
+            executor.submit(get_html_template_content, template_dir, filename): filename
+            for filename in html_files
+        }
+        
+        # 완료된 작업들을 수집
+        for future in as_completed(future_to_filename):
+            filename = future_to_filename[future]
+            try:
+                content = future.result()
+                if content:
+                    templates[filename] = content
+            except Exception as e:
+                print(f"파일 '{filename}' 처리 중 오류 발생: {e}")
+    
+    return templates
+
+
+async def get_all_html_templates_async(template_dir: str) -> Dict[str, str]:
+    """
+    비동기적으로 모든 HTML 템플릿을 읽어옵니다.
+    
+    Args:
+        template_dir (str): 템플릿 디렉토리 경로
+        
+    Returns:
+        Dict[str, str]: {파일명: HTML내용} 형태의 딕셔너리
+    """
+    html_files = get_html_template_files(template_dir)
+    
+    if not html_files:
+        return {}
+    
+    # 비동기 작업들을 생성
+    tasks = [
+        get_html_template_content_async(template_dir, filename)
+        for filename in html_files
+    ]
+    
+    # 모든 작업을 병렬로 실행
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    
+    # 결과를 딕셔너리로 변환
+    templates = {}
+    for filename, result in zip(html_files, results):
+        if isinstance(result, Exception):
+            print(f"파일 '{filename}' 처리 중 오류 발생: {result}")
+        elif result is not None:
+            templates[filename] = result
+    
+    return templates
 
 
 def clear_template_cache():
@@ -38,231 +200,67 @@ def get_template_dir(template_folder: str = "general") -> str:
     return os.path.join(SCRIPT_DIR, "slide_template", template_folder)
 
 
-def get_all_template_folders() -> List[str]:
-    """
-    slide_template 디렉토리 내의 info.json 파일이 있는 템플릿 폴더명만 반환합니다.
+def get_html_template_list(template_folder: str = "general") -> str:
+    """사용 가능한 HTML 템플릿 파일들의 리스트를 조회합니다."""
+    import json
     
-    Returns:
-        List[str]: info.json 파일이 있는 템플릿 폴더명 리스트
-    """
-    template_base_dir = os.path.join(SCRIPT_DIR, "slide_template")
-    try:
-        folders = []
-        for item in os.listdir(template_base_dir):
-            item_path = os.path.join(template_base_dir, item)
-            if os.path.isdir(item_path) and not item.startswith('.'):
-                # info.json 파일이 있는지 확인
-                info_json_path = os.path.join(item_path, "info.json")
-                if os.path.exists(info_json_path):
-                    folders.append(item)
-        return sorted(folders)
-    except Exception as e:
-        print(f"템플릿 폴더 목록을 읽는 중 오류 발생: {e}")
-        return []
-
-
-def extract_template_metadata_from_info_json(template_folder: str) -> Optional[Dict]:
-    """
-    지정된 템플릿 폴더의 info.json 파일을 읽어서 template_library.metadata 정보를 추출합니다.
+    template_dir = get_template_dir(template_folder)
+    # info.json 파일 경로
+    info_json_path = os.path.join(template_dir, "info.json")
     
-    Args:
-        template_folder (str): 템플릿 폴더명
-        
-    Returns:
-        Optional[Dict]: metadata 정보 또는 None (파일이 없거나 읽기 실패 시)
-    """
     try:
-        info_json_path = os.path.join(get_template_dir(template_folder), "info.json")
-        
-        if not os.path.exists(info_json_path):
-            print(f"info.json 파일이 존재하지 않습니다: {info_json_path}")
-            return None
-        
+        # info.json 파일 읽기
         with open(info_json_path, 'r', encoding='utf-8') as f:
             info_data = json.load(f)
         
-        # template_library.metadata 추출
-        if "template_library" in info_data:
-            metadata = info_data["template_library"].get("metadata", {})
-            return metadata
-        else:
-            print(f"template_library 정보를 찾을 수 없습니다: {template_folder}")
-            return None
+        templates = info_data.get("templates", [])
+        
+        if not templates:
+            return "사용 가능한 HTML 템플릿 파일이 없습니다."
+        
+        result = f"사용 가능한 HTML 템플릿 파일들 ({len(templates)}개):\n\n"
+        
+        for i, template in enumerate(templates, 1):
+            filename = template.get("filename", "")
+            description = template.get("description", "")
+            role = template.get("role", "")
+            layout = template.get("layout", "")
+            use_case = template.get("use_case", "")
             
-    except json.JSONDecodeError as e:
-        print(f"JSON 파싱 오류 ({template_folder}): {e}")
-        return None
-    except Exception as e:
-        print(f"info.json 읽기 실패 ({template_folder}): {e}")
-        return None
-
-
-def format_template_info(template_folder: str) -> str:
-    """
-    지정된 템플릿 폴더의 info.json을 읽어서 지정된 형식의 문자열을 반환합니다.
-    
-    Args:
-        template_folder (str): 템플릿 폴더명
-        
-    Returns:
-        str: 포맷된 정보 문자열
-    """
-    try:
-        info_json_path = os.path.join(get_template_dir(template_folder), "info.json")
-        
-        if not os.path.exists(info_json_path):
-            return f"info.json 파일이 존재하지 않습니다: {template_folder}"
-        
-        with open(info_json_path, 'r', encoding='utf-8') as f:
-            info_data = json.load(f)
-        
-        # template_library 정보 추출
-        if "template_library" not in info_data:
-            return f"template_library 정보를 찾을 수 없습니다: {template_folder}"
-        
-        template_library = info_data["template_library"]
-        metadata = template_library.get("metadata", {})
-        templates = template_library.get("templates", [])
-        
-        # 결과 문자열 생성
-        result = f"template_dir: {template_folder}\n"
-        
-        # themes
-        themes = metadata.get("themes", [])
-        result += f"themes: {', '.join(themes) if themes else 'N/A'}\n"
-        
-        # styles
-        styles = metadata.get("styles", [])
-        result += f"styles: {', '.join(styles) if styles else 'N/A'}\n"
-        
-        # included_template
-        result += "included_template\n"
-        
-        # 템플릿 목록
-        if templates:
-            for template in templates:
-                template_name = template.get("name", "Unknown")
-                template_key = template.get("key", "unknown")
-                result += f"- {template_name} ({template_key})\n"
-        else:
-            result += "- No templates found\n"
+            result += f"{i}. {filename}\n"
+            result += f"   역할: {role}\n"
+            result += f"   레이아웃: {layout}\n"
+            result += f"   사용 사례: {use_case}\n"
+            result += f"   설명: {description}\n\n"
         
         return result
         
-    except json.JSONDecodeError as e:
-        return f"JSON 파싱 오류 ({template_folder}): {e}"
-    except Exception as e:
-        return f"info.json 읽기 실패 ({template_folder}): {e}"
-
-
-def get_all_templates_info() -> str:
-    """
-    모든 템플릿 폴더의 정보를 format_template_info를 이용해서 읽어서 반환합니다.
-    
-    Returns:
-        str: 모든 템플릿의 포맷된 정보 문자열
-    """
-    template_folders = get_all_template_folders()
-    
-    if not template_folders:
-        return "info.json 파일이 있는 템플릿 폴더를 찾을 수 없습니다."
-    
-    result = f"📁 전체 템플릿 정보 ({len(template_folders)}개 폴더)\n"
-    result += "=" * 80 + "\n\n"
-    
-    for i, folder in enumerate(template_folders, 1):
-        result += f"🔸 템플릿 {i}/{len(template_folders)}\n"
-        result += format_template_info(folder)
-        result += "\n" + "-" * 60 + "\n\n"
-    
-    return result
-
-
-def get_template_metadata_string(template_folder: str) -> str:
-    """
-    지정된 템플릿 폴더의 info.json을 읽고 등록된 template의 메타데이터를 한번에 string으로 출력합니다.
-    
-    Args:
-        template_folder (str): 템플릿 폴더명
+    except FileNotFoundError:
+        # info.json이 없으면 기존 방식으로 fallback
+        html_files = get_html_template_files(template_dir)
         
-    Returns:
-        str: 템플릿 메타데이터 문자열
-    """
-    try:
-        info_json_path = os.path.join(get_template_dir(template_folder), "info.json")
+        if not html_files:
+            return "사용 가능한 HTML 템플릿 파일이 없습니다."
         
-        if not os.path.exists(info_json_path):
-            return f"info.json 파일이 존재하지 않습니다: {template_folder}"
-        
-        with open(info_json_path, 'r', encoding='utf-8') as f:
-            info_data = json.load(f)
-        
-        # template_library 정보 추출
-        if "template_library" not in info_data:
-            return f"template_library 정보를 찾을 수 없습니다: {template_folder}"
-        
-        template_library = info_data["template_library"]
-        metadata = template_library.get("metadata", {})
-        templates = template_library.get("templates", [])
-        
-        # 결과 문자열 생성
-        result = f"📂 {template_folder} - 템플릿 메타데이터\n"
-        result += "=" * 60 + "\n\n"
-        
-        # 기본 메타데이터 정보
-        result += "📋 기본 정보:\n"
-        result += f"   - 버전: {metadata.get('version', 'N/A')}\n"
-        result += f"   - 생성일: {metadata.get('created', 'N/A')}\n"
-        result += f"   - 총 템플릿 수: {metadata.get('total_templates', 'N/A')}\n"
-        result += f"   - 소스명: {metadata.get('source_name', 'N/A')}\n"
-        result += f"   - 해상도: {metadata.get('resolution', {}).get('width', 'N/A')}x{metadata.get('resolution', {}).get('height', 'N/A')}\n"
-        result += f"   - 테마: {', '.join(metadata.get('themes', []))}\n"
-        result += f"   - 스타일: {', '.join(metadata.get('styles', []))}\n\n"
-        
-        # 등록된 템플릿 목록
-        result += f"🎨 등록된 템플릿 ({len(templates)}개):\n"
-        result += "-" * 40 + "\n"
-        
-        if templates:
-            for i, template in enumerate(templates, 1):
-                template_id = template.get("id", "N/A")
-                template_key = template.get("key", "unknown")
-                template_name = template.get("name", "Unknown")
-                template_name_korean = template.get("name_korean", "")
-                template_category = template.get("category", "N/A")
-                
-                result += f"{i:2d}. [{template_id}] {template_name}"
-                if template_name_korean:
-                    result += f" ({template_name_korean})"
-                result += f"\n"
-                result += f"     파일이름: {template_key}.html\n"
-                result += f"     카테고리: {template_category}\n"
-                
-                # 레이아웃 정보
-                layout = template.get("layout", {})
-                if layout:
-                    layout_type = layout.get("type", "N/A")
-                    result += f"     레이아웃: {layout_type}\n"
-                
-                # 사용 사례
-                use_cases = template.get("use_cases", [])
-                if use_cases:
-                    result += f"     사용 사례: {', '.join(use_cases[:3])}"  # 처음 3개만 표시
-                    if len(use_cases) > 3:
-                        result += f" ... (+{len(use_cases)-3}개 더)"
-                    result += "\n"
-                
-                result += "\n"
-        else:
-            result += "   등록된 템플릿이 없습니다.\n\n"
+        result = f"사용 가능한 HTML 템플릿 파일들 ({len(html_files)}개):\n"
+        for i, filename in enumerate(html_files, 1):
+            result += f"{i}. {filename}\n"
         
         return result
         
-    except json.JSONDecodeError as e:
-        return f"JSON 파싱 오류 ({template_folder}): {e}"
     except Exception as e:
-        return f"info.json 읽기 실패 ({template_folder}): {e}"
-
+        print(f"info.json 파일을 읽는 중 오류 발생: {e}")
+        # 오류 발생 시 기존 방식으로 fallback
+        html_files = get_html_template_files(template_dir)
+        
+        if not html_files:
+            return "사용 가능한 HTML 템플릿 파일이 없습니다."
+        
+        result = f"사용 가능한 HTML 템플릿 파일들 ({len(html_files)}개):\n"
+        for i, filename in enumerate(html_files, 1):
+            result += f"{i}. {filename}\n"
+        
+        return result
 
 @tool
 def get_html_template_content_tool(filename: str, template_folder: str = "general") -> str:
@@ -283,13 +281,26 @@ def get_html_template_content_tool(filename: str, template_folder: str = "genera
     return f"{content}"
 
 
-if __name__ == "__main__":
-    print(get_all_template_folders())
+if __name__ == '__main__':
+    # 기본 템플릿 디렉토리 테스트
+    print("=== 기본 템플릿 디렉토리 (general) 테스트 ===")
+    result = get_html_template_list("general")
+    print(result)
 
-    print(extract_template_metadata_from_info_json("1.현대 AI 기술"))
+    # compare 템플릿 디렉토리 테스트
+    print("\n=== compare 템플릿 디렉토리 테스트 ===")
+    result_compare = get_html_template_list("compare")
+    print(result_compare)
 
-    print(format_template_info("1.현대 AI 기술"))
+    # 템플릿 디렉토리 경로 확인
+    print(f"\n=== 템플릿 디렉토리 경로 확인 ===")
+    print(f"General: {get_template_dir('general')}")
+    print(f"Compare: {get_template_dir('compare')}")
 
-    print(get_all_templates_info())
-
-    print(get_template_metadata_string("1.현대 AI 기술"))
+    # HTML 파일 내용 읽기 테스트
+    print(f"\n=== HTML 파일 내용 읽기 테스트 ===")
+    html = get_html_template_content(get_template_dir("general"), "index.html")
+    if html:
+        print("HTML 파일을 성공적으로 읽었습니다.")
+    else:
+        print("HTML 파일을 읽을 수 없습니다.")

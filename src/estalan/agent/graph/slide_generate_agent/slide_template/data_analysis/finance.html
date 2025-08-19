@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+      
+      body {
+        font-family: 'Noto Sans KR', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        background: #FFFFFF;
+        color: #202124;
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+      }
+      
+      .header {
+        margin-bottom: 20px;
+      }
+      
+      .title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1A73E8;
+        margin-bottom: 10px;
+      }
+      
+      .subtitle {
+        font-size: 24px;
+        font-weight: 500;
+        color: #34A853;
+      }
+      
+      .content {
+        display: flex;
+        flex: 1;
+        gap: 30px;
+      }
+      
+      .left-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .right-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .image-container {
+        width: 100%;
+        height: 250px;
+        margin-bottom: 15px;
+      }
+      
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+      
+      .chart-container {
+        height: 250px;
+        margin-top: 15px;
+      }
+      
+      .data-source {
+        font-size: 14px;
+        color: #5f6368;
+        text-align: right;
+        margin-top: 15px;
+        font-style: italic;
+      }
+      
+      .fintech-services {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 15px;
+      }
+      
+      .service-item {
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        width: calc(50% - 8px);
+      }
+      
+      .service-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      
+      .service-icon {
+        color: #1A73E8;
+        font-size: 20px;
+        margin-right: 10px;
+      }
+      
+      .service-name {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      
+      .service-desc {
+        font-size: 14px;
+        color: #5f6368;
+      }
+      
+      .key-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+      }
+      
+      .stat-item {
+        background-color: #f8f9fa;
+        border-left: 4px solid #1A73E8;
+        padding: 10px;
+        width: 48%;
+        border-radius: 4px;
+      }
+      
+      .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1A73E8;
+      }
+      
+      .stat-desc {
+        font-size: 14px;
+        color: #5f6368;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container">
+      <div class="header">
+        <div class="title">금융 및 서비스 산업의 데이터 활용</div>
+        <div class="subtitle">핀테크 혁신과 데이터 기반 금융 서비스</div>
+      </div>
+      
+      <div class="content">
+        <div class="left-section">
+          <div class="image-container">
+            <img src="/home/ubuntu/presentation/images/6bSZ0G0cQcWV.jpg" alt="핀테크 금융 데이터">
+          </div>
+          
+          <div class="key-stats">
+            <div class="stat-item">
+              <div class="stat-value">11.3%</div>
+              <div class="stat-desc">국내 핀테크 산업 연평균 성장률 (2020-2025)</div>
+            </div>
+            
+            <div class="stat-item">
+              <div class="stat-value">30.7조원</div>
+              <div class="stat-desc">2024년 국내 데이터 산업 시장 규모</div>
+            </div>
+          </div>
+          
+          <div class="chart-container">
+            <canvas id="fintechAdoptionChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="right-section">
+          <h3 class="text-xl font-semibold mb-3">데이터 기반 금융 혁신 사례</h3>
+          
+          <div class="fintech-services">
+            <div class="service-item">
+              <div class="service-title">
+                <div class="service-icon"><i class="fas fa-exchange-alt"></i></div>
+                <div class="service-name">마이데이터</div>
+              </div>
+              <div class="service-desc">
+                개인 금융 데이터 통합 관리 및 맞춤형 금융 서비스 제공
+              </div>
+            </div>
+            
+            <div class="service-item">
+              <div class="service-title">
+                <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="service-name">로보어드바이저</div>
+              </div>
+              <div class="service-desc">
+                AI 알고리즘 기반 자산 관리 및 투자 자문 서비스
+              </div>
+            </div>
+            
+            <div class="service-item">
+              <div class="service-title">
+                <div class="service-icon"><i class="fas fa-credit-card"></i></div>
+                <div class="service-name">간편결제</div>
+              </div>
+              <div class="service-desc">
+                데이터 기반 사용자 인증 및 결제 프로세스 간소화
+              </div>
+            </div>
+            
+            <div class="service-item">
+              <div class="service-title">
+                <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="service-name">금융 보안</div>
+              </div>
+              <div class="service-desc">
+                빅데이터 분석을 통한 이상 거래 탐지 및 사기 방지
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-4">
+            <h4 class="text-lg font-semibold mb-2">금융 데이터 활용 트렌드</h4>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>금융위, 민간에 데이터 '개방'하고 핀테크 산업 '육성' 정책 추진</li>
+              <li>빅데이터 인프라 구축을 통한 금융 서비스 혁신 가속화</li>
+              <li>데이터 3법 개정으로 금융 및 데이터 산업계 변화 촉진</li>
+              <li>AI 기반 개인 맞춤형 금융 상품 및 서비스 확대</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-source">
+        출처: 바이라인네트워크(2024), 연합뉴스(2024), 한국데이터산업진흥원(2024)
+      </div>
+    </div>
+    
+    <script>
+      // 핀테크 서비스 도입률 차트
+      const fintechCtx = document.getElementById('fintechAdoptionChart').getContext('2d');
+      const fintechAdoptionChart = new Chart(fintechCtx, {
+        type: 'bar',
+        data: {
+          labels: ['간편결제', '자산관리', '대출/신용', '보험', '송금'],
+          datasets: [{
+            label: '2020년 도입률',
+            data: [45, 25, 30, 20, 35],
+            backgroundColor: '#FBBC04',
+            borderColor: '#FBBC04',
+            borderWidth: 1
+          }, {
+            label: '2024년 도입률',
+            data: [80, 55, 60, 45, 70],
+            backgroundColor: '#1A73E8',
+            borderColor: '#1A73E8',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: '도입률(%)'
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
+

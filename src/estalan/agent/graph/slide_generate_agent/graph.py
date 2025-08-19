@@ -6,7 +6,6 @@ from estalan.agent.graph.slide_generate_agent.planning_agent import create_plann
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
 from estalan.agent.graph.slide_generate_agent.state import ExecutorState, Section, SlideGenerateAgentState
-from estalan.agent.graph.slide_generate_agent.utils import get_all_templates_info
 
 from estalan.llm.utils import create_chat_model
 from estalan.messages.utils import create_ai_message
@@ -32,17 +31,15 @@ def preprocessing_node(state):
     print(state)
     llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(OutputState)
 
-    # get_all_templates_info를 이용하여 모든 템플릿 정보 가져오기
-    all_templates_info = get_all_templates_info()
+    list_tempalte_folder = ""
+    for key in LIST_TEMPLATE_FOLDER.keys():
+        list_tempalte_folder += f"{key}: {LIST_TEMPLATE_FOLDER[key]}\n"
 
     msg = f"""
     슬라이드 topic과 유저 요구사항 requirement 그리고 template_folder를 추출하세요. topic을 한글로 추출하세요.
     
-    사용 가능한 템플릿 폴더 정보:
-    {all_templates_info}
-    
-    위 정보를 참고하여 주제에 가장 적합한 template_folder를 선택하세요.
-    template_folder는 위에 나열된 폴더명 중 하나를 선택하세요.
+    template_folder는 아래 중 하나를 선택하세요
+    {list_tempalte_folder}
     """
     msg = HumanMessage(content=msg)
 
@@ -167,63 +164,22 @@ def create_graph():
 
 
 if __name__ == '__main__':
-    # import time
+    import time
 
-    # s = time.time()
+    s = time.time()
 
-    # graph = create_graph()
-    # result = asyncio.run(
-    #     graph.ainvoke(
-    #         {
-    #             "messages": [HumanMessage(content="100만원 이하 가성비 자전거 비교해줘")]
-    #         }
-    #     )
-    # )
-    # print(result)
-    # for state in result['slides']:
-    #     with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
-    #         f.write(state['html'])
+    graph = create_graph()
+    result = asyncio.run(
+        graph.ainvoke(
+            {
+                "messages": [HumanMessage(content="100만원 이하 가성비 자전거 비교해줘")]
+            }
+        )
+    )
+    print(result)
+    for state in result['slides']:
+        with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
+            f.write(state['html'])
 
-    # e = time.time()
-    # print(e - s)
-    
-    # 템플릿 정보만 테스트
-    print("=== 템플릿 정보 테스트 ===")
-    from estalan.agent.graph.slide_generate_agent.utils import get_all_templates_info
-    
-    templates_info = get_all_templates_info()
-    print("사용 가능한 템플릿 정보:")
-    print(templates_info)
-    
-    print("\n" + "="*50 + "\n")
-    
-    # preprocessing_node 테스트 (LLM 호출 포함)
-    print("=== preprocessing_node 테스트 ===")
-    
-    # 테스트용 상태 생성
-    test_state = {
-        "messages": [
-            HumanMessage(content="AI 기술의 미래와 발전 방향에 대해 슬라이드를 만들어줘")
-        ]
-    }
-    
-    print("입력 상태:")
-    print(test_state)
-    print("\n" + "="*50 + "\n")
-    
-    try:
-        # preprocessing_node 실행
-        result = preprocessing_node(test_state)
-        
-        print("결과:")
-        print("Metadata:")
-        for key, value in result["metadata"].items():
-            print(f"  {key}: {value}")
-        
-        print("\nMessages:")
-        for msg in result["messages"]:
-            print(f"  {msg.name}: {msg.content[:200]}...")
-    except Exception as e:
-        print(f"preprocessing_node 실행 중 오류 발생: {e}")
-        import traceback
-        traceback.print_exc()
+    e = time.time()
+    print(e - s)

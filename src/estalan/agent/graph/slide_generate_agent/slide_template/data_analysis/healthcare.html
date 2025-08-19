@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+      
+      body {
+        font-family: 'Noto Sans KR', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        background: #FFFFFF;
+        color: #202124;
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+      }
+      
+      .header {
+        margin-bottom: 20px;
+      }
+      
+      .title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1A73E8;
+        margin-bottom: 10px;
+      }
+      
+      .subtitle {
+        font-size: 24px;
+        font-weight: 500;
+        color: #34A853;
+      }
+      
+      .content {
+        display: flex;
+        flex: 1;
+        gap: 30px;
+      }
+      
+      .left-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .right-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .image-container {
+        width: 100%;
+        height: 250px;
+        margin-bottom: 15px;
+      }
+      
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+      
+      .chart-container {
+        height: 250px;
+        margin-top: 15px;
+      }
+      
+      .data-source {
+        font-size: 14px;
+        color: #5f6368;
+        text-align: right;
+        margin-top: 15px;
+        font-style: italic;
+      }
+      
+      .healthcare-innovations {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 15px;
+      }
+      
+      .innovation-item {
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        width: calc(50% - 8px);
+      }
+      
+      .innovation-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      
+      .innovation-icon {
+        color: #34A853;
+        font-size: 20px;
+        margin-right: 10px;
+      }
+      
+      .innovation-name {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      
+      .innovation-desc {
+        font-size: 14px;
+        color: #5f6368;
+      }
+      
+      .benefits {
+        margin-top: 20px;
+      }
+      
+      .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 10px;
+      }
+      
+      .benefit-icon {
+        color: #34A853;
+        margin-right: 10px;
+        font-size: 16px;
+        margin-top: 3px;
+      }
+      
+      .benefit-text {
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container">
+      <div class="header">
+        <div class="title">헬스케어 및 바이오 산업의 데이터 혁신</div>
+        <div class="subtitle">스마트 헬스케어와 개인 맞춤형 의료 서비스</div>
+      </div>
+      
+      <div class="content">
+        <div class="left-section">
+          <div class="image-container">
+            <img src="/home/ubuntu/presentation/images/1FiuoBSSvN1H.jpg" alt="스마트 헬스케어 의료 기술">
+          </div>
+          
+          <div class="chart-container">
+            <canvas id="healthcareDataChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="right-section">
+          <h3 class="text-xl font-semibold mb-3">스마트 헬스케어 주요 혁신</h3>
+          
+          <div class="healthcare-innovations">
+            <div class="innovation-item">
+              <div class="innovation-title">
+                <div class="innovation-icon"><i class="fas fa-heartbeat"></i></div>
+                <div class="innovation-name">원격 의료</div>
+              </div>
+              <div class="innovation-desc">
+                데이터 기반 원격 진료 및 모니터링 시스템
+              </div>
+            </div>
+            
+            <div class="innovation-item">
+              <div class="innovation-title">
+                <div class="innovation-icon"><i class="fas fa-dna"></i></div>
+                <div class="innovation-name">정밀 의학</div>
+              </div>
+              <div class="innovation-desc">
+                유전체 데이터 분석을 통한 맞춤형 치료
+              </div>
+            </div>
+            
+            <div class="innovation-item">
+              <div class="innovation-title">
+                <div class="innovation-icon"><i class="fas fa-brain"></i></div>
+                <div class="innovation-name">AI 진단</div>
+              </div>
+              <div class="innovation-desc">
+                인공지능 기반 의료 영상 분석 및 질병 진단
+              </div>
+            </div>
+            
+            <div class="innovation-item">
+              <div class="innovation-title">
+                <div class="innovation-icon"><i class="fas fa-mobile-alt"></i></div>
+                <div class="innovation-name">웨어러블 기기</div>
+              </div>
+              <div class="innovation-desc">
+                실시간 건강 데이터 수집 및 분석
+              </div>
+            </div>
+          </div>
+          
+          <div class="benefits">
+            <h4 class="text-lg font-semibold mb-2">데이터 기반 헬스케어의 이점</h4>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon"><i class="fas fa-check-circle"></i></div>
+              <div class="benefit-text">
+                의료 서비스 접근성 향상 및 의료 격차 해소
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon"><i class="fas fa-check-circle"></i></div>
+              <div class="benefit-text">
+                개인 맞춤형 예방 및 치료로 의료 효율성 증대
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon"><i class="fas fa-check-circle"></i></div>
+              <div class="benefit-text">
+                의료 비용 절감 및 의료 자원 최적화
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon"><i class="fas fa-check-circle"></i></div>
+              <div class="benefit-text">
+                만성질환 관리 효율성 향상 및 삶의 질 개선
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-source">
+        출처: 동아사이언스(2024), 의학신문(2024), LX인터내셔널(2024)
+      </div>
+    </div>
+    
+    <script>
+      // 헬스케어 데이터 활용 현황 차트
+      const healthCtx = document.getElementById('healthcareDataChart').getContext('2d');
+      const healthcareDataChart = new Chart(healthCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['원격 의료', '정밀 의학', 'AI 진단', '웨어러블 기기', '의료 정보 시스템'],
+          datasets: [{
+            data: [25, 20, 22, 18, 15],
+            backgroundColor: [
+              '#1A73E8',
+              '#34A853',
+              '#FBBC04',
+              '#EA4335',
+              '#5F6368'
+            ],
+            borderColor: '#FFFFFF',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            },
+            title: {
+              display: true,
+              text: '헬스케어 데이터 활용 분야별 비중 (2024)',
+              font: {
+                size: 16
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
+

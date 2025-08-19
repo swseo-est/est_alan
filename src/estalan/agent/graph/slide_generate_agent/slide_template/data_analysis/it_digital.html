@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+      
+      body {
+        font-family: 'Noto Sans KR', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        background: #FFFFFF;
+        color: #202124;
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+      }
+      
+      .header {
+        margin-bottom: 20px;
+      }
+      
+      .title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1A73E8;
+        margin-bottom: 10px;
+      }
+      
+      .subtitle {
+        font-size: 24px;
+        font-weight: 500;
+        color: #34A853;
+      }
+      
+      .content {
+        display: flex;
+        flex: 1;
+        gap: 30px;
+      }
+      
+      .left-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .right-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .image-container {
+        width: 100%;
+        height: 250px;
+        margin-bottom: 15px;
+      }
+      
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+      
+      .chart-container {
+        height: 250px;
+        margin-top: 15px;
+      }
+      
+      .data-source {
+        font-size: 14px;
+        color: #5f6368;
+        text-align: right;
+        margin-top: 15px;
+        font-style: italic;
+      }
+      
+      .tech-trends {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      
+      .trend-item {
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        padding: 12px;
+        width: calc(50% - 5px);
+        display: flex;
+        align-items: center;
+      }
+      
+      .trend-icon {
+        color: #1A73E8;
+        font-size: 20px;
+        margin-right: 10px;
+      }
+      
+      .trend-text {
+        font-size: 16px;
+      }
+      
+      .transformation-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+      }
+      
+      .step-item {
+        text-align: center;
+        width: 23%;
+      }
+      
+      .step-number {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #1A73E8;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 5px;
+        font-weight: 600;
+      }
+      
+      .step-title {
+        font-weight: 600;
+        margin-bottom: 3px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container">
+      <div class="header">
+        <div class="title">IT/디지털 산업의 혁신과 변화</div>
+        <div class="subtitle">디지털 트랜스포메이션의 현재와 미래</div>
+      </div>
+      
+      <div class="content">
+        <div class="left-section">
+          <div class="image-container">
+            <img src="/home/ubuntu/presentation/images/7Y7w9YRA4NoJ.jpg" alt="디지털 트랜스포메이션 전략">
+          </div>
+          
+          <div class="transformation-steps">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-title">디지털화</div>
+            </div>
+            
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-title">디지털라이제이션</div>
+            </div>
+            
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-title">디지털 트랜스포메이션</div>
+            </div>
+            
+            <div class="step-item">
+              <div class="step-number">4</div>
+              <div class="step-title">디지털 성숙도</div>
+            </div>
+          </div>
+          
+          <div class="chart-container">
+            <canvas id="digitalMaturityChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="right-section">
+          <h3 class="text-xl font-semibold mb-3">디지털 트랜스포메이션 핵심 요소</h3>
+          
+          <div class="tech-trends">
+            <div class="trend-item">
+              <div class="trend-icon"><i class="fas fa-cloud"></i></div>
+              <div class="trend-text">
+                <strong>클라우드 컴퓨팅</strong><br>
+                하이브리드 클라우드 도입 증가
+              </div>
+            </div>
+            
+            <div class="trend-item">
+              <div class="trend-icon"><i class="fas fa-brain"></i></div>
+              <div class="trend-text">
+                <strong>인공지능/머신러닝</strong><br>
+                생성형 AI 기술 확산
+              </div>
+            </div>
+            
+            <div class="trend-item">
+              <div class="trend-icon"><i class="fas fa-database"></i></div>
+              <div class="trend-text">
+                <strong>빅데이터 분석</strong><br>
+                실시간 데이터 처리 기술 발전
+              </div>
+            </div>
+            
+            <div class="trend-item">
+              <div class="trend-icon"><i class="fas fa-network-wired"></i></div>
+              <div class="trend-text">
+                <strong>API 생태계</strong><br>
+                서비스 연결성 및 통합 강화
+              </div>
+            </div>
+            
+            <div class="trend-item">
+              <div class="trend-icon"><i class="fas fa-shield-alt"></i></div>
+              <div class="trend-text">
+                <strong>사이버 보안</strong><br>
+                데이터 보호 및 개인정보 관리
+              </div>
+            </div>
+            
+            <div class="trend-item">
+              <div class="trend-icon"><i class="fas fa-robot"></i></div>
+              <div class="trend-text">
+                <strong>자동화/RPA</strong><br>
+                비즈니스 프로세스 자동화
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-source">
+        출처: PTC(2024), KT Enterprise(2024)
+      </div>
+    </div>
+    
+    <script>
+      // 디지털 트랜스포메이션 성숙도 차트
+      const digitalCtx = document.getElementById('digitalMaturityChart').getContext('2d');
+      const digitalMaturityChart = new Chart(digitalCtx, {
+        type: 'radar',
+        data: {
+          labels: ['데이터 활용', '기술 인프라', '인력 역량', '조직 문화', '고객 경험', '비즈니스 모델'],
+          datasets: [{
+            label: '국내 기업 평균 (2020)',
+            data: [40, 45, 35, 30, 50, 35],
+            backgroundColor: 'rgba(251, 188, 4, 0.2)',
+            borderColor: '#FBBC04',
+            borderWidth: 2,
+            pointBackgroundColor: '#FBBC04'
+          }, {
+            label: '국내 기업 평균 (2025 예상)',
+            data: [70, 75, 65, 60, 80, 70],
+            backgroundColor: 'rgba(26, 115, 232, 0.2)',
+            borderColor: '#1A73E8',
+            borderWidth: 2,
+            pointBackgroundColor: '#1A73E8'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                stepSize: 20
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
+

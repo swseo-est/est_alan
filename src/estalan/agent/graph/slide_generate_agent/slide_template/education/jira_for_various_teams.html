@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다양한 팀에서의 Jira 활용</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: #FFFFFF;
+            font-family: 'Roboto', sans-serif;
+        }
+        .title-text {
+            font-size: 36px;
+            font-weight: bold;
+            color: #253858;
+        }
+        .content-text {
+            font-size: 20px;
+            color: #253858;
+            line-height: 1.6;
+        }
+        .feature-item {
+            background: rgba(0, 82, 204, 0.1);
+            border-left: 4px solid #0052CC;
+            padding: 16px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        .feature-item:hover {
+            background: rgba(0, 82, 204, 0.15);
+            transform: translateX(5px);
+        }
+        .team-icon {
+            width: 40px;
+            height: 40px;
+            background: #0052CC;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        .highlight-badge {
+            background: linear-gradient(135deg, #0052CC 0%, #36B37E 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container p-12">
+        <div class="flex items-center mb-6">
+            <h1 class="title-text">다양한 팀에서의 Jira 활용</h1>
+            <span class="highlight-badge ml-4">Cross-functional Teams</span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-12 min-h-[580px]">
+            <div class="space-y-2">
+                <div class="feature-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="team-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2" style="color: #0052CC;">IT 서비스 관리</h3>
+                            <p class="content-text">Jira Service Management를 통한 인시던트, 문제, 변경 관리 및 IT 운영 최적화</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="team-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2" style="color: #0052CC;">마케팅팀</h3>
+                            <p class="content-text">캠페인 계획, 콘텐츠 제작, 이벤트 관리, 브랜딩 프로젝트 등 마케팅 활동 체계적 추적</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="team-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2" style="color: #0052CC;">HR팀</h3>
+                            <p class="content-text">채용 프로세스, 신입사원 온보딩, 직원 요청 처리, 교육 계획 등 인사 업무 관리</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="team-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2" style="color: #0052CC;">법무팀</h3>
+                            <p class="content-text">계약 검토, 법률 문서 관리, 컴플라이언스 추적, 법적 이슈 대응 등 법무 업무</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-center">
+                <div class="text-center">
+                    <img src="/home/ubuntu/jira_presentation/4RNFrdEdcuJv.png" alt="Jira Kanban Board" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                    <p class="content-text mt-4 text-gray-600">Jira 칸반 보드 - 다양한 팀의 업무 관리</p>
+                    <div class="mt-3 flex justify-center space-x-2 text-sm">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">IT</span>
+                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full">Marketing</span>
+                        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full">HR</span>
+                        <span class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full">Legal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

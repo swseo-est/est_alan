@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결론 및 Q&A</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: linear-gradient(135deg, #0052CC 0%, #253858 100%);
+            font-family: 'Roboto', sans-serif;
+        }
+        .title-text {
+            font-size: 36px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+        .content-text {
+            font-size: 20px;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+        .conclusion-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #36B37E;
+            padding: 20px;
+            margin: 16px 0;
+            border-radius: 0 12px 12px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .conclusion-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+        .conclusion-icon {
+            width: 50px;
+            height: 50px;
+            background: #36B37E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        .qna-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        .thank-you {
+            font-size: 48px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container p-12">
+        <h1 class="title-text mb-8 text-center">결론 및 Q&A</h1>
+        
+        <div class="grid grid-cols-2 gap-12 min-h-[580px]">
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <i class="fas fa-star mr-3" style="color: #36B37E;"></i>
+                    Jira 마스터의 핵심 포인트
+                </h2>
+                
+                <div class="conclusion-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="conclusion-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-white">효율적인 협업</h3>
+                            <p class="content-text">Jira를 통한 팀 간 원활한 소통과 협업 환경 구축으로 생산성 극대화</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conclusion-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="conclusion-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-white">프로젝트 성공</h3>
+                            <p class="content-text">체계적인 관리와 추적을 통한 프로젝트 성공률 향상 및 목표 달성</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conclusion-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="conclusion-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-white">지속적인 개선</h3>
+                            <p class="content-text">데이터 기반 의사결정과 프로세스 최적화를 통한 지속적인 성장</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-center">
+                <div class="qna-section w-full">
+                    <img src="/home/ubuntu/jira_presentation/pHEWXhSh8Ss9.png" alt="Jira Logo" class="w-32 h-auto mx-auto mb-6 opacity-90">
+                    
+                    <div class="thank-you">감사합니다!</div>
+                    
+                    <div class="text-center space-y-4">
+                        <h3 class="text-2xl font-bold text-white">
+                            <i class="fas fa-question-circle mr-3" style="color: #36B37E;"></i>
+                            질의응답 시간
+                        </h3>
+                        <p class="content-text">Jira 활용에 대한 궁금한 점이나<br>추가 정보가 필요하시면 언제든 질문해 주세요!</p>
+                        
+                        <div class="flex justify-center space-x-6 mt-8">
+                            <div class="text-center">
+                                <i class="fas fa-comments text-3xl text-white mb-2"></i>
+                                <p class="text-sm text-white">질문</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-lightbulb text-3xl text-white mb-2"></i>
+                                <p class="text-sm text-white">아이디어</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-handshake text-3xl text-white mb-2"></i>
+                                <p class="text-sm text-white">협업</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

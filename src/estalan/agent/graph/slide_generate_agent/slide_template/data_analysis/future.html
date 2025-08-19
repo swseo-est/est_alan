@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+      
+      body {
+        font-family: 'Noto Sans KR', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        background: #FFFFFF;
+        color: #202124;
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+      }
+      
+      .header {
+        margin-bottom: 15px;
+      }
+      
+      .title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1A73E8;
+        margin-bottom: 5px;
+      }
+      
+      .subtitle {
+        font-size: 24px;
+        font-weight: 500;
+        color: #34A853;
+      }
+      
+      .content {
+        display: flex;
+        flex: 1;
+        gap: 30px;
+      }
+      
+      .left-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .right-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .image-container {
+        width: 100%;
+        height: 220px;
+        margin-bottom: 15px;
+      }
+      
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+      
+      .chart-container {
+        height: 220px;
+        margin-top: 15px;
+      }
+      
+      .data-source {
+        font-size: 14px;
+        color: #5f6368;
+        text-align: right;
+        margin-top: 10px;
+        font-style: italic;
+      }
+      
+      .future-trends {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 15px;
+      }
+      
+      .trend-item {
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        padding: 12px;
+        width: calc(50% - 8px);
+      }
+      
+      .trend-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+      }
+      
+      .trend-icon {
+        color: #1A73E8;
+        font-size: 18px;
+        margin-right: 8px;
+      }
+      
+      .trend-name {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      
+      .trend-desc {
+        font-size: 14px;
+        color: #5f6368;
+      }
+      
+      .industry-outlook {
+        margin-top: 15px;
+      }
+      
+      .industry-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      
+      .industry-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        color: #1A73E8;
+      }
+      
+      .industry-text {
+        font-size: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container">
+      <div class="header">
+        <div class="title">미래 전망: 데이터 기반 산업 변화의 방향</div>
+        <div class="subtitle">2025년 이후 데이터 활용의 미래</div>
+      </div>
+      
+      <div class="content">
+        <div class="left-section">
+          <div class="image-container">
+            <img src="/home/ubuntu/presentation/images/SZrK9OSfT05q.jpg" alt="기술 혁신과 미래 전망">
+          </div>
+          
+          <div class="chart-container">
+            <canvas id="futureTrendChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="right-section">
+          <h3 class="text-xl font-semibold mb-3">데이터 기반 산업 변화의 미래 방향</h3>
+          
+          <div class="future-trends">
+            <div class="trend-item">
+              <div class="trend-title">
+                <div class="trend-icon"><i class="fas fa-brain"></i></div>
+                <div class="trend-name">증강 분석</div>
+              </div>
+              <div class="trend-desc">
+                AI와 인간 협업을 통한 데이터 분석 고도화
+              </div>
+            </div>
+            
+            <div class="trend-item">
+              <div class="trend-title">
+                <div class="trend-icon"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="trend-name">실시간 데이터 처리</div>
+              </div>
+              <div class="trend-desc">
+                엣지 컴퓨팅을 통한 즉각적 데이터 분석 및 활용
+              </div>
+            </div>
+            
+            <div class="trend-item">
+              <div class="trend-title">
+                <div class="trend-icon"><i class="fas fa-network-wired"></i></div>
+                <div class="trend-name">IoT 융합</div>
+              </div>
+              <div class="trend-desc">
+                사물인터넷과 데이터 분석의 통합적 발전
+              </div>
+            </div>
+            
+            <div class="trend-item">
+              <div class="trend-title">
+                <div class="trend-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="trend-name">데이터 보안 강화</div>
+              </div>
+              <div class="trend-desc">
+                개인정보 보호와 데이터 활용의 균형 모색
+              </div>
+            </div>
+          </div>
+          
+          <div class="industry-outlook">
+            <h4 class="text-lg font-semibold mb-2">산업별 미래 전망</h4>
+            
+            <div class="industry-item">
+              <div class="industry-icon"><i class="fas fa-industry"></i></div>
+              <div class="industry-text">
+                <strong>제조업:</strong> 디지털 트윈 기반 스마트 팩토리 고도화
+              </div>
+            </div>
+            
+            <div class="industry-item">
+              <div class="industry-icon"><i class="fas fa-heartbeat"></i></div>
+              <div class="industry-text">
+                <strong>헬스케어:</strong> 개인 유전체 데이터 기반 맞춤형 의료 확산
+              </div>
+            </div>
+            
+            <div class="industry-item">
+              <div class="industry-icon"><i class="fas fa-coins"></i></div>
+              <div class="industry-text">
+                <strong>금융:</strong> AI 기반 금융 서비스 자동화 및 개인화 심화
+              </div>
+            </div>
+            
+            <div class="industry-item">
+              <div class="industry-icon"><i class="fas fa-leaf"></i></div>
+              <div class="industry-text">
+                <strong>환경:</strong> 데이터 기반 탄소중립 및 지속가능성 관리 고도화
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-source">
+        출처: 팬루안(2025), 인더스트리뉴스(2024), WGSN(2025)
+      </div>
+    </div>
+    
+    <script>
+      // 미래 기술 트렌드 영향력 차트
+      const futureCtx = document.getElementById('futureTrendChart').getContext('2d');
+      const futureTrendChart = new Chart(futureCtx, {
+        type: 'radar',
+        data: {
+          labels: ['제조업', '금융', '의료', '공공', '에너지', '유통'],
+          datasets: [{
+            label: '2025년',
+            data: [70, 75, 65, 60, 55, 65],
+            backgroundColor: 'rgba(26, 115, 232, 0.2)',
+            borderColor: '#1A73E8',
+            borderWidth: 2,
+            pointBackgroundColor: '#1A73E8'
+          }, {
+            label: '2030년 예상',
+            data: [90, 95, 85, 80, 85, 90],
+            backgroundColor: 'rgba(52, 168, 83, 0.2)',
+            borderColor: '#34A853',
+            borderWidth: 2,
+            pointBackgroundColor: '#34A853'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                stepSize: 20
+              }
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: '데이터 기반 의사결정 영향력 전망',
+              font: {
+                size: 14
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
+

@@ -6,11 +6,7 @@ from estalan.llm import create_chat_model
 from estalan.messages.utils import create_ai_message
 from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 from langgraph.prebuilt import create_react_agent
-from estalan.agent.graph.slide_generate_agent.utils import (
-    get_html_template_content_tool,
-    get_template_metadata_string,
-    format_template_info
-)
+from estalan.agent.graph.slide_generate_agent.utils import get_html_template_list, get_html_template_content_tool
 from estalan.agent.graph.slide_generate_agent.prompt.slide_design import prompt_slide_design
 from langgraph.prebuilt.chat_agent_executor import AgentState, AgentStateWithStructuredResponse
 from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult
@@ -112,17 +108,12 @@ def create_slide_template_select_node(slide_design_react_agent):
         name = state["name"]
         description = state["description"]
         content = state["content"]
+        # img_url = state["img_url"]
+
         template_folder = state["template_folder"]
 
-        # 새로운 utils 함수를 사용하여 템플릿 정보 가져오기
-        try:
-            template_info = get_template_metadata_string(template_folder)
-            template_summary = format_template_info(template_folder)
-        except Exception as e:
-            print(f"템플릿 정보 가져오기 실패: {e}")
-            # 기본 템플릿 정보 사용
-            template_info = f"템플릿 폴더: {template_folder}"
-            template_summary = "기본 템플릿 목록"
+        list_html_file = get_html_template_list(template_folder)
+
 
         # React 에이전트를 위한 프롬프트 템플릿
         prompt_slide_template_select = f"""
@@ -137,51 +128,33 @@ def create_slide_template_select_node(slide_design_react_agent):
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
 
-## 선택된 템플릿 폴더 정보
-{template_info}
-
-## 사용 가능한 템플릿 목록
-{template_summary}
 
 ## 템플릿 선택 기준:
-1. **슬라이드 타입 적합성**: 
-   - title: 제목 슬라이드용 템플릿
-   - contents: 내용 슬라이드용 템플릿
-   - summary: 요약 슬라이드용 템플릿
+- 슬라이드 타입 (title, contents 등)에 따른 적합성
+- 내용의 성격 (텍스트 중심, 이미지 중심, 데이터 시각화 등)
+- 내용이 정확하게 일치하지 않더라도, 유사한 작업에 사용되었다면 선정하세요
+- 레이아웃의 적합성 (가로/세로 배치, 그리드 레이아웃 등)
+- 시각적 효과의 필요성
+- 요구사항과 디자인 프롬프트의 반영
 
-2. **내용 성격 분석**:
-   - 텍스트 중심: 텍스트가 많은 경우
-   - 이미지 중심: 이미지가 중요한 경우
-   - 데이터 시각화: 차트나 그래프가 필요한 경우
-   - 비교 분석: 비교 내용이 많은 경우
 
-3. **레이아웃 적합성**:
-   - 가로/세로 배치
-   - 그리드 레이아웃
-   - 카드 형태
-   - 사이드바 형태
+## 사용 가능한 HTML 템플릿 목록:
+{list_html_file}
 
-4. **시각적 효과**:
-   - 강조 요소 필요성
-   - 색상 및 스타일 일치성
-
-## get_html_template_content_tool 사용법
-- template_folder: {template_folder}
-- filename: 선택한 템플릿의 파일명 (예: "centered_title_cover_intro.html")
+## get_html_template_content_tool parameter
+template_folder: {template_folder}
 
 ## 규칙
 1. 위의 템플릿 목록에서 내용에 가장 적합한 템플릿을 선택하세요.
-2. 선택한 템플릿의 파일명을 정확히 입력하여 get_html_template_content_tool을 사용하세요.
-3. 조회한 template html 코드를 html_template에 변경없이 넣으세요.
-4. **임의로 html을 생성하면 안됩니다.**
-5. 템플릿이 없거나 적합하지 않은 경우, 가장 유사한 템플릿을 선택하세요.
-6. **이미지 형식 보존**: 템플릿의 이미지 태그 형식, 크기, 스타일을 그대로 유지할 수 있는 템플릿을 선택하세요.
+2. 조회한 template html 코드를 html_template에 변경없이 넣으세요
+3. get_html_template_content_tool을 통해 조회된 template을 넣으세요.
+4. ** 임의로 html을 생성하면 안됩니다. **
 """
         input_state = state.copy()
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
 
         # 에이전트 실행
-        result = await slide_design_react_agent.ainvoke(input_state, config={"recursion_limit": 100})
+        result = await slide_design_react_agent.ainvoke(input_state)
 
         # 결과에서 디자인 정보 추출
         return {"html_template": result['structured_response']['html_template']}
@@ -210,11 +183,6 @@ def create_slide_design_node(slide_design_llm):
 슬라이드 타입: {state.get("slide_type", "contents")}
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
-
-## 이미지 디자인 지침
-- 템플릿의 이미지 형식과 스타일을 고려하여 이미지를 설계하세요
-- 이미지 크기와 비율이 템플릿에 적합하도록 제안하세요
-- 템플릿의 디자인 시스템과 일치하는 이미지 스타일을 고려하세요
 """
         for i in range(10):
             try:
@@ -312,26 +280,12 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 {html_template}
 
 # 생성 지침
-1. **템플릿 이미지 형식 보존**: HTML 템플릿에 이미 정의된 이미지 태그의 형식, 크기, 스타일, 클래스명을 그대로 유지하세요.
-2. **이미지 URL만 교체**: 기존 이미지 태그의 src 속성만 새로운 이미지 URL로 교체하고, 나머지 속성들(width, height, class, style 등)은 변경하지 마세요.
-3. **레이아웃 유지**: 템플릿의 이미지 배치와 레이아웃을 그대로 유지하세요.
-4. **CSS 클래스 보존**: 템플릿에 정의된 CSS 클래스명을 그대로 사용하세요.
-5. **이미지 크기 유지**: 템플릿에서 정의된 이미지 크기(width, height)를 변경하지 마세요.
-6. **스타일 속성 보존**: 템플릿의 이미지 스타일 속성(border, margin, padding 등)을 그대로 유지하세요.
-
-# 예시
-템플릿에 다음과 같은 이미지 태그가 있다면:
-```html
-<img src="placeholder.jpg" class="slide-image" style="width: 300px; height: 200px; border-radius: 10px;" alt="이미지 설명">
-```
-
-다음과 같이 URL만 교체하세요:
-```html
-<img src="https://new-image-url.com/image.jpg" class="slide-image" style="width: 300px; height: 200px; border-radius: 10px;" alt="이미지 설명">
-```
-
-**중요**: 템플릿의 디자인 시스템과 이미지 형식을 완전히 보존하면서 내용만 업데이트하는 것이 목표입니다.
-
+1. HTML 템플릿을 참고해서 슬라이드를 생성하세요.
+2. 슬라이드 타입에 맞는 적절한 제목과 레이아웃을 사용하세요
+3. 요구사항과 디자인 프롬프트를 반영하여 슬라이드를 구성하세요
+4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
+5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
+6. 이미지가 영역을 초과하지 않도록, 적절리 resize하거나 crop 하세요
 7. 텍스트 영역을 최대한 활용하여 풍부한 내용을 담되, 가독성을 해치지 않는 선에서 정보량을 극대화하세요
 8. 단순한 키워드 나열이 아닌 구체적인 예시와 부연설명을 포함하여 내용을 풍성하게 전개하세요
 9. **메타적 설명("~슬라이드를 작성하겠습니다", "~이 목적입니다" 등)은 제외하고, 청중이 실제로 봐야 할 핵심 내용만 포함하세요**
@@ -458,7 +412,7 @@ if __name__ == '__main__':
         'description': '제주도의 기본 정보와 특징을 소개하는 섹션',
         'content': '## 제주도 소개\n\n제주도는 한국의 가장 큰 섬으로, 아름다운 자연과 독특한 문화를 가지고 있습니다. 화산 활동으로 형성된 섬으로, 한라산을 중심으로 한 자연 경관이 뛰어납니다.\n\n### 주요 특징\n- 화산섬으로 형성된 독특한 지형\n- 아름다운 해변과 바다 경관\n- 독특한 제주 문화와 전통\n- 다양한 관광 명소와 활동',
         'img_url': 'https://example.com/jeju-image.jpg',
-        "template_folder": "1.현대 AI 기술",
+        "template_folder": "general",
         'metadata': {
             'topic': '제주도 여행 가이드',
             'requirements': '제주도 여행 가이드 슬라이드',

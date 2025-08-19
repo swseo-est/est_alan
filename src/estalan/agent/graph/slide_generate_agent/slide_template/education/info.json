@@ -1,0 +1,67 @@
+{
+    "templates": [
+        {
+            "filename": "title_slide.html",
+            "description": "title_slide.html 템플릿은 교육 발표의 메인 타이틀 슬라이드로, Jira 로고와 함께 파란색 그라데이션 배경을 사용한 전문적인 디자인입니다.",
+            "role": "교육 발표의 메인 타이틀 및 주제 소개",
+            "layout": "중앙 로고 + 제목 + 부제목 + 카테고리 아이콘",
+            "use_case": "Jira 교육이나 학습 관련 발표의 첫 번째 슬라이드"
+        },
+        {
+            "filename": "table_of_contents.html",
+            "description": "table_of_contents.html 템플릿은 발표 내용의 목차를 체계적으로 정리하여 청중이 전체 구조를 파악할 수 있도록 하는 디자인입니다.",
+            "role": "발표 목차 및 전체 구조 안내",
+            "layout": "상단 제목 + 2열 그리드 목차 + 번호 및 아이콘",
+            "use_case": "발표의 두 번째 슬라이드로 전체 내용의 흐름을 미리 보여주는 슬라이드"
+        },
+        {
+            "filename": "what_is_jira.html",
+            "description": "what_is_jira.html 템플릿은 Jira의 기본 개념과 정의를 설명하는 슬라이드로, 하이라이트 박스와 특징 항목을 사용한 교육적 디자인입니다.",
+            "role": "Jira 기본 개념 및 정의 설명",
+            "layout": "좌측 하이라이트 박스 + 특징 항목 + 우측 이미지 및 핵심 기능",
+            "use_case": "Jira에 대한 기본적인 이해를 제공하는 교육 슬라이드"
+        },
+        {
+            "filename": "jira_key_features.html",
+            "description": "jira_key_features.html 템플릿은 Jira의 주요 기능들을 상세히 설명하여 사용자가 핵심 기능을 이해할 수 있도록 하는 디자인입니다.",
+            "role": "Jira 주요 기능 상세 설명",
+            "layout": "기능별 카드 레이아웃 + 아이콘 및 설명",
+            "use_case": "Jira의 핵심 기능들을 체계적으로 소개하는 교육 슬라이드"
+        },
+        {
+            "filename": "jira_for_various_teams.html",
+            "description": "jira_for_various_teams.html 템플릿은 다양한 팀에서 Jira를 어떻게 활용하는지 보여주는 슬라이드로, 팀별 사용 사례를 정리한 디자인입니다.",
+            "role": "다양한 팀의 Jira 활용 사례",
+            "layout": "팀별 카드 레이아웃 + 역할 및 사용 방법",
+            "use_case": "개발팀, 기획팀, 디자인팀 등 다양한 팀의 Jira 활용법을 소개하는 슬라이드"
+        },
+        {
+            "filename": "agile_project_management.html",
+            "description": "agile_project_management.html 템플릿은 애자일 프로젝트 관리에서 Jira의 역할과 활용법을 설명하는 슬라이드입니다.",
+            "role": "애자일 프로젝트 관리와 Jira 연동",
+            "layout": "애자일 방법론 설명 + Jira 활용법 + 워크플로우",
+            "use_case": "스크럼, 칸반 등 애자일 방법론에서 Jira를 활용하는 방법을 교육하는 슬라이드"
+        },
+        {
+            "filename": "jira_use_case_software.html",
+            "description": "jira_use_case_software.html 템플릿은 소프트웨어 개발에서 Jira의 구체적인 사용 사례를 보여주는 슬라이드입니다.",
+            "role": "소프트웨어 개발에서의 Jira 활용 사례",
+            "layout": "개발 프로세스별 사용 사례 + 실제 활용 예시",
+            "use_case": "소프트웨어 개발 프로젝트에서 Jira를 실제로 활용하는 방법을 보여주는 슬라이드"
+        },
+        {
+            "filename": "jira_master_tips.html",
+            "description": "jira_master_tips.html 템플릿은 Jira를 마스터하기 위한 실용적인 팁과 노하우를 제공하는 슬라이드입니다.",
+            "role": "Jira 마스터를 위한 실용적 팁",
+            "layout": "팁별 카드 레이아웃 + 실용적 조언 + 아이콘",
+            "use_case": "Jira를 더욱 효율적으로 사용하기 위한 실용적인 팁을 제공하는 교육 슬라이드"
+        },
+        {
+            "filename": "conclusion.html",
+            "description": "conclusion.html 템플릿은 Jira 교육의 마무리 슬라이드로, 핵심 내용 요약과 다음 단계를 제시하는 디자인입니다.",
+            "role": "교육 내용 요약 및 마무리",
+            "layout": "핵심 포인트 요약 + 다음 단계 제안 + 감사 메시지",
+            "use_case": "Jira 교육의 마지막 슬라이드로 전체 내용을 요약하고 다음 학습 방향을 제시하는 슬라이드"
+        }
+    ]
+}

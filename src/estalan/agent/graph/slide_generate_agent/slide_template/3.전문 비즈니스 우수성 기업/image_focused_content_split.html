@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Core Content - Borcelle Presentation</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+        }
+        .image-section {
+            width: 50%;
+            height: 100%;
+            position: relative;
+        }
+        .content-section {
+            width: 50%;
+            height: 100%;
+            background-color: #ffffff;
+            padding: 80px 60px;
+            position: relative;
+        }
+        .number-badge {
+            position: absolute;
+            right: 30px;
+            bottom: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #f49415;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 10;
+            color: #ffffff;
+        }
+        .sunburst {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            top: 0;
+            right: 0;
+            opacity: 0.2;
+            background: radial-gradient(circle, transparent 30%, rgba(244, 148, 21, 0.3) 70%);
+            z-index: 0;
+        }
+        .title-text {
+            font-family: Arial, sans-serif;
+            color: #06436e;
+        }
+        .content-text {
+            font-family: 'Times New Roman', Times, serif;
+            color: #06436e;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Left Section - Image -->
+<div class="image-section">
+<img alt="Team collaboration around laptop" src="https://page.gensparksite.com/slides_images/074c372758e59c9f4f203a7b9cd9846b.jpg" style="width: 100%; height: 100%; object-fit: cover;"/>
+</div>
+<!-- Right Section - Content -->
+<div class="content-section">
+<!-- Sunburst Pattern -->
+<div class="sunburst"></div>
+<!-- Content -->
+<div style="position: relative; z-index: 1;">
+<h1 class="text-6xl font-bold title-text" style="line-height: 1.1;">CORE</h1>
+<h1 class="text-6xl font-bold mb-4 title-text" style="line-height: 1.1;">CONTENT</h1>
+<h2 class="text-5xl font-bold mb-10 title-text">PART 1</h2>
+<p class="text-base leading-relaxed mb-6 content-text">
+                    Our Leadership Excellence Framework drives transformational growth through adaptive leadership methodologies. We implement customized executive coaching, strategic decision-making workshops, and cross-functional team alignment to create resilient organizations capable of navigating complex business environments.
+                </p>
+<p class="text-base leading-relaxed content-text">
+                    Borcelle's Performance Optimization System integrates data-driven metrics with behavioral science to identify organizational bottlenecks and implement targeted improvement strategies, resulting in measurable productivity increases of 27-35% for our clients.
+                </p>
+</div>
+</div>
+<!-- Number Badge -->
+<div class="number-badge">
+            07
+        </div>
+</div>
+</body>
+</html>

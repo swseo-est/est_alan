@@ -1,0 +1,589 @@
+{
+  "template_library": {
+    "metadata": {
+      "template_id": "71ee10aa-65e5-4395-bc70-3c7c4706954a",
+      "template_name": "현대 기업 고객 경험 프레젠테이션",
+      "version": "1.0",
+      "created_date": "2025-08-19",
+      "total_slides": 13,
+      "source_company": "Sterling & Partners",
+      "presentation_theme": "Customer Experience Optimization",
+      "resolution": {
+        "width": 1280,
+        "height": 720,
+        "aspect_ratio": "16:9"
+      },
+      "themes": ["Business", "Technology", "Marketing", "Customer Experience"],
+      "styles": ["Professional", "Elegant", "Minimalist", "Modern", "Corporate"]
+    },
+
+    "design_system": {
+      "color_palette": {
+        "primary_colors": {
+          "deep_blue": "#1E3A8A",
+          "medium_blue": "#1E40AF",
+          "accent_blue": "#3B82F6",
+          "light_blue": "#93C5FD",
+          "pale_blue": "#BFDBFE"
+        },
+        "neutral_colors": {
+          "pure_white": "#FFFFFF",
+          "slate_gray": "#6B7280",
+          "divider_gray": "rgba(30, 58, 138, 0.2)"
+        },
+        "transparency_variants": {
+          "circle_backgrounds": "rgba(191, 219, 254, 0.3-0.5)",
+          "shape_overlays": "rgba(30, 64, 175, 0.5)",
+          "subtle_shadows": "rgba(0, 0, 0, 0.1)"
+        },
+        "usage_rules": {
+          "cover_slides": "#1E3A8A background with white text",
+          "content_slides": "#FFFFFF background with blue text",
+          "headings": "#1E3A8A",
+          "body_text": "#6B7280",
+          "accent_elements": "Progressive blue gradient (#1E3A8A → #3B82F6)"
+        }
+      },
+
+      "typography": {
+        "font_families": {
+          "primary": {
+            "name": "DM Serif Display",
+            "type": "serif",
+            "usage": "Main titles, section headings, large numbers",
+            "korean_alternative": "설림명조체 (Seollim Myeongjo)"
+          },
+          "secondary": {
+            "name": "Roboto Mono",
+            "type": "monospace",
+            "usage": "Body text, descriptions, labels, interface elements",
+            "korean_alternative": "네이버 나눔고딕코딩 (NanumGothicCoding)"
+          },
+          "icons": {
+            "name": "FontAwesome",
+            "type": "icon font",
+            "usage": "UI icons, decorative elements",
+            "korean_alternative": "Noto Sans Symbols 2 + SVG icons"
+          }
+        },
+
+        "size_hierarchy": {
+          "cover_title": "5rem-6rem (80-96px)",
+          "toc_title": "6rem (96px)",
+          "section_title": "4.5rem-5rem (72-80px)",
+          "subtitle": "1.5rem-1.8rem (24-29px)",
+          "body_text": "1.0rem-1.1rem (16-18px)",
+          "toc_items": "1.2rem (19px)",
+          "stage_labels": "1.2rem (19px)",
+          "stat_numbers": "2.5rem-5rem (40-80px)",
+          "button_text": "1.2rem (19px)",
+          "icon_size": "1.2rem (19px)"
+        },
+
+        "weight_specifications": {
+          "titles": "Bold (700)",
+          "subtitles": "Normal/Bold depending on context",
+          "body": "Regular (400)",
+          "emphasis": "Bold for numbers and labels"
+        },
+
+        "spacing_rules": {
+          "line_height_titles": "1.1",
+          "line_height_body": "1.5-1.6",
+          "line_height_subtitles": "1.4",
+          "letter_spacing": "Normal throughout",
+          "text_alignment": "Primarily left-aligned, center for boxes"
+        }
+      },
+
+      "layout_grid": {
+        "slide_dimensions": {
+          "width": "1280px",
+          "height": "720px"
+        },
+        "margins_and_padding": {
+          "outer_margins": "40px on all sides",
+          "header_padding": "15-20px vertical, 40px horizontal",
+          "content_padding": "40px",
+          "inter_element_spacing": "20px between boxes, 40px between columns"
+        },
+        "grid_systems": {
+          "cover_layout": "3/5 left (title) + 2/5 right (subtitle)",
+          "toc_layout": "1/2 left (title) + 1/2 right (content)",
+          "content_layout": "Equal 1/2 columns",
+          "header_layout": "3-column grid (brand, date, handle)"
+        }
+      },
+
+      "visual_elements": {
+        "decorative_circles": {
+          "sizes": "300px-800px diameter",
+          "colors": "Blue tints with 30-50% opacity",
+          "placement": "Background corners, never overlapping text",
+          "purpose": "Depth and visual interest"
+        },
+        "content_boxes": {
+          "border_radius": "10px-30px",
+          "colors": "Progressive blue hierarchy",
+          "padding": "20-30px",
+          "text_alignment": "Center"
+        },
+        "icon_circles": {
+          "size": "36-60px diameter",
+          "background": "Blue variants",
+          "icon_color": "White",
+          "border": "2px solid white when applicable"
+        },
+        "dividers_and_lines": {
+          "thickness": "1px",
+          "color": "#1E3A8A at 20% opacity",
+          "usage": "Section separation, connector lines"
+        }
+      }
+    },
+
+    "slide_templates": [
+      {
+        "slide_number": 1,
+        "template_key": "title_cover_feature_highlight",
+        "template_name": "Title Cover with Feature Highlight",
+        "category": "Cover",
+        "layout_type": "Split Screen (3/5 + 2/5)",
+        "background_color": "#1E3A8A",
+        "text_color": "White",
+        "content_structure": {
+          "left_section": {
+            "main_title": "5rem, DM Serif Display, Bold",
+            "alignment": "Left"
+          },
+          "right_section": {
+            "subtitle": "1.5rem, Roboto Mono",
+            "alignment": "Right"
+          },
+          "header": "3-column brand header",
+          "decorative_elements": "3 overlapping circles (500px, 400px, 300px)"
+        },
+        "use_cases": [
+          "Presentation opening",
+          "Company introduction",
+          "Topic introduction",
+          "Brand presentation"
+        ]
+      },
+
+      {
+        "slide_number": 2,
+        "template_key": "table_of_contents_numbered_list",
+        "template_name": "Table of Contents with Numbered List",
+        "category": "Navigation",
+        "layout_type": "Split (1/2 + 1/2)",
+        "background_color": "#1E3A8A",
+        "text_color": "White",
+        "content_structure": {
+          "left_section": {
+            "title": "6rem, DM Serif Display, Bold",
+            "alignment": "Left"
+          },
+          "right_section": {
+            "toc_list": "Vertical list with numbers",
+            "item_size": "1.2rem",
+            "number_color": "#BFDBFE"
+          },
+          "decorative_elements": "2 background circles (700px, 400px)"
+        },
+        "use_cases": [
+          "Agenda presentation",
+          "Content overview",
+          "Section navigation",
+          "Presentation roadmap"
+        ]
+      },
+
+      {
+        "slide_number": 3,
+        "template_key": "intro_overview_dual_stat_blocks",
+        "template_name": "Intro Overview with Dual Stat Blocks",
+        "category": "Content",
+        "layout_type": "Split (1/2 + 1/2)",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "left_section": {
+            "title": "5rem, DM Serif Display",
+            "description": "1.1rem, Roboto Mono, #6B7280"
+          },
+          "right_section": {
+            "stat_blocks": "2 vertical stat items",
+            "stat_numbers": "5rem, DM Serif Display",
+            "icon_circles": "40px blue circles"
+          },
+          "decorative_elements": "2 background circles"
+        },
+        "use_cases": [
+          "Topic introduction with statistics",
+          "Key metrics presentation",
+          "Overview with data points",
+          "Impact demonstration"
+        ]
+      },
+
+      {
+        "slide_number": 4,
+        "template_key": "priority_highlights_circular_cluster",
+        "template_name": "Priority Highlights with Circular Cluster",
+        "category": "Content",
+        "layout_type": "Split with Floating Elements",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "left_section": {
+            "title": "4.8rem, DM Serif Display",
+            "subtitle": "1.8rem, DM Serif Display",
+            "description": "1rem, Roboto Mono"
+          },
+          "right_section": {
+            "priority_circles": "3 floating circles (180-200px)",
+            "circle_colors": ["#1E3A8A", "#1E40AF", "#3B82F6"],
+            "positioning": "Absolute positioning in quadrants"
+          }
+        },
+        "use_cases": [
+          "Priority ranking",
+          "Feature highlights",
+          "Top 3 concepts",
+          "Clustered information"
+        ]
+      },
+
+      {
+        "slide_number": 5,
+        "template_key": "data_spotlight_dual_emphasis",
+        "template_name": "Data Spotlight with Dual Emphasis",
+        "category": "Content",
+        "layout_type": "Split (1/2 + 1/2)",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "left_section": {
+            "title": "5rem, DM Serif Display"
+          },
+          "right_section": {
+            "description": "1.1rem, Roboto Mono",
+            "gauge_chart": "Semi-circular gauge (160x80px)",
+            "stat_highlight": "2.5rem numbers with descriptions"
+          },
+          "visual_elements": "Gauge visualization, divider lines"
+        },
+        "use_cases": [
+          "Data visualization",
+          "Performance metrics",
+          "Survey results",
+          "Analytics presentation"
+        ]
+      },
+
+      {
+        "slide_number": 6,
+        "template_key": "segmented_infographic_descriptive_sidebar",
+        "template_name": "Segmented Infographic with Descriptive Sidebar",
+        "category": "Content",
+        "layout_type": "Split (1/2 + 1/2)",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "left_section": {
+            "title": "5rem, DM Serif Display",
+            "description": "1.1rem, Roboto Mono"
+          },
+          "right_section": {
+            "funnel_diagram": "5-level funnel (450x450px)",
+            "stage_labels": "1.2rem, DM Serif Display",
+            "connector_lines": "1px horizontal lines"
+          },
+          "visual_complexity": "Multi-layered infographic"
+        },
+        "use_cases": [
+          "Process visualization",
+          "Journey mapping",
+          "Funnel analysis",
+          "Stage progression"
+        ]
+      },
+
+      {
+        "slide_number": 7,
+        "template_key": "horizontal_touchpoint_timeline",
+        "template_name": "Horizontal Touchpoint Timeline",
+        "category": "Content",
+        "layout_type": "Split (1/2 + 1/2)",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "left_section": {
+            "title": "4.5rem, DM Serif Display",
+            "subtitle": "1.8rem, DM Serif Display",
+            "description": "1.1rem, Roboto Mono"
+          },
+          "right_section": {
+            "strategy_boxes": "Horizontal sequence of rounded boxes",
+            "box_arrangement": "1 full-width + 2 half-width",
+            "number_circles": "36px white circles with blue numbers"
+          }
+        },
+        "use_cases": [
+          "Timeline presentation",
+          "Sequential processes",
+          "Strategy steps",
+          "Customer journey touchpoints"
+        ]
+      },
+
+      {
+        "slide_number": 8,
+        "template_key": "process_steps_highlighted_actions",
+        "template_name": "Process Steps with Highlighted Actions",
+        "category": "Content",
+        "layout_type": "Split (1/2 + 1/2)",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "left_section": {
+            "title": "4.5rem, DM Serif Display",
+            "subtitle": "1.8rem, DM Serif Display",
+            "description": "1.1rem, Roboto Mono"
+          },
+          "right_section": {
+            "step_boxes": "3 vertical stacked boxes",
+            "box_colors": ["#1E3A8A", "#1E40AF", "#3B82F6"],
+            "text_alignment": "Center, 1.2rem"
+          }
+        },
+        "use_cases": [
+          "Action steps",
+          "Process breakdown",
+          "Sequential instructions",
+          "Workflow presentation"
+        ]
+      },
+
+      {
+        "slide_number": 9,
+        "template_key": "case_study_metrics_split_columns",
+        "template_name": "Case Study Metrics with Split Columns",
+        "category": "Content",
+        "layout_type": "Full Width with Sections",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "header_section": {
+            "title": "4rem, DM Serif Display"
+          },
+          "metrics_section": {
+            "layout": "Horizontal flex layout",
+            "metric_items": "Icon + Number + Description",
+            "icon_circles": "60px blue circles",
+            "numbers": "3.5rem, DM Serif Display"
+          },
+          "result_section": {
+            "arrow_indicator": "60px circle with arrow",
+            "result_percentage": "5rem, DM Serif Display",
+            "description": "1rem, Roboto Mono"
+          }
+        },
+        "use_cases": [
+          "Case study presentation",
+          "Before/after comparisons",
+          "Results demonstration",
+          "Impact metrics"
+        ]
+      },
+
+      {
+        "slide_number": 10,
+        "template_key": "segmented_arch_highlights_descriptor_list",
+        "template_name": "Segmented Arch Highlights with Descriptor List",
+        "category": "Content",
+        "layout_type": "Split (1/2 + 1/2)",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "left_section": {
+            "title": "5rem, DM Serif Display",
+            "subtitle": "1.8rem, DM Serif Display",
+            "description": "1.1rem, Roboto Mono",
+            "feature_list": "3 vertical items with left borders"
+          },
+          "right_section": {
+            "arch_visual": "3 overlapping arches (550x300px)",
+            "arch_colors": ["#1E40AF", "#3B82F6", "#BFDBFE"],
+            "visual_style": "Rotated semi-circles"
+          }
+        },
+        "use_cases": [
+          "Technology categories",
+          "Feature pillars",
+          "Concept clustering",
+          "Architectural overview"
+        ]
+      },
+
+      {
+        "slide_number": 11,
+        "template_key": "clustered_feature_circles_stat_highlight",
+        "template_name": "Clustered Feature Circles with Stat Highlight",
+        "category": "Content",
+        "layout_type": "Full Width with Grouped Elements",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "header_section": {
+            "title": "5rem, DM Serif Display",
+            "description": "1.2rem, Roboto Mono"
+          },
+          "feature_circles": {
+            "layout": "Horizontal row of 3 circles",
+            "circle_size": "180px diameter",
+            "colors": ["#1E40AF", "#1E3A8A", "#3B82F6"],
+            "content": "Icon + text, centered"
+          },
+          "stat_section": {
+            "arrow_circle": "60px bordered circle",
+            "percentage": "5rem, DM Serif Display",
+            "description": "1.1rem, Roboto Mono"
+          }
+        },
+        "use_cases": [
+          "Feature clustering",
+          "Method comparison",
+          "Service highlights with results",
+          "Multi-option presentation"
+        ]
+      },
+
+      {
+        "slide_number": 12,
+        "template_key": "conclusion_stacked_step_bars",
+        "template_name": "Conclusion Layout with Stacked Step Bars",
+        "category": "Content",
+        "layout_type": "Split (1/2 + 1/2)",
+        "background_color": "#FFFFFF",
+        "text_color": "#1E3A8A",
+        "content_structure": {
+          "left_section": {
+            "title": "5rem, DM Serif Display"
+          },
+          "right_section": {
+            "description": "1.1rem, Roboto Mono",
+            "best_practices_title": "1.8rem, DM Serif Display",
+            "practice_bars": "3 ascending bars (150px, 200px, 250px height)",
+            "bar_colors": ["#1E3A8A", "#1E40AF", "#3B82F6"]
+          }
+        },
+        "use_cases": [
+          "Best practices summary",
+          "Key takeaways",
+          "Recommendation hierarchy",
+          "Conclusion points"
+        ]
+      },
+
+      {
+        "slide_number": 13,
+        "template_key": "contact_details_emphasis_banner",
+        "template_name": "Contact Details with Emphasis Banner",
+        "category": "Closing",
+        "layout_type": "Split with Emphasis",
+        "background_color": "#1E3A8A",
+        "text_color": "White",
+        "content_structure": {
+          "header": "3-column brand header + subtitle bar",
+          "left_section": {
+            "title": "5.5rem, DM Serif Display",
+            "description": "1.1rem, Roboto Mono"
+          },
+          "right_section": {
+            "contact_blocks": "Stacked contact information",
+            "label_style": "1.4rem, DM Serif Display, #BFDBFE",
+            "info_style": "1.8rem, Roboto Mono, White"
+          },
+          "decorative_elements": "3 overlapping circles"
+        },
+        "use_cases": [
+          "Contact information",
+          "Thank you slides",
+          "Call to action",
+          "Presentation closing"
+        ]
+      }
+    ],
+
+    "usage_guidelines": {
+      "template_selection_by_purpose": {
+        "opening_slides": ["title_cover_feature_highlight", "table_of_contents_numbered_list"],
+        "content_slides": [
+          "intro_overview_dual_stat_blocks",
+          "priority_highlights_circular_cluster",
+          "data_spotlight_dual_emphasis",
+          "segmented_infographic_descriptive_sidebar",
+          "horizontal_touchpoint_timeline",
+          "process_steps_highlighted_actions",
+          "case_study_metrics_split_columns",
+          "segmented_arch_highlights_descriptor_list",
+          "clustered_feature_circles_stat_highlight"
+        ],
+        "closing_slides": ["conclusion_stacked_step_bars", "contact_details_emphasis_banner"]
+      },
+
+      "content_type_mapping": {
+        "statistics_and_data": [
+          "intro_overview_dual_stat_blocks",
+          "data_spotlight_dual_emphasis",
+          "case_study_metrics_split_columns"
+        ],
+        "processes_and_workflows": [
+          "segmented_infographic_descriptive_sidebar",
+          "horizontal_touchpoint_timeline",
+          "process_steps_highlighted_actions"
+        ],
+        "features_and_highlights": [
+          "priority_highlights_circular_cluster",
+          "segmented_arch_highlights_descriptor_list",
+          "clustered_feature_circles_stat_highlight"
+        ],
+        "navigation_and_structure": [
+          "table_of_contents_numbered_list",
+          "conclusion_stacked_step_bars"
+        ]
+      },
+
+      "design_consistency_rules": [
+        "Always use specified color palette",
+        "Maintain 40px outer margins on all slides",
+        "Use DM Serif Display for titles, Roboto Mono for body",
+        "Keep decorative circles in background with proper opacity",
+        "Ensure consistent header branding across all slides",
+        "Follow established font size hierarchy",
+        "Use progressive blue colors for element hierarchy",
+        "Maintain white space and clean layouts"
+      ]
+    },
+
+    "technical_specifications": {
+      "html_css_framework": {
+        "css_library": "Tailwind CSS 2.2.19",
+        "icon_library": "FontAwesome 6.4.0",
+        "google_fonts": "DM Serif Display, Roboto Mono"
+      },
+      "responsive_considerations": {
+        "fixed_dimensions": "1280x720px (not responsive)",
+        "target_output": "PDF and PPTX conversion",
+        "zoom_compatibility": "Designed for standard presentation zoom levels"
+      },
+      "browser_compatibility": {
+        "css_features": "Modern CSS (flexbox, grid, clip-path)",
+        "font_loading": "Google Fonts with fallbacks",
+        "performance": "Optimized for slide rendering"
+      }
+    }
+  }
+}

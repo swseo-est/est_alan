@@ -6,7 +6,11 @@ from estalan.llm import create_chat_model
 from estalan.messages.utils import create_ai_message
 from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 from langgraph.prebuilt import create_react_agent
-from estalan.agent.graph.slide_generate_agent.utils import get_html_template_list, get_html_template_content_tool
+from estalan.agent.graph.slide_generate_agent.utils import (
+    get_html_template_content_tool,
+    get_template_metadata_string,
+    format_template_info
+)
 from estalan.agent.graph.slide_generate_agent.prompt.slide_design import prompt_slide_design
 from langgraph.prebuilt.chat_agent_executor import AgentState, AgentStateWithStructuredResponse
 from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult
@@ -108,12 +112,17 @@ def create_slide_template_select_node(slide_design_react_agent):
         name = state["name"]
         description = state["description"]
         content = state["content"]
-        # img_url = state["img_url"]
-
         template_folder = state["template_folder"]
 
-        list_html_file = get_html_template_list(template_folder)
-
+        # 새로운 utils 함수를 사용하여 템플릿 정보 가져오기
+        try:
+            template_info = get_template_metadata_string(template_folder)
+            template_summary = format_template_info(template_folder)
+        except Exception as e:
+            print(f"템플릿 정보 가져오기 실패: {e}")
+            # 기본 템플릿 정보 사용
+            template_info = f"템플릿 폴더: {template_folder}"
+            template_summary = "기본 템플릿 목록"
 
         # React 에이전트를 위한 프롬프트 템플릿
         prompt_slide_template_select = f"""
@@ -128,33 +137,50 @@ def create_slide_template_select_node(slide_design_react_agent):
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
 
+## 선택된 템플릿 폴더 정보
+{template_info}
+
+## 사용 가능한 템플릿 목록
+{template_summary}
 
 ## 템플릿 선택 기준:
-- 슬라이드 타입 (title, contents 등)에 따른 적합성
-- 내용의 성격 (텍스트 중심, 이미지 중심, 데이터 시각화 등)
-- 내용이 정확하게 일치하지 않더라도, 유사한 작업에 사용되었다면 선정하세요
-- 레이아웃의 적합성 (가로/세로 배치, 그리드 레이아웃 등)
-- 시각적 효과의 필요성
-- 요구사항과 디자인 프롬프트의 반영
+1. **슬라이드 타입 적합성**: 
+   - title: 제목 슬라이드용 템플릿
+   - contents: 내용 슬라이드용 템플릿
+   - summary: 요약 슬라이드용 템플릿
 
+2. **내용 성격 분석**:
+   - 텍스트 중심: 텍스트가 많은 경우
+   - 이미지 중심: 이미지가 중요한 경우
+   - 데이터 시각화: 차트나 그래프가 필요한 경우
+   - 비교 분석: 비교 내용이 많은 경우
 
-## 사용 가능한 HTML 템플릿 목록:
-{list_html_file}
+3. **레이아웃 적합성**:
+   - 가로/세로 배치
+   - 그리드 레이아웃
+   - 카드 형태
+   - 사이드바 형태
 
-## get_html_template_content_tool parameter
-template_folder: {template_folder}
+4. **시각적 효과**:
+   - 강조 요소 필요성
+   - 색상 및 스타일 일치성
+
+## get_html_template_content_tool 사용법
+- template_folder: {template_folder}
+- filename: 선택한 템플릿의 파일명 (예: "centered_title_cover_intro.html")
 
 ## 규칙
 1. 위의 템플릿 목록에서 내용에 가장 적합한 템플릿을 선택하세요.
-2. 조회한 template html 코드를 html_template에 변경없이 넣으세요
-3. get_html_template_content_tool을 통해 조회된 template을 넣으세요.
-4. ** 임의로 html을 생성하면 안됩니다. **
+2. 선택한 템플릿의 파일명을 정확히 입력하여 get_html_template_content_tool을 사용하세요.
+3. 조회한 template html 코드를 html_template에 변경없이 넣으세요.
+4. **임의로 html을 생성하면 안됩니다.**
+5. 템플릿이 없거나 적합하지 않은 경우, 가장 유사한 템플릿을 선택하세요.
 """
         input_state = state.copy()
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
 
         # 에이전트 실행
-        result = await slide_design_react_agent.ainvoke(input_state)
+        result = await slide_design_react_agent.ainvoke(input_state, config={"recursion_limit": 100})
 
         # 결과에서 디자인 정보 추출
         return {"html_template": result['structured_response']['html_template']}
@@ -376,7 +402,7 @@ if __name__ == '__main__':
         'description': '제주도의 기본 정보와 특징을 소개하는 섹션',
         'content': '## 제주도 소개\n\n제주도는 한국의 가장 큰 섬으로, 아름다운 자연과 독특한 문화를 가지고 있습니다. 화산 활동으로 형성된 섬으로, 한라산을 중심으로 한 자연 경관이 뛰어납니다.\n\n### 주요 특징\n- 화산섬으로 형성된 독특한 지형\n- 아름다운 해변과 바다 경관\n- 독특한 제주 문화와 전통\n- 다양한 관광 명소와 활동',
         'img_url': 'https://example.com/jeju-image.jpg',
-        "template_folder": "general",
+        "template_folder": "1.현대 AI 기술",
         'metadata': {
             'topic': '제주도 여행 가이드',
             'requirements': '제주도 여행 가이드 슬라이드',

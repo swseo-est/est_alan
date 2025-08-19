@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Objectives &amp; Goals - Borcelle Solutions</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #FFFFFF;
+            overflow: hidden;
+        }
+        .left-panel {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 400px;
+            height: 100%;
+            background-color: #f49415;
+            padding: 80px 40px;
+        }
+        .sunburst {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            bottom: 50px;
+            left: 50px;
+            opacity: 0.3;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+        }
+        .number-badge {
+            position: absolute;
+            right: 30px;
+            bottom: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #f49415;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .objective-circle {
+            width: 80px;
+            height: 80px;
+            background-color: #f49415;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 60px;
+            margin-top: 60px;
+        }
+        .objective-box {
+            width: 350px;
+        }
+        .title-font {
+            font-family: Arial, sans-serif;
+            color: #06436e;
+        }
+        .content-font {
+            font-family: "Times New Roman", Times, serif;
+            color: #06436e;
+        }
+        .panel-title {
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+        }
+        .panel-content {
+            font-family: "Times New Roman", Times, serif;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Left Panel -->
+<div class="left-panel">
+<h2 class="text-5xl font-bold mb-6 panel-title">OBJECTIVES<br/>&amp; GOALS</h2>
+<p class="text-sm leading-relaxed mt-8 panel-content">
+                At Borcelle Solutions, we establish clear objectives that drive measurable business excellence outcomes. Our structured approach ensures your organization achieves sustainable growth and operational excellence.
+            </p>
+<!-- Sunburst Pattern -->
+<div class="sunburst"></div>
+</div>
+<!-- Right Content -->
+<div style="position: absolute; left: 450px; top: 50px; right: 50px; height: calc(100% - 100px);">
+<div class="objectives-grid">
+<!-- Objective 1 -->
+<div class="objective-box">
+<div class="objective-circle">01</div>
+<h3 class="text-xl font-bold mb-2 title-font">Performance Excellence</h3>
+<p class="text-sm content-font">Enhance operational efficiency through data-driven analysis and strategic implementation of industry best practices.</p>
+</div>
+<!-- Objective 2 -->
+<div class="objective-box">
+<div class="objective-circle">02</div>
+<h3 class="text-xl font-bold mb-2 title-font">Leadership Development</h3>
+<p class="text-sm content-font">Build resilient leadership teams equipped with advanced management capabilities and strategic decision-making skills.</p>
+</div>
+<!-- Objective 3 -->
+<div class="objective-box">
+<div class="objective-circle">03</div>
+<h3 class="text-xl font-bold mb-2 title-font">Process Optimization</h3>
+<p class="text-sm content-font">Streamline organizational workflows, eliminate redundancy, and implement agile methodologies to reduce operational waste.</p>
+</div>
+<!-- Objective 4 -->
+<div class="objective-box">
+<div class="objective-circle">04</div>
+<h3 class="text-xl font-bold mb-2 title-font">Customer Experience</h3>
+<p class="text-sm content-font">Develop and implement comprehensive strategies to enhance client satisfaction, loyalty, and long-term relationship value.</p>
+</div>
+</div>
+</div>
+<!-- Number Badge -->
+<div class="number-badge">
+            03
+        </div>
+</div>
+</body>
+</html>

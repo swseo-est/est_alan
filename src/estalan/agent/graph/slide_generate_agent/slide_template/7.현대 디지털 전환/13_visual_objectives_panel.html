@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Objectives - Nexus Innovations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #181B24;
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+        }
+        .content-container {
+            display: flex;
+            height: 100%;
+            padding: 80px;
+        }
+        .left-content {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            padding-right: 40px;
+        }
+        .title-section {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        .purple-bar {
+            width: 8px;
+            background-color: #B165FB;
+            margin-right: 30px;
+            height: 120px;
+        }
+        .title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+            text-transform: uppercase;
+            font-family: 'Sora', sans-serif;
+        }
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #AAAAAA;
+            margin-left: 38px;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
+        }
+        .right-content {
+            width: 55%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+        }
+        .image-container {
+            display: flex;
+            height: 320px;
+        }
+        .image {
+            width: 220px;
+            height: 100%;
+            object-fit: cover;
+            margin-left: 10px;
+            border: 2px solid #B165FB;
+        }
+        .wave-decoration {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            height: 150px;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        .company-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            color: #AAAAAA;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+        }
+        .objectives-list {
+            margin-left: 38px;
+            color: #AAAAAA;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .objectives-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+        }
+        .objectives-list i {
+            color: #B165FB;
+            margin-right: 12px;
+        }
+        .highlight {
+            color: white;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="content-container">
+            <div class="left-content">
+                <div class="title-section">
+                    <div class="purple-bar"></div>
+                    <div>
+                        <h1 class="title">STRATEGIC<br>OBJECTIVES</h1>
+                    </div>
+                </div>
+                
+                <ul class="objectives-list">
+                    <li><i class="fas fa-chart-line"></i> Increase operational efficiency by <span class="highlight">40%</span></li>
+                    <li><i class="fas fa-money-bill-wave"></i> Reduce costs by <span class="highlight">25%</span></li>
+                    <li><i class="fas fa-users"></i> Enhance customer experience through personalized solutions</li>
+                    <li><i class="fas fa-database"></i> Improve data-driven decision making across all departments</li>
+                </ul>
+            </div>
+            
+            <div class="right-content">
+                <div class="image-container">
+                    <img src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=220&h=320&q=80" alt="Team collaboration" class="image">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=220&h=320&q=80" alt="Business discussion" class="image">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wave decoration -->
+        <svg class="wave-decoration" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,150 C50,100 100,50 150,0 C200,-50 250,-100 300,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M20,150 C70,100 120,50 170,0 C220,-50 270,-100 320,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M40,150 C90,100 140,50 190,0 C240,-50 290,-100 340,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M60,150 C110,100 160,50 210,0 C260,-50 310,-100 360,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M80,150 C130,100 180,50 230,0 C280,-50 330,-100 380,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M100,150 C150,100 200,50 250,0 C300,-50 350,-100 400,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M120,150 C170,100 220,50 270,0 C320,-50 370,-100 420,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M140,150 C190,100 240,50 290,0 C340,-50 390,-100 440,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M160,150 C210,100 260,50 310,0 C360,-50 410,-100 460,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M180,150 C230,100 280,50 330,0 C380,-50 430,-100 480,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+            <path d="M200,150 C250,100 300,50 350,0 C400,-50 450,-100 500,-150" stroke="#B165FB" stroke-width="1" fill="none"></path>
+        </svg>
+        
+        <div class="company-logo">NEXUS INNOVATIONS</div>
+    </div>
+</body>
+</html>

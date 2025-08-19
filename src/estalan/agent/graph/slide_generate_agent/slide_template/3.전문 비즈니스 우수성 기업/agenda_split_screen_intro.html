@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agenda Slide - Borcelle Solutions</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #06436e;
+            overflow: hidden;
+        }
+        .sunburst {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, transparent 0%, transparent 70%, rgba(255,255,255,0.1) 100%);
+            opacity: 0.3;
+            right: 50px;
+            top: 50px;
+        }
+        .agenda-box {
+            position: absolute;
+            left: 0;
+            top: 50px;
+            width: 340px;
+            height: 180px;
+            background-color: #f49415;
+            padding: 30px;
+        }
+        .number-badge {
+            position: absolute;
+            right: 30px;
+            bottom: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #f49415;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .title-font {
+            font-family: Arial, sans-serif;
+        }
+        .content-font {
+            font-family: "Times New Roman", Times, serif;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container flex">
+<!-- Sunburst Pattern -->
+<div class="sunburst"></div>
+<!-- Left Section - Agenda -->
+<div class="agenda-box">
+<h2 class="text-3xl font-bold mb-3 title-font">AGENDA</h2>
+<p class="text-sm content-font">
+                Today's session outlines our approach to business excellence and transformative training solutions.
+            </p>
+</div>
+<!-- Center Section - Image -->
+<div class="absolute" style="left: 50px; top: 230px; width: 650px; height: 400px;">
+<img alt="Business team collaborating" class="w-full h-full object-cover rounded-md" src="https://page.gensparksite.com/slides_images/1422b5320a96f214240cab870f48eeed.jpg"/>
+</div>
+<!-- Right Section - Content -->
+<div class="absolute text-white" style="right: 50px; top: 190px; width: 450px;">
+<h3 class="text-xl font-bold mb-4 title-font">SESSION OVERVIEW</h3>
+<ul class="space-y-3 content-font">
+<li class="flex items-start">
+<i class="fas fa-circle text-orange-400 mr-3 mt-1 text-xs" style="color: #f49415;"></i>
+<span>Introduction to Business Excellence Framework</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-circle text-orange-400 mr-3 mt-1 text-xs" style="color: #f49415;"></i>
+<span>Our Expert Team &amp; Methodology</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-circle text-orange-400 mr-3 mt-1 text-xs" style="color: #f49415;"></i>
+<span>Core Solutions &amp; Implementation Strategy</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-circle text-orange-400 mr-3 mt-1 text-xs" style="color: #f49415;"></i>
+<span>Client Success Case Study Analysis</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-circle text-orange-400 mr-3 mt-1 text-xs" style="color: #f49415;"></i>
+<span>Q&amp;A and Next Steps</span>
+</li>
+</ul>
+<div class="mt-6 text-sm content-font">
+<p class="mb-1"><i class="fas fa-phone-alt mr-2" style="color: #f49415;"></i> +1 (555) 847-2950</p>
+<p><i class="fas fa-globe mr-2" style="color: #f49415;"></i> www.borcellesolutions.com</p>
+</div>
+</div>
+<!-- Number Badge -->
+<div class="number-badge">
+            04
+        </div>
+</div>
+</body>
+</html>

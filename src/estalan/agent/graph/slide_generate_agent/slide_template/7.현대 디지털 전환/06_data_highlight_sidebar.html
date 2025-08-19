@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Trends - Nexus Innovations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #181B24;
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+        }
+        .wave-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 500px;
+            height: 300px;
+            z-index: 1;
+        }
+        .content-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            height: 100%;
+            padding: 80px;
+        }
+        .left-content {
+            flex: 1;
+            padding-right: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .right-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .title {
+            font-family: 'Sora', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1;
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-width: 90%;
+            color: #A0A0A0;
+        }
+        .purple-bar {
+            width: 8px;
+            background-color: #B165FB;
+            margin-right: 20px;
+            height: 100px;
+        }
+        .chart-container {
+            width: 500px;
+            height: 400px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            padding: 20px;
+        }
+        .title-with-bar {
+            display: flex;
+            align-items: flex-start;
+        }
+        .company-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            color: #A0A0A0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <svg class="wave-decoration" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,100 Q125,50 250,100 T500,100 T750,100 T1000,100 T1250,100 T1500,100" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,110 Q125,60 250,110 T500,110 T750,110 T1000,110 T1250,110 T1500,110" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,120 Q125,70 250,120 T500,120 T750,120 T1000,120 T1250,120 T1500,120" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,130 Q125,80 250,130 T500,130 T750,130 T1000,130 T1250,130 T1500,130" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,140 Q125,90 250,140 T500,140 T750,140 T1000,140 T1250,140 T1500,140" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,150 Q125,100 250,150 T500,150 T750,150 T1000,150 T1250,150 T1500,150" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,160 Q125,110 250,160 T500,160 T750,160 T1000,160 T1250,160 T1500,160" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,170 Q125,120 250,170 T500,170 T750,170 T1000,170 T1250,170 T1500,170" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,180 Q125,130 250,180 T500,180 T750,180 T1000,180 T1250,180 T1500,180" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+            <path d="M0,190 Q125,140 250,190 T500,190 T750,190 T1000,190 T1250,190 T1500,190" fill="none" stroke="#B165FB" stroke-width="1.5" opacity="0.7"></path>
+        </svg>
+        
+        <div class="content-container">
+            <div class="left-content">
+                <div class="title-with-bar">
+                    <div class="purple-bar"></div>
+                    <div>
+                        <h1 class="title">DIGITAL<br>TRENDS</h1>
+                        <p class="subtitle">The digital transformation landscape is rapidly evolving across industries. Our analysis shows accelerated adoption of key technologies that are reshaping business operations and creating competitive advantages for early adopters.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-content">
+                <div class="chart-container">
+                    <canvas id="marketTrendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="company-logo">NEXUS INNOVATIONS</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('marketTrendsChart').getContext('2d');
+            
+            // Updated data for digital transformation trends
+            const adoptionData = [67, 85, 92, 58, 74];
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['AI Adoption', 'Cloud Migration', 'Remote Work Tools', 'IoT Integration', 'Data Analytics'],
+                    datasets: [
+                        {
+                            label: 'Adoption Rate (%)',
+                            data: adoptionData,
+                            backgroundColor: 'rgba(177, 101, 251, 0.7)',
+                            borderColor: 'rgba(177, 101, 251, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#A0A0A0',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#A0A0A0'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

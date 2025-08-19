@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinerary (2/2) - Ultimate Tokyo Adventure</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/gambetta');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Manrope', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            background-color: white;
+        }
+        h1, h2, h3 {
+            font-family: 'Gambetta', serif;
+        }
+        .section-number {
+            width: 50px;
+            height: 50px;
+            background-color: #FCCBC4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .bg-warm-cream {
+            background-color: #EEEDE9;
+        }
+        .text-soft-pink {
+            color: #FCCBC4;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container flex">
+        <!-- Left column with text content -->
+        <div class="w-1/2 p-10 flex flex-col bg-warm-cream">
+            <!-- Header with title -->
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold">Itinerary (2/2)</h1>
+                <p class="text-sm text-gray-600">WanderTokyo Experience</p>
+            </div>
+            
+            <!-- Day 4 -->
+            <div class="mb-8">
+                <h2 class="text-2xl text-soft-pink font-bold mb-1">DAY 4</h2>
+                <h3 class="text-2xl font-bold mb-4">Culture + Food Day</h3>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Workshop: pottery / cooking / calligraphy</li>
+                    <li>Visit to local art space or bookshop</li>
+                    <li>Evening food crawl — sample 3 dishes</li>
+                    <li>Optional: soak in a quiet, local bathhouse</li>
+                </ul>
+            </div>
+            
+            <!-- Day 5 -->
+            <div>
+                <h2 class="text-2xl text-soft-pink font-bold mb-1">DAY 5</h2>
+                <h3 class="text-2xl font-bold mb-4">Wrap Up</h3>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Morning: chill in a park or quiet cafe</li>
+                    <li>Pick up small souvenirs or local snacks</li>
+                    <li>Late checkout & head to airport</li>
+                    <li>Grab final meal on the way</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Right column with image -->
+        <div class="w-1/2 h-full relative">
+            <img src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?ixlib=rb-4.0.3&auto=format&fit=crop&w=640&h=720&q=80" alt="Tokyo Skytree at night" class="w-full h-full object-cover">
+            
+            <!-- Section number positioned at bottom right of the image -->
+            <div class="section-number absolute bottom-6 right-6">9</div>
+        </div>
+    </div>
+</body>
+</html>

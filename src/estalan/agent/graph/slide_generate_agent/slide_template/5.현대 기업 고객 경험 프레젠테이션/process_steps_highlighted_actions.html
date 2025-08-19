@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolving Customer Pain Points</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Roboto+Mono:wght@400;700&display=swap');
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 15px 40px;
+            color: #1E3A8A;
+            border-bottom: 1px solid rgba(30, 58, 138, 0.2);
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .content {
+            display: flex;
+            height: calc(100% - 60px);
+            padding: 40px;
+        }
+        
+        .left-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-right: 40px;
+        }
+        
+        .right-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 4.5rem;
+            line-height: 1.1;
+            color: #1E3A8A;
+            margin-bottom: 30px;
+        }
+        
+        .subtitle {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: #1E3A8A;
+            margin-bottom: 15px;
+        }
+        
+        .description {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            color: #6B7280;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            max-width: 500px;
+        }
+        
+        .step-box {
+            font-family: 'Roboto Mono', monospace;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        
+        .step-box-1 {
+            background-color: #1E3A8A;
+        }
+        
+        .step-box-2 {
+            background-color: #1E40AF;
+        }
+        
+        .step-box-3 {
+            background-color: #3B82F6;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(191, 219, 254, 0.4);
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            top: -150px;
+            right: -150px;
+        }
+        
+        .circle-2 {
+            width: 350px;
+            height: 350px;
+            bottom: -100px;
+            left: 50%;
+        }
+        
+        .circle-3 {
+            width: 450px;
+            height: 450px;
+            top: 150px;
+            right: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background Circles -->
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">Sterling &amp; Partners</div>
+            <div class="header-center text-center">03/15/2030</div>
+            <div class="header-right text-right">@sterlingcx</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="left-content">
+                <h1 class="title">Resolving<br>Customer<br>Pain Points</h1>
+                <h2 class="subtitle">Steps to Resolve<br>Customer Pain Points:</h2>
+                <p class="description">Addressing customer concerns quickly and effectively enhances trust and brand reputation.</p>
+            </div>
+            <div class="right-content">
+                <div class="step-box step-box-1">Identify recurring issues</div>
+                <div class="step-box step-box-2">Improve processes based on feedback</div>
+                <div class="step-box step-box-3">Train employees to handle complaints professionally</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

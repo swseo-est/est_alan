@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>KPI Metrics Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Lato:wght@400&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background-color: #FFFFFF;
+            color: #0052CC;
+            font-family: 'Lato', sans-serif;
+        }
+        .title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 36px;
+            color: #003366;
+            line-height: 1.2;
+        }
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: #0052CC;
+        }
+        .body-text {
+            font-family: 'Lato', sans-serif;
+            font-size: 16px;
+            color: #003366;
+        }
+        .blue-accent {
+            color: #0052CC;
+        }
+        .light-blue-bg {
+            background-color: #E6F2FF;
+        }
+        .light-blue-text {
+            color: #4A90E2;
+        }
+        .dark-blue-text {
+            color: #003366;
+        }
+        .geometric-shape {
+            position: absolute;
+            background-color: rgba(74, 144, 226, 0.1);
+            border-radius: 0;
+        }
+        .shape1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -50px;
+            transform: rotate(45deg);
+        }
+        .shape2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: 100px;
+            transform: rotate(30deg);
+        }
+        .accent-line {
+            width: 60px;
+            height: 4px;
+            background-color: #4A90E2;
+        }
+        .data-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E6F2FF;
+            border-left: 4px solid #0052CC;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .metric-value {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: #0052CC;
+        }
+        .metric-label {
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            color: #003366;
+        }
+        .metric-card {
+            background-color: #F8FBFF;
+            border: 1px solid #E6F2FF;
+            border-radius: 4px;
+            padding: 12px;
+            text-align: center;
+        }
+        .progress-container {
+            height: 10px;
+            background-color: #E6F2FF;
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #0052CC;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body style="">
+<div class="slide-container">
+<!-- Geometric shapes for background design -->
+<div class="geometric-shape shape1"></div>
+<div class="geometric-shape shape2"></div>
+<!-- Main content container -->
+<div class="flex flex-col h-full p-10">
+<!-- Title Section -->
+<div class="mb-6">
+<h1 class="title mb-3">PERFORMANCE METRICS & KPIs</h1>
+<div class="accent-line mb-4"></div>
+
+</div>
+<!-- Data Visualization Section -->
+<div class="flex flex-row justify-between space-x-6 flex-grow">
+<!-- Left Column: Revenue Growth -->
+<div class="w-1/3 flex flex-col">
+<h3 class="subtitle mb-3">REVENUE GROWTH</h3>
+<div class="chart-container">
+<canvas id="revenueLineChart" width="384" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 384px;"></canvas>
+</div>
+<div class="data-card">
+<p class="blue-accent font-bold mb-1">Year-to-Date Performance:</p>
+<p class="body-text text-sm">18.7% revenue growth exceeding target of 15%, driven primarily by enterprise client segment</p>
+</div>
+</div>
+<!-- Middle Column: Customer Acquisition -->
+<div class="w-1/3 flex flex-col">
+<h3 class="subtitle mb-3">CUSTOMER ACQUISITION</h3>
+<div class="chart-container">
+<canvas id="acquisitionBarChart" width="384" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 384px;"></canvas>
+</div>
+<div class="data-card">
+<p class="blue-accent font-bold mb-1">New Customer Overview:</p>
+<p class="body-text text-sm">Q2 acquisition target achieved at 127% with significant growth in APAC region (152% of target)</p>
+</div>
+</div>
+<!-- Right Column: Profit Margins -->
+<div class="w-1/3 flex flex-col">
+<h3 class="subtitle mb-3">PROFIT MARGINS</h3>
+<div class="chart-container">
+<canvas id="marginsDonutChart" width="384" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 384px;"></canvas>
+</div>
+<div class="data-card">
+<p class="blue-accent font-bold mb-1">Margin Expansion:</p>
+<p class="body-text text-sm">3.2 percentage point improvement in gross margin YoY through operational efficiency initiatives</p>
+</div>
+</div>
+</div>
+<!-- Bottom Metrics Section -->
+<div class="mt-4">
+<h3 class="subtitle mb-3">STRATEGIC KPI DASHBOARD</h3>
+<div class="flex justify-between">
+<div class="metric-card w-1/5">
+<p class="metric-value">32.4%</p>
+<p class="metric-label">ROI on Marketing</p>
+<div class="progress-container">
+<div class="progress-bar" style="width: 85%"></div>
+</div>
+<p class="text-xs light-blue-text mt-1">85% of Target</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">89%</p>
+<p class="metric-label">Customer Satisfaction</p>
+<div class="progress-container">
+<div class="progress-bar" style="width: 98%"></div>
+</div>
+<p class="text-xs light-blue-text mt-1">98% of Target</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">4.2x</p>
+<p class="metric-label">LTV:CAC Ratio</p>
+<div class="progress-container">
+<div class="progress-bar" style="width: 105%"></div>
+</div>
+<p class="text-xs light-blue-text mt-1">105% of Target</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">28.6%</p>
+<p class="metric-label">Market Share</p>
+<div class="progress-container">
+<div class="progress-bar" style="width: 92%"></div>
+</div>
+<p class="text-xs light-blue-text mt-1">92% of Target</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="absolute bottom-4 flex justify-between w-full px-10">
+<div class="dark-blue-text">
+
+</div>
+<div class="dark-blue-text text-right">
+<p>8</p>
+</div>
+</div>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Revenue Growth Line Chart
+            var revenueCtx = document.getElementById('revenueLineChart').getContext('2d');
+            var revenueLineChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Q3 2024', 'Q4 2024', 'Q1 2025', 'Q2 2025'],
+                    datasets: [{
+                        label: 'Actual Revenue ($M)',
+                        data: [18.4, 22.6, 24.9, 28.7],
+                        fill: true,
+                        backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                        borderColor: '#0052CC',
+                        tension: 0.3,
+                        pointBackgroundColor: '#003366',
+                        pointBorderColor: '#FFFFFF',
+                        pointHoverBackgroundColor: '#FFFFFF',
+                        pointHoverBorderColor: '#0052CC',
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Target Revenue ($M)',
+                        data: [18.0, 21.0, 23.5, 26.0],
+                        fill: false,
+                        borderColor: '#4A90E2',
+                        borderDash: [5, 5],
+                        tension: 0.3,
+                        pointBackgroundColor: 'transparent',
+                        pointBorderColor: 'transparent',
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 15,
+                            max: 30,
+                            title: {
+                                display: true,
+                                text: 'Revenue in $M',
+                                color: '#003366'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#003366',
+                                font: {
+                                    family: 'Lato',
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Customer Acquisition Bar Chart
+            var acquisitionCtx = document.getElementById('acquisitionBarChart').getContext('2d');
+            var acquisitionBarChart = new Chart(acquisitionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Americas', 'EMEA', 'APAC'],
+                    datasets: [
+                        {
+                            label: 'Actual',
+                            data: [1240, 960, 840],
+                            backgroundColor: '#0052CC',
+                            borderColor: '#0052CC',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Target',
+                            data: [1000, 850, 550],
+                            backgroundColor: '#E6F2FF',
+                            borderColor: '#4A90E2',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'New Customers',
+                                color: '#003366'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#003366',
+                                font: {
+                                    family: 'Lato',
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Profit Margins Donut Chart
+            var marginsCtx = document.getElementById('marginsDonutChart').getContext('2d');
+            var marginsDonutChart = new Chart(marginsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Gross Margin', 'Operating Margin', 'Net Margin'],
+                    datasets: [{
+                        data: [68, 42, 24],
+                        backgroundColor: ['#0052CC', '#4A90E2', '#E6F2FF'],
+                        borderColor: '#FFFFFF',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#003366',
+                                font: {
+                                    family: 'Lato',
+                                    size: 12
+                                },
+                                generateLabels: function(chart) {
+                                    const original = Chart.overrides.doughnut.plugins.legend.labels.generateLabels;
+                                    const labels = original.call(this, chart);
+                                    
+                                    labels.forEach((label, i) => {
+                                        label.text = `${label.text} (${chart.data.datasets[0].data[i]}%)`;
+                                    });
+                                    
+                                    return labels;
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body></html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TechLearn Academy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: rgb(250, 251, 248);
+            overflow: hidden;
+        }
+        .main-title {
+            font-size: 70px;
+            font-weight: 700;
+            color: #333333;
+            line-height: 1.1;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgb(87, 117, 144);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: rgb(87, 117, 144);
+            font-size: 20px;
+        }
+        .contact-text {
+            font-size: 20px;
+            color: #333333;
+        }
+        .top-accent {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 80px;
+            background-color: rgb(87, 117, 144);
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
+        }
+        .bottom-accent {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 450px;
+            height: 60px;
+            background-color: rgb(163, 177, 138);
+            clip-path: polygon(0 100%, 100% 0, 100% 100%);
+        }
+        .dots-pattern {
+            position: absolute;
+            left: 400px;
+            top: 50%;
+            display: grid;
+            grid-template-columns: repeat(3, 5px);
+            grid-template-rows: repeat(5, 5px);
+            grid-gap: 5px;
+        }
+        .dot {
+            width: 5px;
+            height: 5px;
+            background-color: rgb(218, 223, 202);
+            opacity: 0.8;
+            border-radius: 50%;
+        }
+        .image-container {
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(87, 117, 144, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Top Accent -->
+        <div class="top-accent"></div>
+        
+        <!-- Main Content -->
+        <div class="flex h-full">
+            <!-- Left Column - Image -->
+            <div class="w-5/12 p-8 flex items-center justify-center">
+                <div class="image-container w-full h-4/5 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&h=720&q=80" 
+                         alt="A group of business professionals collaborating around digital devices" 
+                         class="w-full h-full object-cover">
+                </div>
+            </div>
+            
+            <!-- Right Column - Contact Information -->
+            <div class="w-7/12 p-12 flex flex-col justify-center">
+                <!-- Main Heading -->
+                <h1 class="main-title mb-10">
+                    Get in Touch
+                </h1>
+                
+                <!-- Contact Details -->
+                <div class="mt-6">
+                    <!-- Phone -->
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <span class="contact-text">+1 (555) 123-4567</span>
+                    </div>
+                    
+                    <!-- Website -->
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <span class="contact-text">www.techlearn.academy</span>
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <span class="contact-text">contact@techlearn.academy</span>
+                    </div>
+                    
+                    <!-- Address -->
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <span class="contact-text">789 Innovation Boulevard, Learning City</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dots Pattern -->
+        <div class="dots-pattern">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        
+        <!-- Bottom Accent -->
+        <div class="bottom-accent"></div>
+    </div>
+</body>
+</html>

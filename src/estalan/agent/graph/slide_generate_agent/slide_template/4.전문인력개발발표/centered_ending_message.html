@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developing Engaging Learning Resources - TechLearn Academy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: rgb(250, 251, 248);
+            overflow: hidden;
+        }
+        .main-title {
+            font-size: 46px;
+            font-weight: 700;
+            color: #222222;
+            line-height: 1.1;
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333333;
+        }
+        .section-text {
+            font-size: 16px;
+            color: #444444;
+            line-height: 1.5;
+        }
+        .top-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 40px;
+            background-color: rgb(87, 117, 144);
+            clip-path: polygon(0 0, 100% 0, 80% 100%, 0 100%);
+        }
+        .bottom-accent {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 400px;
+            height: 40px;
+            background-color: rgb(87, 117, 144);
+            clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);
+        }
+        .material-card {
+            border: 1px solid rgb(218, 223, 202);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            background-color: white;
+            height: 100%;
+        }
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background-color: rgb(218, 223, 202);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .icon-box i {
+            color: rgb(87, 117, 144);
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Top Accent -->
+        <div class="top-accent"></div>
+        
+        <!-- Logo and Company Name -->
+        <div class="absolute top-4 left-4 flex items-center z-10">
+            <i class="fas fa-cube text-xl mr-2" style="color: rgb(87, 117, 144);"></i>
+            <span style="color: rgb(87, 117, 144);" class="text-sm">TechLearn Academy</span>
+        </div>
+        
+        <!-- Main Content Layout -->
+        <div class="flex h-full px-16 py-16">
+            <!-- Left Column - Title and Image -->
+            <div class="w-2/5 flex flex-col pr-8">
+                <!-- Main Heading -->
+                <h1 class="main-title mb-8">
+                    Developing<br>
+                    Engaging<br>
+                    Learning<br>
+                    Resources
+                </h1>
+                
+                <!-- Image -->
+                <div class="mt-8 rounded-2xl overflow-hidden flex-1">
+                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=300&q=80" 
+                         alt="Team working on digital learning resources" 
+                         class="w-full h-full object-cover">
+                </div>
+            </div>
+            
+            <!-- Right Column - Grid of Material Types -->
+            <div class="w-3/5 grid grid-cols-2 gap-6 pl-8">
+                <!-- Targeted Outcomes Card -->
+                <div class="material-card" style="background-color: rgb(250, 251, 248);">
+                    <div class="icon-box">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h2 class="section-title mb-3">Targeted Outcomes</h2>
+                    <p class="section-text">
+                        Define specific competencies and skills learners will develop through structured, measurable learning objectives.
+                    </p>
+                </div>
+                
+                <!-- Media Integration Card -->
+                <div class="material-card" style="background-color: rgb(250, 251, 248);">
+                    <div class="icon-box">
+                        <i class="far fa-images"></i>
+                    </div>
+                    <h2 class="section-title mb-3">Media Integration</h2>
+                    <p class="section-text">
+                        Enhance retention with diverse media formats including videos, infographics, and interactive visualizations.
+                    </p>
+                </div>
+                
+                <!-- Participant Engagement Card -->
+                <div class="material-card" style="background-color: rgb(250, 251, 248);">
+                    <div class="icon-box">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h2 class="section-title mb-3">Participant Engagement</h2>
+                    <p class="section-text">
+                        Foster active learning through scenario-based exercises, gamification elements, and collaborative challenges.
+                    </p>
+                </div>
+                
+                <!-- Streamlined Content Card -->
+                <div class="material-card" style="background-color: rgb(250, 251, 248);">
+                    <div class="icon-box">
+                        <i class="fas fa-align-left"></i>
+                    </div>
+                    <h2 class="section-title mb-3">Streamlined Content</h2>
+                    <p class="section-text">
+                        Optimize knowledge transfer with concise messaging, clear structure, and accessible language for all learning levels.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Accent -->
+        <div class="bottom-accent"></div>
+    </div>
+</body>
+</html>

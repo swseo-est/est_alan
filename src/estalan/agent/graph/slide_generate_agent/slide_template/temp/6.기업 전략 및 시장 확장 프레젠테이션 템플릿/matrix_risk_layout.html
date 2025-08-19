@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Matrix Risk Layout</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Lato:wght@400&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background-color: #FFFFFF;
+            color: #0052CC;
+            font-family: 'Lato', sans-serif;
+        }
+        .title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 36px;
+            color: #0052CC;
+            line-height: 1.2;
+        }
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: #4A90E2;
+        }
+        .body-text {
+            font-family: 'Lato', sans-serif;
+            font-size: 16px;
+            color: #0052CC;
+        }
+        .blue-accent {
+            color: #4A90E2;
+        }
+        .light-blue-bg {
+            background-color: #E3F2FD;
+        }
+        .dark-blue-text {
+            color: #0052CC;
+        }
+        .geometric-shape {
+            position: absolute;
+            background-color: rgba(74, 144, 226, 0.1);
+            border-radius: 0;
+        }
+        .shape1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -50px;
+            transform: rotate(45deg);
+        }
+        .shape2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: 100px;
+            transform: rotate(30deg);
+        }
+        .accent-line {
+            width: 60px;
+            height: 4px;
+            background-color: #4A90E2;
+        }
+        .risk-box {
+            background-color: rgba(227, 242, 253, 0.8);
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .risk-header {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #4A90E2;
+        }
+        .strategy-item {
+            background-color: rgba(227, 242, 253, 0.5);
+            border-left: 3px solid #4A90E2;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+        }
+        .risk-matrix-cell {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #4A90E2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .risk-low {
+            background-color: rgba(227, 242, 253, 0.7);
+            color: #0052CC;
+        }
+        .risk-medium {
+            background-color: rgba(74, 144, 226, 0.5);
+            color: #0052CC;
+        }
+        .risk-high {
+            background-color: #0052CC;
+            color: white;
+        }
+        .risk-very-high {
+            background-color: #003580;
+            color: white;
+        }
+    </style>
+</head>
+<body style="">
+<div class="slide-container">
+<!-- Geometric shapes for background design -->
+<div class="geometric-shape shape1"></div>
+<div class="geometric-shape shape2"></div>
+<!-- Main content container -->
+<div class="flex flex-row h-full p-10">
+<!-- Left side: Content area -->
+<div class="w-1/2 flex flex-col justify-center pr-8">
+<!-- Title Section -->
+<h1 class="title mb-3">RISK MANAGEMENT FRAMEWORK</h1>
+<div class="accent-line mb-6"></div>
+<!-- Content Section -->
+<div class="body-text space-y-4">
+<p class="mb-3"><span class="blue-accent font-bold">Key Risk Categories:</span> Our framework identifies and addresses four primary risk categories that could impact our growth strategy.</p>
+<div class="strategy-item">
+<p class="dark-blue-text"><span class="blue-accent font-bold">Market Risks:</span> Competitive disruption, demand shifts, pricing pressure</p>
+</div>
+<div class="strategy-item">
+<p class="dark-blue-text"><span class="blue-accent font-bold">Operational Risks:</span> Supply chain disruption, talent shortage, technology failures</p>
+</div>
+<div class="strategy-item">
+<p class="dark-blue-text"><span class="blue-accent font-bold">Financial Risks:</span> Exchange rate volatility, capital constraints, credit exposure</p>
+</div>
+<div class="strategy-item">
+<p class="dark-blue-text"><span class="blue-accent font-bold">Compliance Risks:</span> Regulatory changes, legal liabilities, governance issues</p>
+</div>
+<p class="mt-5 mb-3"><span class="blue-accent font-bold">Risk Management Approach:</span></p>
+<ul class="list-disc pl-6 space-y-2">
+<li>Proactive identification and continuous monitoring</li>
+<li>Quantitative impact assessment methodology</li>
+<li>Cross-functional risk mitigation taskforces</li>
+<li>Quarterly risk review with executive leadership</li>
+</ul>
+</div>
+</div>
+<!-- Right side: Visual area -->
+<div class="w-1/2 flex flex-col items-center justify-center">
+<!-- Risk Matrix -->
+<div class="w-full mb-6">
+<h3 class="subtitle mb-4 text-center">RISK MATRIX ASSESSMENT</h3>
+<div class="flex flex-col items-center">
+<div class="flex items-center mb-2">
+<div style="width: 100px; text-align: center;"></div>
+<div class="dark-blue-text font-bold" style="width: 100px; text-align: center;">Low</div>
+<div class="dark-blue-text font-bold" style="width: 100px; text-align: center;">Medium</div>
+<div class="dark-blue-text font-bold" style="width: 100px; text-align: center;">High</div>
+</div>
+<div class="flex items-center">
+<div class="dark-blue-text font-bold" style="width: 100px; text-align: right; padding-right: 10px;">High</div>
+<div class="risk-matrix-cell risk-medium">M3</div>
+<div class="risk-matrix-cell risk-high">F1</div>
+<div class="risk-matrix-cell risk-very-high">O2</div>
+</div>
+<div class="flex items-center">
+<div class="dark-blue-text font-bold" style="width: 100px; text-align: right; padding-right: 10px;">Medium</div>
+<div class="risk-matrix-cell risk-low">C3</div>
+<div class="risk-matrix-cell risk-medium">M1</div>
+<div class="risk-matrix-cell risk-high">C1</div>
+</div>
+<div class="flex items-center">
+<div class="dark-blue-text font-bold" style="width: 100px; text-align: right; padding-right: 10px;">Low</div>
+<div class="risk-matrix-cell risk-low">F3</div>
+<div class="risk-matrix-cell risk-low">O3</div>
+<div class="risk-matrix-cell risk-medium">M2</div>
+</div>
+</div>
+</div>
+<!-- Mitigation Strategies -->
+<div class="w-full mt-4">
+<h3 class="subtitle mb-4">MITIGATION STRATEGIES</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="risk-box">
+<p class="risk-header mb-2">HIGH PRIORITY RISKS</p>
+<ul class="list-disc pl-6 dark-blue-text text-sm">
+<li><b>O2:</b> Supply chain disruption</li>
+<li><b>F1:</b> Exchange rate volatility</li>
+<li><b>C1:</b> Regulatory changes</li>
+</ul>
+</div>
+<div class="risk-box">
+<p class="risk-header mb-2">KEY MITIGATION ACTIONS</p>
+<ul class="list-disc pl-6 dark-blue-text text-sm">
+<li>Diversify supplier network</li>
+<li>Implement hedging strategy</li>
+<li>Enhance regulatory intelligence</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="absolute bottom-4 flex justify-between w-full px-10">
+<div class="dark-blue-text">
+
+</div>
+<div class="dark-blue-text text-right">
+<p>10</p>
+</div>
+</div>
+</div>
+
+</body></html>

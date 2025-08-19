@@ -1,0 +1,566 @@
+{
+  "template_library": {
+    "metadata": {
+      "template_id": "cb46d6c8-46e9-41d0-9b7e-328328adf838",
+      "template_name": "현대 디지털 전환 프레젠테이션 템플릿",
+      "version": "1.0",
+      "created": "2025-08-19",
+      "total_templates": 16,
+      "source_name": "Nexus Innovations Digital Transformation Strategy",
+      "resolution": {
+        "width": 1280,
+        "height": 720
+      },
+      "themes": ["Business", "Technology"],
+      "styles": ["Professional", "Minimalist", "Modern"],
+      "language": "Korean/English"
+    },
+    "design_system": {
+      "color_palette": {
+        "primary": "#181B24",
+        "primary_name": "Deep Navy",
+        "secondary": "#B165FB",
+        "secondary_name": "Purple Accent",
+        "tertiary": "#4B5563",
+        "tertiary_name": "Medium Gray",
+        "background": "#FFFFFF",
+        "background_name": "White",
+        "text_primary": "#FFFFFF",
+        "text_secondary": "#A0A0A0",
+        "text_tertiary": "#9CA3AF"
+      },
+      "typography": {
+        "font_family_primary": "Manrope, sans-serif",
+        "font_family_secondary": "Sora, sans-serif",
+        "korean_alternatives": {
+          "manrope_replacement": "Noto Sans KR",
+          "sora_replacement": "Pretendard"
+        },
+        "sizes": {
+          "hero_title": "72px",
+          "main_title": "56px-4.5rem",
+          "section_title": "42px",
+          "body_text": "18px",
+          "caption": "16px",
+          "small_text": "0.9rem"
+        },
+        "weights": {
+          "hero": 800,
+          "title": 700,
+          "section": 600,
+          "body": 400
+        }
+      },
+      "spacing": {
+        "slide_padding": "80px",
+        "section_margin": "30px-60px",
+        "accent_bar_width": "4px-8px",
+        "accent_bar_margin": "30px"
+      },
+      "visual_elements": {
+        "accent_bars": {
+          "color": "#B165FB",
+          "width": "4px-8px",
+          "typical_height": "80px-260px"
+        },
+        "wave_decorations": {
+          "color": "#B165FB",
+          "opacity": "0.7",
+          "stroke_width": "1px-1.5px"
+        },
+        "icons": {
+          "library": "FontAwesome v6.4.0",
+          "style": "Solid",
+          "colors": ["white", "#B165FB"]
+        }
+      }
+    },
+    "templates": [
+      {
+        "id": 1,
+        "key": "title_cover_accent_line",
+        "name": "Title Cover with Accent Line",
+        "name_korean": "강조선이 있는 제목 표지",
+        "category": "Cover",
+        "layout": {
+          "type": "Split Screen with Accent",
+          "orientation": "horizontal"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Logo", "Main Title", "Subtitle", "Website Link"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Wave Decoration"],
+            "features": ["SVG patterns", "Purple accent lines"]
+          }
+        },
+        "use_cases": [
+          "프레젠테이션 오프닝",
+          "회사 소개",
+          "섹션 구분"
+        ],
+        "design_features": [
+          "명확한 계층구조",
+          "보라색 강조 요소",
+          "전문적 외관",
+          "하단 강조 바"
+        ]
+      },
+      {
+        "id": 2,
+        "key": "sectioned_toc_layout",
+        "name": "Sectioned Table of Contents",
+        "name_korean": "섹션별 목차 레이아웃",
+        "category": "Navigation",
+        "layout": {
+          "type": "Two Column with Accent Bar",
+          "sections": ["Title Area", "Numbered List"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Section Title", "Accent Bar"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Numbered List Items"],
+            "structure": "Item + Number pairs"
+          }
+        },
+        "use_cases": [
+          "프레젠테이션 구조 소개",
+          "목차 슬라이드",
+          "섹션 네비게이션"
+        ]
+      },
+      {
+        "id": 3,
+        "key": "dual_image_data_overview",
+        "name": "Dual Image Data Overview",
+        "name_korean": "듀얼 이미지 데이터 개요",
+        "category": "Content",
+        "layout": {
+          "type": "Split with Multiple Images",
+          "ratio": "50/50"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Title with Accent Bar", "Statistics", "Description"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Stacked Images", "Wave Background"],
+            "image_count": 2
+          }
+        },
+        "use_cases": [
+          "데이터 기반 인사이트",
+          "프로젝트 하이라이트",
+          "분석 결과 발표"
+        ]
+      },
+      {
+        "id": 4,
+        "key": "split_statement_accent_divider",
+        "name": "Split Statement with Accent Divider",
+        "name_korean": "강조 구분선이 있는 분할 문구",
+        "category": "Content",
+        "layout": {
+          "type": "Horizontal Split with Bands",
+          "sections": ["Header Band", "Content Area", "Footer Band"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Mission/Statement Title"],
+            "alignment": "right"
+          },
+          "right": {
+            "components": ["Supporting Text"],
+            "alignment": "left"
+          }
+        },
+        "use_cases": [
+          "핵심 메시지 강조",
+          "가치 선언",
+          "미션 스테이트먼트"
+        ]
+      },
+      {
+        "id": 5,
+        "key": "image_highlighted_content_block",
+        "name": "Image with Highlighted Content Block",
+        "name_korean": "강조 콘텐츠 블록이 있는 이미지",
+        "category": "Content",
+        "layout": {
+          "type": "Split with Framed Image",
+          "ratio": "45/55"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Framed Image with Purple Border"],
+            "features": ["Layered frame effect"]
+          },
+          "right": {
+            "components": ["Title", "Description", "Icon List"],
+            "accent_bar": true
+          }
+        },
+        "use_cases": [
+          "투자 정보",
+          "프로젝트 소개",
+          "케이스 스터디"
+        ]
+      },
+      {
+        "id": 6,
+        "key": "data_highlight_sidebar",
+        "name": "Data Highlight with Sidebar",
+        "name_korean": "사이드바가 있는 데이터 강조",
+        "category": "Data",
+        "layout": {
+          "type": "Sidebar with Chart Area"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Title with Accent Bar", "Description"],
+            "width": "flex: 1"
+          },
+          "right": {
+            "components": ["Chart Container", "Data Visualization"],
+            "chart_type": "Bar Chart",
+            "width": "500px"
+          }
+        },
+        "use_cases": [
+          "시장 트렌드",
+          "성과 지표",
+          "데이터 분석"
+        ],
+        "chart_integration": {
+          "library": "Chart.js",
+          "colors": ["#B165FB"]
+        }
+      },
+      {
+        "id": 7,
+        "key": "milestone_timeline_chevron_arrows",
+        "name": "Milestone Timeline with Chevron Arrows",
+        "name_korean": "셰브론 화살표가 있는 마일스톤 타임라인",
+        "category": "Timeline",
+        "layout": {
+          "type": "Horizontal Timeline with Chevron Segments"
+        },
+        "content_areas": {
+          "top": {
+            "components": ["Phase Descriptions"],
+            "layout": "Three columns above timeline"
+          },
+          "center": {
+            "components": ["Chevron Arrow Timeline"],
+            "segments": 5,
+            "segment_width": "20% each"
+          },
+          "bottom": {
+            "components": ["Phase Descriptions"],
+            "layout": "Two columns below timeline"
+          }
+        },
+        "use_cases": [
+          "프로젝트 로드맵",
+          "구현 타임라인",
+          "단계별 전략"
+        ]
+      },
+      {
+        "id": 8,
+        "key": "profile_grid_accent_header",
+        "name": "Profile Grid with Accent Header",
+        "name_korean": "강조 헤더가 있는 프로필 그리드",
+        "category": "Team",
+        "layout": {
+          "type": "Header with Three Column Grid"
+        },
+        "content_areas": {
+          "header": {
+            "components": ["Title with Accent Bar"],
+            "title": "MEET THE TEAM"
+          },
+          "grid": {
+            "columns": 3,
+            "member_structure": ["Photo Placeholder", "Name", "Position"]
+          }
+        },
+        "use_cases": [
+          "팀 소개",
+          "전문가 패널",
+          "조직 구성원"
+        ]
+      },
+      {
+        "id": 9,
+        "key": "two_column_content_focus",
+        "name": "Two-Column Content Focus",
+        "name_korean": "2열 콘텐츠 포커스",
+        "category": "Content",
+        "layout": {
+          "type": "Equal Two Column Split"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Service Items with Icons"],
+            "width": "48%"
+          },
+          "right": {
+            "components": ["Service Items with Icons"],
+            "width": "48%"
+          }
+        },
+        "use_cases": [
+          "서비스 소개",
+          "기능 비교",
+          "솔루션 제안"
+        ]
+      },
+      {
+        "id": 10,
+        "key": "about_section_image_focus",
+        "name": "About Section with Image Focus",
+        "name_korean": "이미지 포커스가 있는 소개 섹션",
+        "category": "About",
+        "layout": {
+          "type": "Split with Framed Image"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Title with Accent Bar", "Description"],
+            "width": "flex: 1"
+          },
+          "right": {
+            "components": ["Framed Image"],
+            "frame_style": "Purple border with offset"
+          }
+        },
+        "use_cases": [
+          "회사 소개",
+          "팀 소개",
+          "섹션 개요"
+        ]
+      },
+      {
+        "id": 11,
+        "key": "content_with_side_image",
+        "name": "Content with Side Image",
+        "name_korean": "사이드 이미지가 있는 콘텐츠",
+        "category": "Content",
+        "layout": {
+          "type": "Content Box with Side Image"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["White Content Box", "Title", "Description"],
+            "width": "45%"
+          },
+          "right": {
+            "components": ["Framed Image"],
+            "width": "45%"
+          }
+        },
+        "use_cases": [
+          "서비스 설명",
+          "솔루션 소개",
+          "주요 정보"
+        ]
+      },
+      {
+        "id": 12,
+        "key": "horizontal_event_timeline",
+        "name": "Horizontal Event Timeline",
+        "name_korean": "수평 이벤트 타임라인",
+        "category": "Timeline",
+        "layout": {
+          "type": "Horizontal Timeline with Dots"
+        },
+        "content_areas": {
+          "timeline": {
+            "components": ["Timeline Line", "Event Dots"],
+            "dots": 5
+          },
+          "events": {
+            "components": ["Event Titles", "Event Descriptions"],
+            "layout": "Below timeline dots"
+          }
+        },
+        "use_cases": [
+          "프로젝트 단계",
+          "역사적 개요",
+          "다단계 전략"
+        ]
+      },
+      {
+        "id": 13,
+        "key": "visual_objectives_panel",
+        "name": "Visual Objectives Panel",
+        "name_korean": "시각적 목표 패널",
+        "category": "Objectives",
+        "layout": {
+          "type": "Split with Dual Images"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Title with Accent Bar", "Objectives List"],
+            "width": "45%"
+          },
+          "right": {
+            "components": ["Two Vertical Images"],
+            "width": "55%"
+          }
+        },
+        "use_cases": [
+          "핵심 목표",
+          "프로젝트 야망",
+          "전략적 우선순위"
+        ]
+      },
+      {
+        "id": 14,
+        "key": "numbered_comparison_layout",
+        "name": "Numbered Comparison Layout",
+        "name_korean": "번호가 매겨진 비교 레이아웃",
+        "category": "Comparison",
+        "layout": {
+          "type": "Two Column Comparison with Numbers"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Number Circle (1)", "Comparison Title", "Description"],
+            "width": "48%"
+          },
+          "right": {
+            "components": ["Number Circle (2)", "Comparison Title", "Description"],
+            "width": "48%"
+          }
+        },
+        "use_cases": [
+          "경쟁 우위 분석",
+          "옵션 비교",
+          "해결책 대비"
+        ]
+      },
+      {
+        "id": 15,
+        "key": "objectives_list_split_layout",
+        "name": "Objectives List with Split Layout",
+        "name_korean": "분할 레이아웃이 있는 목표 목록",
+        "category": "Objectives",
+        "layout": {
+          "type": "Split with Bordered Frame"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Title Section", "Description"],
+            "width": "40%"
+          },
+          "divider": {
+            "components": ["Purple Vertical Line"],
+            "width": "5px"
+          },
+          "right": {
+            "components": ["Objectives List", "Detailed Descriptions"],
+            "width": "60%"
+          }
+        },
+        "use_cases": [
+          "핵심 결과물",
+          "프로젝트 목표",
+          "전략적 우선순위"
+        ]
+      },
+      {
+        "id": 16,
+        "key": "contact_info_icon_list",
+        "name": "Contact Information with Icon List",
+        "name_korean": "아이콘 목록이 있는 연락처 정보",
+        "category": "Contact",
+        "layout": {
+          "type": "Split with Wave Decoration"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Wave SVG Decoration"],
+            "width": "50%"
+          },
+          "right": {
+            "components": ["Contact Title", "Contact Items with Icons"],
+            "width": "50%",
+            "alignment": "right"
+          }
+        },
+        "contact_items": ["Website", "Email", "Phone", "Address"],
+        "use_cases": [
+          "연락처 정보",
+          "마감 슬라이드",
+          "비즈니스 카드"
+        ]
+      }
+    ],
+    "usage_guidelines": {
+      "template_selection": {
+        "cover_slides": ["title_cover_accent_line"],
+        "navigation_slides": ["sectioned_toc_layout"],
+        "content_slides": [
+          "dual_image_data_overview",
+          "split_statement_accent_divider",
+          "image_highlighted_content_block",
+          "two_column_content_focus",
+          "about_section_image_focus",
+          "content_with_side_image"
+        ],
+        "data_slides": ["data_highlight_sidebar"],
+        "timeline_slides": [
+          "milestone_timeline_chevron_arrows",
+          "horizontal_event_timeline"
+        ],
+        "team_slides": ["profile_grid_accent_header"],
+        "objectives_slides": [
+          "visual_objectives_panel",
+          "numbered_comparison_layout",
+          "objectives_list_split_layout"
+        ],
+        "closing_slides": ["contact_info_icon_list"]
+      },
+      "content_types": {
+        "데이터_시각화": ["data_highlight_sidebar"],
+        "팀_소개": ["profile_grid_accent_header"],
+        "프로젝트_타임라인": ["milestone_timeline_chevron_arrows", "horizontal_event_timeline"],
+        "서비스_소개": ["two_column_content_focus", "content_with_side_image"],
+        "회사_소개": ["about_section_image_focus"],
+        "목표_설정": ["visual_objectives_panel", "objectives_list_split_layout"],
+        "비교_분석": ["numbered_comparison_layout"],
+        "연락처": ["contact_info_icon_list"]
+      }
+    },
+    "technical_specifications": {
+      "css_framework": "Tailwind CSS 2.2.19",
+      "icon_library": "FontAwesome 6.4.0",
+      "chart_library": "Chart.js",
+      "responsive": false,
+      "browser_support": ["Chrome", "Firefox", "Safari", "Edge"],
+      "export_formats": ["PDF", "PPTX"],
+      "image_sources": ["Unsplash", "AI Generated"],
+      "animation_support": "CSS transitions only"
+    },
+    "brand_elements": {
+      "company_name": "NEXUS INNOVATIONS",
+      "logo_style": "Text with chevron icon",
+      "brand_colors": {
+        "primary": "#181B24",
+        "accent": "#B165FB"
+      },
+      "tagline_examples": [
+        "Digital Transformation Strategy",
+        "Revolutionizing Business Operations Through Innovation"
+      ]
+    }
+  }
+}

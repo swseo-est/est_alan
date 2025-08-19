@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Outcomes - Nexus Innovations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #181B24;
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content-frame {
+            width: 85%;
+            height: 75%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 10;
+            display: flex;
+            background-color: #181B24;
+        }
+        .left-content {
+            flex: 40%;
+            padding: 60px 20px 60px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .right-content {
+            flex: 60%;
+            padding: 60px 60px 60px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .title-proposed {
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: white;
+            font-family: 'Sora', sans-serif;
+            line-height: 1.1;
+            margin-bottom: 5px;
+        }
+        .title-objectives {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: white;
+            font-family: 'Sora', sans-serif;
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+        .left-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #A0A0A0;
+            max-width: 95%;
+        }
+        .objective-section {
+            margin-bottom: 25px;
+        }
+        .objective-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            font-family: 'Sora', sans-serif;
+            margin-bottom: 8px;
+        }
+        .objective-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #A0A0A0;
+        }
+        .purple-divider {
+            width: 5px;
+            background-color: #B165FB;
+            margin: 0 20px;
+        }
+        .curve-decoration {
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .top-right {
+            top: 0;
+            right: 0;
+        }
+        .bottom-right {
+            bottom: 0;
+            right: 0;
+        }
+        .company-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            color: #A0A0A0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Curved line decorations -->
+        <svg class="curve-decoration top-right" width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <path d="M300,0 C325,25 350,50 375,75 C400,100 425,125 450,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M310,0 C335,25 360,50 385,75 C410,100 435,125 460,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M320,0 C345,25 370,50 395,75 C420,100 445,125 470,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M330,0 C355,25 380,50 405,75 C430,100 455,125 480,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M340,0 C365,25 390,50 415,75 C440,100 465,125 490,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M350,0 C375,25 400,50 425,75 C450,100 475,125 500,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M360,0 C385,25 410,50 435,75 C460,100 485,125 510,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M370,0 C395,25 420,50 445,75 C470,100 495,125 520,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M380,0 C405,25 430,50 455,75 C480,100 505,125 530,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M390,0 C415,25 440,50 465,75 C490,100 515,125 540,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M400,0 C425,25 450,50 475,75 C500,100 525,125 550,150" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+        </svg>
+        
+        <svg class="curve-decoration bottom-right" width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <path d="M250,150 C275,175 300,200 325,225 C350,250 375,275 400,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M260,150 C285,175 310,200 335,225 C360,250 385,275 410,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M270,150 C295,175 320,200 345,225 C370,250 395,275 420,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M280,150 C305,175 330,200 355,225 C380,250 405,275 430,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M290,150 C315,175 340,200 365,225 C390,250 415,275 440,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M300,150 C325,175 350,200 375,225 C400,250 425,275 450,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M310,150 C335,175 360,200 385,225 C410,250 435,275 460,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M320,150 C345,175 370,200 395,225 C420,250 445,275 470,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M330,150 C355,175 380,200 405,225 C430,250 455,275 480,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M340,150 C365,175 390,200 415,225 C440,250 465,275 490,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            <path d="M350,150 C375,175 400,200 425,225 C450,250 475,275 500,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+        </svg>
+        
+        <div class="content-frame">
+            <div class="left-content">
+                <h1 class="title-proposed">KEY</h1>
+                <h1 class="title-objectives">OUTCOMES</h1>
+                <p class="left-description">
+                    Our comprehensive digital transformation approach delivers measurable results through strategic implementation and continuous optimization. These outcomes represent the culmination of our collaborative partnership and provide a foundation for ongoing innovation.
+                </p>
+            </div>
+            
+            <div class="purple-divider"></div>
+            
+            <div class="right-content">
+                <div class="objective-section">
+                    <h2 class="objective-title">Digital Transformation Roadmap</h2>
+                    <p class="objective-text">
+                        A comprehensive, customized implementation plan with clear milestones and deliverables aligned with your business objectives. This roadmap provides a strategic framework for your organization's digital evolution over the next 3-5 years.
+                    </p>
+                </div>
+                
+                <div class="objective-section">
+                    <h2 class="objective-title">Technology Integration Plan</h2>
+                    <p class="objective-text">
+                        Detailed technical architecture and system integration blueprints ensuring seamless connectivity between existing infrastructure and new digital solutions. Includes API management, data migration strategies, and security protocols.
+                    </p>
+                </div>
+                
+                <div class="objective-section">
+                    <h2 class="objective-title">Performance Metrics & Success Milestones</h2>
+                    <p class="objective-text">
+                        Custom KPI dashboard with real-time tracking of operational efficiency, cost reduction, customer satisfaction, and revenue growth. Enables data-driven decision making and provides clear visibility into transformation progress and ROI.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="company-logo">NEXUS INNOVATIONS</div>
+    </div>
+</body>
+</html>

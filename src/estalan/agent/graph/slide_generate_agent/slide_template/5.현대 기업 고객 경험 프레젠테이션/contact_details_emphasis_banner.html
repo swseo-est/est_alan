@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thank You &amp; Contact Information</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Roboto+Mono:wght@400;700&display=swap');
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #1E3A8A;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: 'Roboto Mono', monospace;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .subtitle {
+            padding: 10px 40px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: 'Roboto Mono', monospace;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .content {
+            display: flex;
+            height: calc(100% - 112px);
+            padding: 40px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .left-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .right-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 5.5rem;
+            line-height: 1.1;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .description {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 400px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .contact-section {
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .contact-label {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #BFDBFE;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .contact-info {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.8rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(30, 64, 175, 0.5);
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 700px;
+            height: 700px;
+            top: -200px;
+            right: -200px;
+        }
+        
+        .circle-2 {
+            width: 500px;
+            height: 500px;
+            bottom: -200px;
+            left: 10%;
+            background-color: rgba(191, 219, 254, 0.5);
+        }
+        
+        .circle-3 {
+            width: 400px;
+            height: 400px;
+            top: 200px;
+            right: 25%;
+            background-color: rgba(107, 114, 128, 0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Circles -->
+<div class="circle circle-1"></div>
+<div class="circle circle-2"></div>
+<div class="circle circle-3"></div>
+<!-- Header -->
+<div class="header">
+<div class="header-left">Sterling &amp; Partners</div>
+<div class="header-center text-center">03/15/2030</div>
+<div class="header-right text-right">@sterlingcx</div>
+</div>
+<!-- Subtitle -->
+<div class="subtitle">
+            Let's Create Exceptional Customer Experiences.
+        </div>
+<!-- Content -->
+<div class="content">
+<div class="left-content">
+<h1 class="title">Thank You &amp;<br/>Contact Information</h1>
+<p class="description">
+                    Thank you for exploring customer experience optimization strategies with us! If you have any questions or would like to discuss further, feel free to reach out.
+                </p>
+</div>
+<div class="right-content">
+<div class="contact-section">
+<div class="contact-label">Mobile</div>
+<div class="contact-info">+1-555-849-2750</div>
+</div>
+<div class="contact-section">
+<div class="contact-label">Email</div>
+<div class="contact-info">contact@sterlingcx.com</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

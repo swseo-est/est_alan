@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Nexus Innovations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #181B24;
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+        }
+        .content-container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            z-index: 10;
+        }
+        .left-decoration {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .right-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-right: 80px;
+        }
+        .contact-title {
+            font-size: 6rem;
+            font-weight: 800;
+            font-family: 'Sora', sans-serif;
+            color: white;
+            margin-bottom: 60px;
+            position: relative;
+            line-height: 1;
+        }
+        .purple-accent {
+            width: 10px;
+            height: 120px;
+            background-color: #B165FB;
+            position: absolute;
+            right: -30px;
+            top: 0;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #e0e0e0;
+        }
+        .contact-text {
+            margin-right: 15px;
+            text-align: right;
+        }
+        .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #B165FB;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .company-logo {
+            position: absolute;
+            top: 70px;
+            right: 80px;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Sora', sans-serif;
+            color: white;
+        }
+        .logo-icon {
+            color: #B165FB;
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+        .wave-lines {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="company-logo">
+            NEXUS INNOVATIONS
+            <i class="fas fa-chevron-right logo-icon"></i>
+        </div>
+        
+        <div class="content-container">
+            <div class="left-decoration">
+                <svg class="wave-lines" viewBox="0 0 640 720" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Multiple curved paths to create the wave effect -->
+                    <path d="M0,200 C100,180 200,350 300,300 C400,250 500,400 600,250" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,210 C100,190 200,360 300,310 C400,260 500,410 600,260" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,220 C100,200 200,370 300,320 C400,270 500,420 600,270" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,230 C100,210 200,380 300,330 C400,280 500,430 600,280" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,240 C100,220 200,390 300,340 C400,290 500,440 600,290" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,250 C100,230 200,400 300,350 C400,300 500,450 600,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,260 C100,240 200,410 300,360 C400,310 500,460 600,310" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,270 C100,250 200,420 300,370 C400,320 500,470 600,320" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,280 C100,260 200,430 300,380 C400,330 500,480 600,330" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,290 C100,270 200,440 300,390 C400,340 500,490 600,340" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,300 C100,280 200,450 300,400 C400,350 500,500 600,350" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,310 C100,290 200,460 300,410 C400,360 500,510 600,360" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,320 C100,300 200,470 300,420 C400,370 500,520 600,370" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,330 C100,310 200,480 300,430 C400,380 500,530 600,380" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,340 C100,320 200,490 300,440 C400,390 500,540 600,390" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,350 C100,330 200,500 300,450 C400,400 500,550 600,400" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,360 C100,340 200,510 300,460 C400,410 500,560 600,410" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,370 C100,350 200,520 300,470 C400,420 500,570 600,420" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,380 C100,360 200,530 300,480 C400,430 500,580 600,430" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,390 C100,370 200,540 300,490 C400,440 500,590 600,440" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,400 C100,380 200,550 300,500 C400,450 500,600 600,450" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,410 C100,390 200,560 300,510 C400,460 500,610 600,460" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,420 C100,400 200,570 300,520 C400,470 500,620 600,470" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,430 C100,410 200,580 300,530 C400,480 500,630 600,480" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,440 C100,420 200,590 300,540 C400,490 500,640 600,490" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                    <path d="M0,450 C100,430 200,600 300,550 C400,500 500,650 600,500" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                </svg>
+            </div>
+            
+            <div class="right-content">
+                <div class="contact-title">
+                    CONTACT
+                    <div class="purple-accent"></div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-text">www.nexusinnovations.com</div>
+                    <div class="icon-circle">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-text">contact@nexusinnovations.com</div>
+                    <div class="icon-circle">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-text">+1-555-NEXUS-1</div>
+                    <div class="icon-circle">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-text">123 Innovation Drive, Silicon Valley,<br>CA 94043</div>
+                    <div class="icon-circle">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,628 @@
+{
+  "template_library": {
+    "metadata": {
+      "template_id": "1d58fbf7-5837-441c-aa96-2d91f7434ec7",
+      "template_name": "기업 전략 및 시장 확장 프레젠테이션 템플릿",
+      "version": "1.0",
+      "created": "2025-08-19",
+      "total_templates": 12,
+      "source_id": "1d58fbf7-5837-441c-aa96-2d91f7434ec7",
+      "source_name": "기업 전략 및 시장 확장 프레젠테이션 템플릿",
+      "resolution": {
+        "width": 1280,
+        "height": 720
+      },
+      "themes": ["Business", "Technology", "Marketing"],
+      "styles": ["Professional", "Minimalist", "Modern"]
+    },
+    "design_system": {
+      "color_palette": {
+        "primary": "#0052CC",
+        "primary_name": "Primary Blue",
+        "secondary": "#4A90E2",
+        "secondary_name": "Light Blue",
+        "tertiary": "#003366",
+        "tertiary_name": "Dark Blue",
+        "quaternary": "#ADD8E6",
+        "quaternary_name": "Light Blue Accent",
+        "background": "#FFFFFF",
+        "background_name": "Pure White",
+        "text_primary": "#003366",
+        "text_secondary": "#0052CC",
+        "text_tertiary": "#555555",
+        "accent_colors": {
+          "light_blue_bg": "#E3F2FD",
+          "very_light_blue": "#E6F2FF",
+          "steel_gray": "#555555",
+          "very_dark_blue": "#003380"
+        }
+      },
+      "typography": {
+        "font_family_primary": "Montserrat, sans-serif",
+        "font_family_body": "Lato, sans-serif",
+        "korean_alternatives": {
+          "montserrat_alternative": "Noto Sans KR",
+          "lato_alternative": "Spoqa Han Sans Neo",
+          "fallback_korean": "나눔스퀘어"
+        },
+        "sizes": {
+          "hero_title": "48px",
+          "main_title": "36px",
+          "subtitle_cover": "28px",
+          "subtitle_content": "24px",
+          "body_text": "16-18px",
+          "caption": "12-14px"
+        },
+        "weights": {
+          "hero": 700,
+          "title": 700,
+          "subtitle": 700,
+          "body": 400
+        },
+        "line_heights": {
+          "title": "1.2",
+          "body": "1.35-1.5"
+        }
+      },
+      "spacing": {
+        "slide_padding": "40-80px",
+        "section_margin": "24-32px",
+        "column_gap": "24px",
+        "card_padding": "12-16px",
+        "accent_line_width": "60-100px",
+        "accent_line_height": "4px"
+      },
+      "layout_grid": {
+        "slide_dimensions": {
+          "width": "1280px",
+          "min_height": "720px"
+        },
+        "column_layouts": {
+          "two_column": "50%/50%",
+          "sidebar_content": "33%/67%"
+        },
+        "margins": {
+          "outer": "40-80px",
+          "inner_cards": "12px"
+        }
+      }
+    },
+    "templates": [
+      {
+        "id": 1,
+        "key": "hero_cover",
+        "name": "Hero Cover Page",
+        "name_korean": "히어로 커버 페이지",
+        "category": "Cover",
+        "layout": {
+          "type": "Centered Hero",
+          "alignment": "center",
+          "sections": ["Corporate Identity", "Title", "Subtitle", "Executive Introduction", "Footer"]
+        },
+        "content_areas": {
+          "main": {
+            "components": ["Large Title", "Accent Line", "Subtitle", "Bullet Points"],
+            "alignment": "center",
+            "offset": "100px from top"
+          },
+          "background": {
+            "components": ["3 Geometric Shapes"],
+            "style": "Rotated rectangles, translucent blue"
+          },
+          "footer": {
+            "components": ["Date (left)", "Presenter Info (right)"],
+            "positioning": "absolute bottom"
+          }
+        },
+        "use_cases": [
+          "Presentation covers",
+          "Title pages",
+          "Introductory slides",
+          "Executive presentations"
+        ],
+        "design_features": [
+          "Clean typography",
+          "Geometric background elements",
+          "Centered layout",
+          "Professional branding space",
+          "Blue accent shapes"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Corporate", "Strategic", "Executive"],
+          "content_types": ["Introduction", "Company overview", "Strategic framework"]
+        }
+      },
+      {
+        "id": 2,
+        "key": "split_content_image",
+        "name": "Split Content with Image",
+        "name_korean": "분할 콘텐츠 + 이미지",
+        "category": "Content",
+        "layout": {
+          "type": "Split Layout",
+          "ratio": "50/50",
+          "orientation": "horizontal"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Title", "Accent Line", "Body Text", "Lists", "Data Cards"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Charts", "SWOT Analysis", "Visualizations"],
+            "features": ["Interactive elements", "Data visualization"]
+          }
+        },
+        "use_cases": [
+          "Market analysis",
+          "Current position assessment",
+          "Data presentation with context",
+          "SWOT analysis"
+        ],
+        "design_features": [
+          "Balanced layout",
+          "Chart integration",
+          "Data cards",
+          "Color-coded segments",
+          "Interactive charts"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Business", "Analytics", "Research"],
+          "content_types": ["Market data", "Analysis", "Performance metrics"]
+        }
+      },
+      {
+        "id": 3,
+        "key": "framework_diagram",
+        "name": "Framework Diagram Layout",
+        "name_korean": "프레임워크 다이어그램 레이아웃",
+        "category": "Framework",
+        "layout": {
+          "type": "Split + Diagram",
+          "sections": ["Content Area", "Framework Visualization"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Strategic explanation", "Key pillars", "Implementation details"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Ansoff Matrix", "Strategic pillars", "Process diagrams"],
+            "features": ["Icon integration", "Grid layouts"]
+          }
+        },
+        "use_cases": [
+          "Strategic frameworks",
+          "Business models",
+          "Growth strategies",
+          "Methodology explanation"
+        ],
+        "design_features": [
+          "Matrix visualizations",
+          "Icon-based content",
+          "Strategic diagrams",
+          "Color-coded quadrants",
+          "Framework grids"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Strategy", "Consulting", "Planning"],
+          "content_types": ["Frameworks", "Models", "Strategic planning"]
+        }
+      },
+      {
+        "id": 4,
+        "key": "multi_chart_dashboard",
+        "name": "Multi-Chart Dashboard",
+        "name_korean": "멀티 차트 대시보드",
+        "category": "Analytics",
+        "layout": {
+          "type": "Three Column Dashboard",
+          "sections": ["Regional Performance", "Strategy Effectiveness", "Growth Trajectory", "KPI Section"]
+        },
+        "content_areas": {
+          "top": {
+            "components": ["Title", "Subtitle"],
+            "alignment": "left"
+          },
+          "main": {
+            "components": ["Multiple charts", "Data insights", "Performance metrics"],
+            "chart_types": ["Bar", "Radar", "Line"]
+          },
+          "bottom": {
+            "components": ["KPI cards", "Metrics summary"],
+            "features": ["Color-coded metrics", "Trend indicators"]
+          }
+        },
+        "use_cases": [
+          "Performance dashboards",
+          "Market penetration analysis",
+          "Strategy effectiveness",
+          "KPI monitoring"
+        ],
+        "design_features": [
+          "Multiple chart integration",
+          "Real-time data display",
+          "Metric cards",
+          "Interactive visualizations",
+          "Performance indicators"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Analytics", "Performance", "Monitoring"],
+          "content_types": ["Dashboards", "KPIs", "Performance data"]
+        }
+      },
+      {
+        "id": 5,
+        "key": "icon_grid_content",
+        "name": "Icon Grid Content Layout",
+        "name_korean": "아이콘 그리드 콘텐츠 레이아웃",
+        "category": "Content",
+        "layout": {
+          "type": "Split + Icon Grid",
+          "sections": ["Content explanation", "Technology enablers", "Business impact", "Implementation phases"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Strategy description", "Key initiatives", "Expected outcomes"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Technology stack", "Impact areas", "Implementation timeline"],
+            "features": ["FontAwesome icons", "Phased approach"]
+          }
+        },
+        "use_cases": [
+          "Digital transformation",
+          "Technology initiatives",
+          "Process improvements",
+          "Service offerings"
+        ],
+        "design_features": [
+          "Icon-based sections",
+          "Technology focus",
+          "Implementation phases",
+          "Impact visualization",
+          "Clean grid layout"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Technology", "Digital", "Innovation"],
+          "content_types": ["Digital transformation", "Technology strategy", "Innovation"]
+        }
+      },
+      {
+        "id": 6,
+        "key": "process_flow_visual",
+        "name": "Process Flow Visual",
+        "name_korean": "프로세스 플로우 비주얼",
+        "category": "Process",
+        "layout": {
+          "type": "Split + Flow Diagram",
+          "sections": ["Strategy description", "Partnership flow", "Synergies", "Partnership image"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Partnership strategy", "Key types", "M&A focus areas"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Process flow chart", "Expected synergies", "Partnership examples"],
+            "features": ["Flow arrows", "Process steps"]
+          }
+        },
+        "use_cases": [
+          "Strategic partnerships",
+          "M&A processes",
+          "Workflow documentation",
+          "Step-by-step guides"
+        ],
+        "design_features": [
+          "Flow visualization",
+          "Process arrows",
+          "Step indicators",
+          "Partnership focus",
+          "Synergy analysis"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Partnership", "Process", "M&A"],
+          "content_types": ["Partnerships", "Workflows", "Strategic alliances"]
+        }
+      },
+      {
+        "id": 7,
+        "key": "map_based_content",
+        "name": "Map-Based Content Layout",
+        "name_korean": "지도 기반 콘텐츠 레이아웃",
+        "category": "Geographic",
+        "layout": {
+          "type": "Split + Interactive Map",
+          "sections": ["Expansion strategy", "World map", "Impact projections"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Global growth strategy", "Priority markets", "Success factors"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Interactive world map", "Phase markers", "Impact metrics"],
+            "features": ["Leaflet integration", "Color-coded phases"]
+          }
+        },
+        "use_cases": [
+          "International expansion",
+          "Regional analysis",
+          "Market entry strategy",
+          "Geographic planning"
+        ],
+        "design_features": [
+          "Interactive mapping",
+          "Phase-based markers",
+          "Geographic visualization",
+          "Regional strategy",
+          "Expansion timeline"
+        ],
+        "suitable_for": {
+          "presentation_types": ["International", "Expansion", "Regional"],
+          "content_types": ["Geographic strategy", "Market expansion", "Regional analysis"]
+        }
+      },
+      {
+        "id": 8,
+        "key": "kpi_metrics_dashboard",
+        "name": "KPI Metrics Dashboard",
+        "name_korean": "KPI 메트릭 대시보드",
+        "category": "Metrics",
+        "layout": {
+          "type": "Multi-Chart + Metrics Grid",
+          "sections": ["Revenue growth", "Customer acquisition", "Profit margins", "Strategic KPIs"]
+        },
+        "content_areas": {
+          "top": {
+            "components": ["Title", "Description"],
+            "alignment": "left"
+          },
+          "main": {
+            "components": ["Revenue chart", "Acquisition chart", "Margins chart"],
+            "chart_types": ["Line", "Bar", "Doughnut"]
+          },
+          "bottom": {
+            "components": ["KPI cards", "Progress bars", "Target tracking"],
+            "features": ["Progress indicators", "Target comparison"]
+          }
+        },
+        "use_cases": [
+          "Performance monitoring",
+          "KPI tracking",
+          "Financial metrics",
+          "Business intelligence"
+        ],
+        "design_features": [
+          "Multiple chart types",
+          "Progress indicators",
+          "Target tracking",
+          "Metric cards",
+          "Performance visualization"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Performance", "Financial", "Analytics"],
+          "content_types": ["KPIs", "Financial data", "Performance metrics"]
+        }
+      },
+      {
+        "id": 9,
+        "key": "timeline_gantt_layout",
+        "name": "Timeline Gantt Layout",
+        "name_korean": "타임라인 간트 레이아웃",
+        "category": "Timeline",
+        "layout": {
+          "type": "Timeline + Phase Cards",
+          "sections": ["Implementation roadmap", "Gantt visualization", "Phase details", "Success indicators"]
+        },
+        "content_areas": {
+          "top": {
+            "components": ["Roadmap title", "Timeline description"],
+            "alignment": "left"
+          },
+          "main": {
+            "components": ["Gantt chart", "Phase cards", "Milestone tracking"],
+            "features": ["Interactive timeline", "Phase badges"]
+          },
+          "bottom": {
+            "components": ["Success indicators", "Implementation metrics"],
+            "features": ["Metric cards", "Progress tracking"]
+          }
+        },
+        "use_cases": [
+          "Project timelines",
+          "Implementation roadmaps",
+          "Strategic planning",
+          "Phase management"
+        ],
+        "design_features": [
+          "Gantt visualization",
+          "Phase tracking",
+          "Milestone indicators",
+          "Timeline management",
+          "Progress visualization"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Project", "Planning", "Implementation"],
+          "content_types": ["Timelines", "Roadmaps", "Project plans"]
+        }
+      },
+      {
+        "id": 10,
+        "key": "matrix_risk_layout",
+        "name": "Matrix Risk Layout",
+        "name_korean": "매트릭스 리스크 레이아웃",
+        "category": "Risk",
+        "layout": {
+          "type": "Split + Risk Matrix",
+          "sections": ["Risk framework", "Risk matrix", "Mitigation strategies"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Risk categories", "Management approach", "Risk types"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Risk matrix grid", "Priority classifications", "Mitigation actions"],
+            "features": ["Color-coded risk levels", "Matrix visualization"]
+          }
+        },
+        "use_cases": [
+          "Risk assessment",
+          "Risk management",
+          "Strategic analysis",
+          "Compliance planning"
+        ],
+        "design_features": [
+          "Risk matrix visualization",
+          "Color-coded risk levels",
+          "Priority mapping",
+          "Mitigation planning",
+          "Assessment framework"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Risk", "Compliance", "Strategic"],
+          "content_types": ["Risk analysis", "Compliance", "Strategic planning"]
+        }
+      },
+      {
+        "id": 11,
+        "key": "financial_projections",
+        "name": "Financial Projections Layout",
+        "name_korean": "재무 예측 레이아웃",
+        "category": "Financial",
+        "layout": {
+          "type": "Split + Financial Charts",
+          "sections": ["Revenue forecast", "Investment requirements", "Financial indicators"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Revenue chart", "Growth analysis", "Financial projections"],
+            "chart_types": ["Line chart with dual datasets"]
+          },
+          "right": {
+            "components": ["Investment breakdown", "Category allocation", "Total investment"],
+            "features": ["Investment categories", "Amount tracking"]
+          },
+          "bottom": {
+            "components": ["Key financial indicators", "Margin metrics", "Growth rates"],
+            "features": ["Financial KPIs", "Performance indicators"]
+          }
+        },
+        "use_cases": [
+          "Financial planning",
+          "Investment analysis",
+          "Budget presentations",
+          "Financial forecasting"
+        ],
+        "design_features": [
+          "Financial chart integration",
+          "Investment tracking",
+          "Margin analysis",
+          "Growth projections",
+          "Financial KPIs"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Financial", "Investment", "Planning"],
+          "content_types": ["Financial data", "Investment plans", "Budget analysis"]
+        }
+      },
+      {
+        "id": 12,
+        "key": "summary_action_page",
+        "name": "Summary Action Page",
+        "name_korean": "요약 액션 페이지",
+        "category": "Conclusion",
+        "layout": {
+          "type": "Split + Action Summary",
+          "sections": ["Conclusion", "Strategic highlights", "Immediate actions"]
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Strategic summary", "Key pillars", "Implementation framework"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Strategic highlights", "Immediate actions", "CTA button"],
+            "features": ["Icon integration", "Action items", "Timeline markers"]
+          }
+        },
+        "use_cases": [
+          "Presentation conclusions",
+          "Action planning",
+          "Next steps",
+          "Executive summaries"
+        ],
+        "design_features": [
+          "Summary structure",
+          "Action items",
+          "Call-to-action",
+          "Timeline integration",
+          "Strategic highlights"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Conclusion", "Planning", "Executive"],
+          "content_types": ["Summaries", "Action plans", "Next steps"]
+        }
+      }
+    ],
+    "usage_guidelines": {
+      "template_selection": {
+        "cover_slides": ["hero_cover"],
+        "content_slides": [
+          "split_content_image",
+          "framework_diagram",
+          "icon_grid_content",
+          "process_flow_visual",
+          "map_based_content"
+        ],
+        "analytics_slides": [
+          "multi_chart_dashboard",
+          "kpi_metrics_dashboard",
+          "financial_projections"
+        ],
+        "planning_slides": [
+          "timeline_gantt_layout",
+          "matrix_risk_layout"
+        ],
+        "closing_slides": ["summary_action_page"]
+      },
+      "content_types": {
+        "data_visualization": ["multi_chart_dashboard", "kpi_metrics_dashboard"],
+        "strategic_frameworks": ["framework_diagram", "matrix_risk_layout"],
+        "geographic_analysis": ["map_based_content"],
+        "process_documentation": ["process_flow_visual", "timeline_gantt_layout"],
+        "technology_initiatives": ["icon_grid_content"],
+        "financial_analysis": ["financial_projections"],
+        "executive_presentation": ["hero_cover", "summary_action_page"]
+      },
+      "design_consistency": {
+        "fonts": "Montserrat for titles, Lato for body text",
+        "colors": "Blue palette (#0052CC, #4A90E2, #003366)",
+        "spacing": "Consistent padding and margins",
+        "layout": "Two-column layouts with geometric accents"
+      }
+    },
+    "technical_specifications": {
+      "libraries": {
+        "css_framework": "Tailwind CSS 2.2.19",
+        "fonts": "Google Fonts (Montserrat, Lato)",
+        "icons": "Font Awesome 6.4.0",
+        "charts": "Chart.js",
+        "maps": "Leaflet 1.9.4"
+      },
+      "responsive_design": {
+        "base_width": "1280px",
+        "base_height": "720px",
+        "scaling": "Proportional scaling for different screen sizes"
+      },
+      "accessibility": {
+        "color_contrast": "WCAG AA compliant",
+        "font_sizes": "Minimum 12px for readability",
+        "keyboard_navigation": "Supported for interactive elements"
+      }
+    }
+  }
+}

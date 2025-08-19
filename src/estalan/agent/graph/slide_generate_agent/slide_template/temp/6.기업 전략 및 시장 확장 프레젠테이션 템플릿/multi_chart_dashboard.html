@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Market Penetration Strategies</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Lato:wght@400&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background-color: #FFFFFF;
+            color: #0052CC;
+            font-family: 'Lato', sans-serif;
+        }
+        .title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 36px;
+            color: #003366;
+            line-height: 1.2;
+        }
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: #0052CC;
+        }
+        .body-text {
+            font-family: 'Lato', sans-serif;
+            font-size: 16px;
+            color: #003366;
+        }
+        .blue-accent {
+            color: #0052CC;
+        }
+        .light-blue-bg {
+            background-color: #E6F2FF;
+        }
+        .light-blue-text {
+            color: #4A90E2;
+        }
+        .dark-blue-text {
+            color: #003366;
+        }
+        .geometric-shape {
+            position: absolute;
+            background-color: rgba(74, 144, 226, 0.1);
+            border-radius: 0;
+        }
+        .shape1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -50px;
+            transform: rotate(45deg);
+        }
+        .shape2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: 100px;
+            transform: rotate(30deg);
+        }
+        .accent-line {
+            width: 60px;
+            height: 4px;
+            background-color: #4A90E2;
+        }
+        .data-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E6F2FF;
+            border-left: 4px solid #0052CC;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .metric-value {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: #0052CC;
+        }
+        .metric-label {
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            color: #003366;
+        }
+        .metric-card {
+            background-color: #F8FBFF;
+            border: 1px solid #E6F2FF;
+            border-radius: 4px;
+            padding: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="">
+<div class="slide-container">
+<!-- Geometric shapes for background design -->
+<div class="geometric-shape shape1"></div>
+<div class="geometric-shape shape2"></div>
+<!-- Main content container -->
+<div class="flex flex-col h-full p-10">
+<!-- Title Section -->
+<div class="mb-6">
+<h1 class="title mb-3">MARKET PENETRATION STRATEGIES</h1>
+<div class="accent-line mb-4"></div>
+
+</div>
+<!-- Data Visualization Section -->
+<div class="flex flex-row justify-between space-x-6 flex-grow">
+<!-- Left Column: Regional Performance -->
+<div class="w-1/3 flex flex-col">
+<h3 class="subtitle mb-3">REGIONAL PENETRATION</h3>
+<div class="chart-container">
+<canvas id="regionBarChart" width="384" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 384px;"></canvas>
+</div>
+<div class="data-card">
+<p class="blue-accent font-bold mb-1">Key Insights:</p>
+<p class="body-text text-sm">North America shows highest current penetration at 42% with significant room for growth compared to target of 65%</p>
+</div>
+</div>
+<!-- Middle Column: Strategy Effectiveness -->
+<div class="w-1/3 flex flex-col">
+<h3 class="subtitle mb-3">STRATEGY EFFECTIVENESS</h3>
+<div class="chart-container">
+<canvas id="strategyRadarChart" width="384" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 384px;"></canvas>
+</div>
+<div class="data-card">
+<p class="blue-accent font-bold mb-1">Priority Focus:</p>
+<p class="body-text text-sm">Customer retention strategies showing highest effectiveness (87%) while cross-selling requires additional investment</p>
+</div>
+</div>
+<!-- Right Column: Growth Trajectory -->
+<div class="w-1/3 flex flex-col">
+<h3 class="subtitle mb-3">GROWTH TRAJECTORY</h3>
+<div class="chart-container">
+<canvas id="growthLineChart" width="384" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 384px;"></canvas>
+</div>
+<div class="data-card">
+<p class="blue-accent font-bold mb-1">Q-o-Q Trend:</p>
+<p class="body-text text-sm">Consistent upward growth trajectory with 6.8% average quarterly improvement over the last 4 quarters</p>
+</div>
+</div>
+</div>
+<!-- Bottom Metrics Section -->
+<div class="mt-4">
+<h3 class="subtitle mb-3">KEY PERFORMANCE INDICATORS</h3>
+<div class="flex justify-between">
+<div class="metric-card w-1/5">
+<p class="metric-value">24%</p>
+<p class="metric-label">Market Share</p>
+<p class="text-xs light-blue-text">+4.2% YoY</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">87%</p>
+<p class="metric-label">Customer Retention</p>
+<p class="text-xs light-blue-text">+5.8% YoY</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">$542</p>
+<p class="metric-label">Avg. Revenue Per User</p>
+<p class="text-xs light-blue-text">+12.3% YoY</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">4.2x</p>
+<p class="metric-label">Customer LTV:CAC</p>
+<p class="text-xs light-blue-text">+0.6x YoY</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="absolute bottom-4 flex justify-between w-full px-10">
+<div class="dark-blue-text">
+
+</div>
+<div class="dark-blue-text text-right">
+<p>4</p>
+</div>
+</div>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Regional Penetration Bar Chart
+            var regionCtx = document.getElementById('regionBarChart').getContext('2d');
+            var regionBarChart = new Chart(regionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['North America', 'Europe', 'Asia Pacific', 'LATAM'],
+                    datasets: [
+                        {
+                            label: 'Current',
+                            data: [42, 28, 18, 12],
+                            backgroundColor: '#0052CC',
+                            borderColor: '#0052CC',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Target',
+                            data: [65, 45, 35, 30],
+                            backgroundColor: '#E6F2FF',
+                            borderColor: '#4A90E2',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 70,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#003366',
+                                font: {
+                                    family: 'Lato',
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Strategy Effectiveness Radar Chart
+            var strategyCtx = document.getElementById('strategyRadarChart').getContext('2d');
+            var strategyRadarChart = new Chart(strategyCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Retention', 'Upselling', 'Cross-selling', 'Account Expansion', 'Reactivation'],
+                    datasets: [{
+                        label: 'Effectiveness',
+                        data: [87, 72, 58, 76, 64],
+                        backgroundColor: 'rgba(74, 144, 226, 0.2)',
+                        borderColor: '#0052CC',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#003366',
+                        pointBorderColor: '#FFFFFF',
+                        pointHoverBackgroundColor: '#FFFFFF',
+                        pointHoverBorderColor: '#0052CC'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: '#E6F2FF'
+                            },
+                            grid: {
+                                color: '#E6F2FF'
+                            },
+                            pointLabels: {
+                                color: '#003366',
+                                font: {
+                                    family: 'Lato',
+                                    size: 12
+                                }
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: '#003366'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Growth Trajectory Line Chart
+            var growthCtx = document.getElementById('growthLineChart').getContext('2d');
+            var growthLineChart = new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Q3 2024', 'Q4 2024', 'Q1 2025', 'Q2 2025'],
+                    datasets: [{
+                        label: 'Market Share %',
+                        data: [19.8, 21.2, 22.7, 24.0],
+                        fill: true,
+                        backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                        borderColor: '#0052CC',
+                        tension: 0.3,
+                        pointBackgroundColor: '#003366',
+                        pointBorderColor: '#FFFFFF',
+                        pointHoverBackgroundColor: '#FFFFFF',
+                        pointHoverBorderColor: '#0052CC',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 15,
+                            max: 30,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#003366',
+                                font: {
+                                    family: 'Lato',
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body></html>

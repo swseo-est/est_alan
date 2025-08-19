@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Financial Projections Layout</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Lato:wght@400&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        position: relative;
+        background-color: #FFFFFF;
+        color: #0052CC;
+        font-family: 'Lato', sans-serif;
+    }
+    .title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 36px;
+        color: #003366;
+        line-height: 1.2;
+    }
+    .subtitle {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: #0052CC;
+    }
+    .body-text {
+        font-family: 'Lato', sans-serif;
+        font-size: 16px;
+        color: #003366;
+    }
+    .blue-accent {
+        color: #0052CC;
+    }
+    .light-blue-bg {
+        background-color: #E6F2FF;
+    }
+    .light-blue-text {
+        color: #4A90E2;
+    }
+    .dark-blue-text {
+        color: #003366;
+    }
+    .geometric-shape {
+        position: absolute;
+        background-color: rgba(74, 144, 226, 0.1);
+        border-radius: 0;
+    }
+    .shape1 {
+        width: 300px;
+        height: 300px;
+        top: -100px;
+        right: -50px;
+        transform: rotate(45deg);
+    }
+    .shape2 {
+        width: 200px;
+        height: 200px;
+        bottom: -50px;
+        left: 100px;
+        transform: rotate(30deg);
+    }
+    .accent-line {
+        width: 60px;
+        height: 4px;
+        background-color: #4A90E2;
+    }
+    .data-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E6F2FF;
+        border-left: 4px solid #0052CC;
+        padding: 12px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .chart-container {
+        position: relative;
+        height: 200px;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .metric-value {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: #0052CC;
+    }
+    .metric-label {
+        font-family: 'Lato', sans-serif;
+        font-size: 14px;
+        color: #003366;
+    }
+    .metric-card {
+        background-color: #F8FBFF;
+        border: 1px solid #E6F2FF;
+        border-radius: 4px;
+        padding: 12px;
+        text-align: center;
+    }
+    .investment-item {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #E6F2FF;
+        padding: 8px 0;
+    }
+    .investment-category {
+        font-weight: bold;
+        color: #003366;
+    }
+    .investment-amount {
+        font-weight: bold;
+        color: #0052CC;
+    }
+</style>
+</head>
+<body style="">
+<div class="slide-container">
+<!-- Geometric shapes for background design -->
+<div class="geometric-shape shape1"></div>
+<div class="geometric-shape shape2"></div>
+<!-- Main content container -->
+<div class="flex flex-col h-full p-10">
+<!-- Title Section -->
+<div class="mb-6">
+<h1 class="title mb-3">FINANCIAL PROJECTIONS & INVESTMENT</h1>
+<div class="accent-line mb-4"></div>
+<p class="body-text">Projected financial outcomes and capital allocation requirements for 2025-2028</p>
+</div>
+<!-- Data Visualization Section -->
+<div class="flex flex-row justify-between space-x-6 flex-grow">
+<!-- Left Column: Revenue Projections -->
+<div class="w-1/2 flex flex-col">
+<h3 class="subtitle mb-3">REVENUE FORECAST</h3>
+<div class="chart-container">
+<canvas id="revenueChart" width="588" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 588px;"></canvas>
+</div>
+<div class="data-card">
+<p class="blue-accent font-bold mb-1">Projected Growth:</p>
+<p class="body-text text-sm">Compound Annual Growth Rate (CAGR) of 18.5% between 2025-2028, with significant growth acceleration in FY2027</p>
+</div>
+</div>
+<!-- Right Column: Investment Requirements -->
+<div class="w-1/2 flex flex-col">
+<h3 class="subtitle mb-3">INVESTMENT REQUIREMENTS</h3>
+<div class="light-blue-bg p-4 rounded mb-3">
+<div class="investment-item">
+<span class="investment-category">Technology & Digital Transformation</span>
+<span class="investment-amount">$12.8M</span>
+</div>
+<div class="investment-item">
+<span class="investment-category">Market Expansion</span>
+<span class="investment-amount">$8.5M</span>
+</div>
+<div class="investment-item">
+<span class="investment-category">R&D</span>
+<span class="investment-amount">$6.2M</span>
+</div>
+<div class="investment-item">
+<span class="investment-category">Talent Acquisition</span>
+<span class="investment-amount">$4.3M</span>
+</div>
+<div class="investment-item">
+<span class="investment-category">M&A Activity</span>
+<span class="investment-amount">$15.7M</span>
+</div>
+<div class="investment-item mt-2 pt-2">
+<span class="investment-category text-lg">TOTAL INVESTMENT</span>
+<span class="investment-amount text-lg">$47.5M</span>
+</div>
+</div>
+
+</div>
+</div>
+<!-- Bottom Metrics Section -->
+<div class="mt-4">
+<h3 class="subtitle mb-3">KEY FINANCIAL INDICATORS</h3>
+<div class="flex justify-between">
+<div class="metric-card w-1/5">
+<p class="metric-value">28.4%</p>
+<p class="metric-label">Gross Margin</p>
+<p class="text-xs light-blue-text">+3.2% by 2028</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">12.8%</p>
+<p class="metric-label">EBITDA Margin</p>
+<p class="text-xs light-blue-text">+4.6% by 2028</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">2.4x</p>
+<p class="metric-label">ROI Ratio</p>
+<p class="text-xs light-blue-text">Expected by 2027</p>
+</div>
+<div class="metric-card w-1/5">
+<p class="metric-value">18.5%</p>
+<p class="metric-label">Revenue CAGR</p>
+<p class="text-xs light-blue-text">2025-2028</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="absolute bottom-4 flex justify-between w-full px-10">
+<div class="dark-blue-text">
+
+</div>
+<div class="dark-blue-text text-right">
+<p>11</p>
+</div>
+</div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Revenue Projection Chart
+        var revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['FY2025', 'FY2026', 'FY2027', 'FY2028'],
+                datasets: [
+                    {
+                        label: 'Revenue (in millions $)',
+                        data: [85.2, 102.8, 127.6, 142.3],
+                        backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                        borderColor: '#0052CC',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#003366',
+                        pointBorderColor: '#FFFFFF',
+                        pointHoverBackgroundColor: '#FFFFFF',
+                        pointHoverBorderColor: '#0052CC',
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Operating Profit (in millions $)',
+                        data: [18.7, 24.2, 32.5, 38.4],
+                        backgroundColor: 'rgba(0, 51, 102, 0.05)',
+                        borderColor: '#003366',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#0052CC',
+                        pointBorderColor: '#FFFFFF',
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value + 'M';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#003366',
+                            font: {
+                                family: 'Lato',
+                                size: 12
+                            },
+                            boxWidth: 12
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+</body></html>

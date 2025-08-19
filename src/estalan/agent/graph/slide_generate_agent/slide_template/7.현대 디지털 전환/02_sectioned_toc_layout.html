@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table of Contents - Nexus Innovations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: white;
+            color: #181B24;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content-wrapper {
+            width: 80%;
+            position: relative;
+        }
+        .title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            color: #181B24;
+            text-transform: uppercase;
+            font-family: 'Sora', sans-serif;
+        }
+        .toc-container {
+            display: flex;
+            width: 100%;
+        }
+        .toc-title {
+            display: flex;
+            flex-direction: row;
+            margin-right: 80px;
+            width: 300px;
+        }
+        .toc-list {
+            flex: 1;
+            list-style-type: none;
+            padding: 0;
+        }
+        .toc-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            font-size: 1.2rem;
+        }
+        .toc-item-content {
+            display: flex;
+            align-items: center;
+            color: #4B5563; /* gray */
+        }
+        .toc-item-content:before {
+            content: "•";
+            color: #B165FB;
+            font-weight: bold;
+            display: inline-block; 
+            margin-right: 10px;
+        }
+        .toc-item .number {
+            font-weight: 700;
+            margin-left: 20px;
+            font-size: 1.5rem;
+            color: #B165FB;
+            font-family: 'Sora', sans-serif;
+        }
+        .purple-bar {
+            width: 8px;
+            background-color: #B165FB;
+            margin-right: 30px;
+            height: 120px;
+            align-self: center;
+        }
+        .company-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            color: #4B5563;
+            opacity: 0.7;
+            font-family: 'Sora', sans-serif;
+        }
+        .shadow-element {
+            width: 90%;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(75, 85, 99, 0.05), transparent);
+            position: absolute;
+            left: 5%;
+            border-radius: 50%;
+        }
+        .shadow-top {
+            top: -80px;
+        }
+        .shadow-bottom {
+            bottom: -80px;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="content-wrapper">
+            <div class="shadow-element shadow-top"></div>
+            
+            <div class="toc-container">
+                <div class="toc-title">
+                    <div class="purple-bar"></div>
+                    <h1 class="title">TABLE OF<br>CONTENTS</h1>
+                </div>
+                
+                <ul class="toc-list">
+                    <li class="toc-item">
+                        <div class="toc-item-content">Company Overview</div>
+                        <div class="number">1</div>
+                    </li>
+                    <li class="toc-item">
+                        <div class="toc-item-content">Market Analysis</div>
+                        <div class="number">2</div>
+                    </li>
+                    <li class="toc-item">
+                        <div class="toc-item-content">Strategic Roadmap</div>
+                        <div class="number">3</div>
+                    </li>
+                    <li class="toc-item">
+                        <div class="toc-item-content">Implementation Timeline</div>
+                        <div class="number">4</div>
+                    </li>
+                    <li class="toc-item">
+                        <div class="toc-item-content">Team & Resources</div>
+                        <div class="number">5</div>
+                    </li>
+                    <li class="toc-item">
+                        <div class="toc-item-content">Key Objectives</div>
+                        <div class="number">6</div>
+                    </li>
+                    <li class="toc-item">
+                        <div class="toc-item-content">Contact Information</div>
+                        <div class="number">7</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="shadow-element shadow-bottom"></div>
+        </div>
+        
+        <div class="company-logo">NEXUS INNOVATIONS</div>
+    </div>
+</body>
+</html>

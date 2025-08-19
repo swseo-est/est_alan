@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Insights - Nexus Innovations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Manrope', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+        }
+        .left-section {
+            width: 50%;
+            height: 100%;
+            background-color: white;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+        .right-section {
+            width: 50%;
+            height: 100%;
+            background-color: #181B24;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 40px 0;
+        }
+        .title-container {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        .accent-bar {
+            width: 8px;
+            background-color: #B165FB;
+            margin-right: 30px;
+            height: 80px;
+            align-self: flex-start;
+        }
+        .title {
+            font-family: 'Sora', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #181B24;
+            line-height: 1;
+        }
+        .description {
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #4B5563;
+            max-width: 90%;
+        }
+        .stats-container {
+            margin-top: 30px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .stat-number {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #B165FB;
+            margin-right: 15px;
+        }
+        .stat-description {
+            font-family: 'Manrope', sans-serif;
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #4B5563;
+        }
+        .image-container {
+            width: 90%;
+            max-width: 500px;
+            margin: 15px 0;
+            overflow: hidden;
+            border-radius: 4px;
+            position: relative;
+            z-index: 5;
+        }
+        .data-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .wave-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .company-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            color: white;
+            z-index: 10;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Left Section -->
+        <div class="left-section">
+            <div class="title-container">
+                <div class="accent-bar"></div>
+                <div class="title">MARKET<br>INSIGHTS</div>
+            </div>
+            
+            <p class="description">
+                The digital transformation landscape is rapidly evolving, creating unprecedented opportunities for businesses that embrace innovation and technology-driven strategies.
+            </p>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">87%</div>
+                    <div class="stat-description">of companies now prioritize digital transformation initiatives as a strategic imperative</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">$2.3T</div>
+                    <div class="stat-description">projected market size for digital transformation technologies by 2025</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">70%</div>
+                    <div class="stat-description">average productivity improvement reported by businesses after implementing digital solutions</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Section -->
+        <div class="right-section">
+            <!-- Wave Decoration in background -->
+            <svg class="wave-decoration" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
+                <!-- Purple curved lines flowing from left to right -->
+                <path d="M-400,0 C-200,50 0,100 200,150 C400,200 600,250 800,300" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,20 C-200,70 0,120 200,170 C400,220 600,270 800,320" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,40 C-200,90 0,140 200,190 C400,240 600,290 800,340" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,60 C-200,110 0,160 200,210 C400,260 600,310 800,360" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,80 C-200,130 0,180 200,230 C400,280 600,330 800,380" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,100 C-200,150 0,200 200,250 C400,300 600,350 800,400" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,400 C-200,450 0,500 200,550 C400,600 600,650 800,700" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,420 C-200,470 0,520 200,570 C400,620 600,670 800,720" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,440 C-200,490 0,540 200,590 C400,640 600,690 800,740" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,460 C-200,510 0,560 200,610 C400,660 600,710 800,760" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,480 C-200,530 0,580 200,630 C400,680 600,730 800,780" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+                <path d="M-400,500 C-200,550 0,600 200,650 C400,700 600,750 800,800" stroke="#B165FB" stroke-width="1" fill="none" opacity="0.7"></path>
+            </svg>
+            
+            <!-- Data Analysis Images -->
+            <div class="image-container">
+                <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=280&q=80" alt="Data analysis meeting" class="data-image">
+            </div>
+            
+            <div class="image-container">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=280&q=80" alt="Business team analyzing data" class="data-image">
+            </div>
+        </div>
+        
+        <!-- Company Logo -->
+        <div class="company-logo">NEXUS INNOVATIONS</div>
+    </div>
+</body>
+</html>

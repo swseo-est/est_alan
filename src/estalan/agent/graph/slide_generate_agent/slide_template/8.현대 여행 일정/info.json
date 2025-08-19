@@ -1,0 +1,425 @@
+{
+  "template_library": {
+    "metadata": {
+      "version": "1.0",
+      "created": "2025-08-19",
+      "total_templates": 10,
+      "source_id": "4c981e6f-c916-4b33-a7b8-fa34b7e9bcfa",
+      "source_name": "현대 여행 일정 프레젠테이션",
+      "resolution": {
+        "width": 1280,
+        "height": 720
+      },
+      "themes": ["Travel", "Modern", "Minimalist"],
+      "styles": ["Creative", "Elegant", "Minimalist", "Modern"]
+    },
+    "design_system": {
+      "color_palette": {
+        "primary": "#FCCBC4",
+        "primary_name": "Coral Pink",
+        "secondary": "#EEEDE9",
+        "secondary_name": "Warm Cream",
+        "tertiary": "#000000",
+        "tertiary_name": "Pure Black",
+        "background": "#FFFFFF",
+        "background_name": "Pure White",
+        "text_primary": "#000000",
+        "text_secondary": "#333333",
+        "text_tertiary": "#666666",
+        "accent": "#6B7280"
+      },
+      "typography": {
+        "primary_font": "Gambetta, serif",
+        "secondary_font": "Manrope, sans-serif",
+        "sizes": {
+          "cover_title": "5.5rem (88px)",
+          "main_title": "4xl-5xl (36-48px)",
+          "section_title": "2xl (24px)",
+          "body_text": "1.125-1.25rem (18-20px)",
+          "caption": "0.9rem (14.4px)"
+        },
+        "weights": {
+          "cover": 900,
+          "title": 700,
+          "section": 600,
+          "body": 400
+        }
+      },
+      "spacing": {
+        "slide_padding": "2-3.5rem (32-56px)",
+        "section_margin": "2-3rem (32-48px)",
+        "column_gap": "1.875-2.5rem (30-40px)",
+        "grid_gap": "1.5-2rem (24-32px)"
+      }
+    },
+    "templates": [
+      {
+        "id": 1,
+        "key": "full_image_overlay_cover",
+        "name": "Full-Image Cover with Overlay Text",
+        "category": "Cover",
+        "layout": {
+          "type": "Full Background Image",
+          "overlay": "Text overlay with shadow",
+          "alignment": "center"
+        },
+        "content_areas": {
+          "main": {
+            "components": ["Hero Title", "Subtitle", "Date Info", "CTA Button"],
+            "positioning": "Centered with bottom alignment for secondary info"
+          },
+          "footer": {
+            "components": ["Social Handle", "Navigation Button"],
+            "alignment": "Split left-right"
+          }
+        },
+        "use_cases": [
+          "Opening slides",
+          "Title presentations",
+          "Event introductions",
+          "Brand launches"
+        ],
+        "design_features": [
+          "Full-bleed background image",
+          "Text shadows for readability",
+          "Prominent typography hierarchy",
+          "Call-to-action integration"
+        ]
+      },
+      {
+        "id": 2,
+        "key": "split_text_image_toc",
+        "name": "Text-Image Split Table of Contents",
+        "category": "Navigation",
+        "layout": {
+          "type": "50/50 Split",
+          "left": "Table of Contents",
+          "right": "Feature Image"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Section Number Circle", "Main Title", "Numbered TOC List"],
+            "features": ["Section numbering", "Clean list formatting"]
+          },
+          "right": {
+            "components": ["Large Feature Image"],
+            "style": "Rounded corners"
+          }
+        },
+        "use_cases": [
+          "Presentation overview",
+          "Chapter navigation",
+          "Content roadmap",
+          "Agenda slides"
+        ],
+        "design_features": [
+          "Numbered section circles",
+          "Clean typography hierarchy",
+          "Visual balance",
+          "Easy navigation"
+        ]
+      },
+      {
+        "id": 3,
+        "key": "overview_split_feature_image",
+        "name": "Overview Split with Feature Image",
+        "category": "Content",
+        "layout": {
+          "type": "50/50 Split",
+          "left": "Structured Text Content",
+          "right": "Feature Image"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Main Title", "2x2 Info Grid", "Key Details"],
+            "structure": "Grid-based information display"
+          },
+          "right": {
+            "components": ["Large Vertical Image"],
+            "features": ["Section number overlay"]
+          }
+        },
+        "use_cases": [
+          "Trip overviews",
+          "Project summaries",
+          "Feature highlights",
+          "Key information display"
+        ],
+        "design_features": [
+          "Grid-based content organization",
+          "Clear information hierarchy",
+          "Visual-text balance",
+          "Professional layout"
+        ]
+      },
+      {
+        "id": 4,
+        "key": "table_centric_split_layout",
+        "name": "Table-Centric Data Split",
+        "category": "Data",
+        "layout": {
+          "type": "50/50 Split",
+          "left": "Data Table",
+          "right": "Supporting Image"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Title", "Subtitle", "Structured Data Table"],
+            "table_style": "Black header, white rows, clean borders"
+          },
+          "right": {
+            "components": ["Full-height Image"],
+            "features": ["Section number overlay"]
+          }
+        },
+        "use_cases": [
+          "Budget breakdowns",
+          "Data presentations",
+          "Financial summaries",
+          "Comparison tables"
+        ],
+        "design_features": [
+          "Professional table styling",
+          "Clear data hierarchy",
+          "High contrast headers",
+          "Clean alignment"
+        ]
+      },
+      {
+        "id": 5,
+        "key": "dual_column_schedule_header",
+        "name": "Dual-Column Schedule with Visual Header",
+        "category": "Schedule",
+        "layout": {
+          "type": "Header + Dual Column",
+          "header": "Visual Header with Title",
+          "body": "Two-column comparison"
+        },
+        "content_areas": {
+          "header": {
+            "components": ["Background Image", "Overlay Title"],
+            "height": "160px"
+          },
+          "body": {
+            "components": ["Two Information Columns", "Additional Details"],
+            "structure": "Side-by-side comparison format"
+          }
+        },
+        "use_cases": [
+          "Flight schedules",
+          "Timetables",
+          "Comparison data",
+          "Before/after presentations"
+        ],
+        "design_features": [
+          "Visual header impact",
+          "Structured comparison layout",
+          "Clear time/data presentation",
+          "Professional formatting"
+        ]
+      },
+      {
+        "id": 6,
+        "key": "left_text_right_visual_info_split",
+        "name": "Left-Text Right-Visual Information Split",
+        "category": "Information",
+        "layout": {
+          "type": "50/50 Split",
+          "left": "Text Information",
+          "right": "Visual Content"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Main Title", "Accent Subheading", "Bullet Points", "Additional Info"],
+            "background": "Warm cream background option"
+          },
+          "right": {
+            "components": ["Full-height Image"],
+            "features": ["Section number overlay"]
+          }
+        },
+        "use_cases": [
+          "Feature explanations",
+          "Service descriptions",
+          "Key information display",
+          "Benefits presentation"
+        ],
+        "design_features": [
+          "Clean information hierarchy",
+          "Accent color integration",
+          "Structured content layout",
+          "Visual balance"
+        ]
+      },
+      {
+        "id": 7,
+        "key": "horizontal_image_grid_captions",
+        "name": "Horizontal Image Grid with Captions",
+        "category": "Gallery",
+        "layout": {
+          "type": "Title + 4-Column Grid",
+          "grid": "Equal-width columns",
+          "spacing": "30px gaps"
+        },
+        "content_areas": {
+          "header": {
+            "components": ["Main Title"],
+            "alignment": "Left-aligned"
+          },
+          "grid": {
+            "components": ["Images (180px height)", "Captions"],
+            "structure": "4 equal columns with image-text pairs"
+          }
+        },
+        "use_cases": [
+          "Food galleries",
+          "Product showcases",
+          "Portfolio displays",
+          "Experience highlights"
+        ],
+        "design_features": [
+          "Consistent image sizing",
+          "Clean grid layout",
+          "Caption integration",
+          "Visual storytelling"
+        ]
+      },
+      {
+        "id": 8,
+        "key": "triple_column_sequential_content",
+        "name": "Triple-Column Sequential Content Layout",
+        "category": "Sequential",
+        "layout": {
+          "type": "Three Equal Columns",
+          "spacing": "Even distribution",
+          "background": "Warm cream blocks"
+        },
+        "content_areas": {
+          "columns": {
+            "components": ["Day/Step Headers", "Main Titles", "Bullet Point Lists"],
+            "structure": "Sequential information blocks",
+            "background": "Colored background for each column"
+          }
+        },
+        "use_cases": [
+          "Multi-day itineraries",
+          "Step-by-step processes",
+          "Workflow presentations",
+          "Sequential comparisons"
+        ],
+        "design_features": [
+          "Sequential organization",
+          "Color-coded sections",
+          "Clear step progression",
+          "Parallel information display"
+        ]
+      },
+      {
+        "id": 9,
+        "key": "dual_day_split_feature_image",
+        "name": "Dual-Day Split with Feature Image",
+        "category": "Content",
+        "layout": {
+          "type": "50/50 Split",
+          "left": "Two Content Blocks",
+          "right": "Feature Image"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Title", "Two Sequential Sections", "Day Headers", "Activity Lists"],
+            "background": "Warm cream background"
+          },
+          "right": {
+            "components": ["Full-height Image"],
+            "features": ["Section number overlay"]
+          }
+        },
+        "use_cases": [
+          "Itinerary continuation",
+          "Two-part presentations",
+          "Sequential content",
+          "Detailed planning"
+        ],
+        "design_features": [
+          "Dual content organization",
+          "Sequential structure",
+          "Visual reinforcement",
+          "Consistent branding"
+        ]
+      },
+      {
+        "id": 10,
+        "key": "full_image_closing_slide",
+        "name": "Full-Image Closing Slide",
+        "category": "Closing",
+        "layout": {
+          "type": "Full Background Image",
+          "overlay": "Centered text overlay",
+          "alignment": "center"
+        },
+        "content_areas": {
+          "main": {
+            "components": ["Large Title", "Subtitle Message"],
+            "positioning": "Centered with dramatic typography"
+          },
+          "footer": {
+            "components": ["Social Handle", "Back Button"],
+            "alignment": "Split positioning"
+          }
+        },
+        "use_cases": [
+          "Closing slides",
+          "Thank you pages",
+          "Final messages",
+          "Presentation endings"
+        ],
+        "design_features": [
+          "Full-impact background",
+          "Dramatic typography",
+          "Strong visual closure",
+          "Memorable ending"
+        ]
+      }
+    ],
+    "usage_guidelines": {
+      "template_selection": {
+        "opening_slides": ["full_image_overlay_cover"],
+        "navigation_slides": ["split_text_image_toc"],
+        "content_slides": [
+          "overview_split_feature_image",
+          "table_centric_split_layout",
+          "dual_column_schedule_header",
+          "left_text_right_visual_info_split",
+          "horizontal_image_grid_captions",
+          "triple_column_sequential_content",
+          "dual_day_split_feature_image"
+        ],
+        "closing_slides": ["full_image_closing_slide"]
+      },
+      "content_types": {
+        "data_presentation": ["table_centric_split_layout"],
+        "schedules_timetables": ["dual_column_schedule_header"],
+        "galleries_showcases": ["horizontal_image_grid_captions"],
+        "sequential_content": ["triple_column_sequential_content", "dual_day_split_feature_image"],
+        "information_display": ["overview_split_feature_image", "left_text_right_visual_info_split"]
+      },
+      "design_consistency": {
+        "color_usage": "Use #FCCBC4 for accents and section numbers, #EEEDE9 for backgrounds",
+        "typography": "Gambetta for headings, Manrope for body text",
+        "spacing": "Maintain consistent padding and margins across slides",
+        "imagery": "High-quality, travel-focused photography with proper aspect ratios"
+      }
+    },
+    "technical_specifications": {
+      "dimensions": "1280x720px",
+      "format": "HTML/CSS responsive design",
+      "fonts": ["Gambetta (serif)", "Manrope (sans-serif)", "FontAwesome (icons)"],
+      "image_requirements": {
+        "cover_images": "1280x720px, high resolution",
+        "feature_images": "640x720px vertical format",
+        "grid_images": "300x180px horizontal format",
+        "header_images": "1280x160px horizontal strip"
+      }
+    }
+  }
+}

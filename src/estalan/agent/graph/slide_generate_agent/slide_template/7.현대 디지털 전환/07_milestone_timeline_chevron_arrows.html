@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implementation Timeline - Nexus Innovations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #181B24;
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+        }
+        .content-container {
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+            position: relative;
+            z-index: 10;
+        }
+        .timeline-arrow {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 30px 0;
+        }
+        .arrow-segment {
+            background-color: #B165FB;
+            color: white;
+            font-weight: bold;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            position: relative;
+            clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%, 15% 50%);
+            padding-left: 30px;
+            padding-right: 20px;
+            font-family: 'Sora', sans-serif;
+        }
+        .arrow-segment:first-child {
+            clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+            padding-left: 20px;
+        }
+        .arrow-segment:last-child {
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 15% 100%, 0 50%);
+            padding-right: 20px;
+        }
+        .timeline-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .timeline-content-bottom {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+        .content-item {
+            width: 30%;
+            max-width: 250px;
+        }
+        .content-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: white;
+            font-family: 'Sora', sans-serif;
+        }
+        .content-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #AAAAAA;
+        }
+        .company-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            color: #B165FB;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+        }
+        .wave-decoration {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            z-index: 1;
+            opacity: 0.5;
+        }
+        .title-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .title-bar {
+            width: 4px;
+            height: 40px;
+            background-color: #B165FB;
+            margin-right: 15px;
+        }
+        .title {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="content-container">
+            <div class="title-container">
+                <div class="title-bar"></div>
+                <div class="title">IMPLEMENTATION TIMELINE</div>
+            </div>
+            <div class="timeline-container">
+                <div class="timeline-content">
+                    <div class="content-item">
+                        <div class="content-title">• Analysis & Planning</div>
+                        <div class="content-text">
+                            Comprehensive assessment of current systems, identification of requirements, stakeholder interviews, and creation of detailed implementation roadmap with resource allocation plans.
+                        </div>
+                    </div>
+                    
+                    <div class="content-item">
+                        <div class="content-title">• Infrastructure Setup</div>
+                        <div class="content-text">
+                            Procurement and configuration of necessary hardware/software, cloud environment setup, security implementation, and establishment of development and testing environments.
+                        </div>
+                    </div>
+                    
+                    <div class="content-item">
+                        <div class="content-title">• Implementation</div>
+                        <div class="content-text">
+                            Core system development, data migration, integration with existing systems, and initial user training sessions for key stakeholders and departmental champions.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-arrow">
+                    <div class="arrow-segment" style="width: 20%;">Q1 2024</div>
+                    <div class="arrow-segment" style="width: 20%;">Q2 2024</div>
+                    <div class="arrow-segment" style="width: 20%;">Q3 2024</div>
+                    <div class="arrow-segment" style="width: 20%;">Q4 2024</div>
+                    <div class="arrow-segment" style="width: 20%;">Q1 2025</div>
+                </div>
+                
+                <div class="timeline-content-bottom">
+                    <div class="content-item">
+                        <div class="content-title">• Testing & Optimization</div>
+                        <div class="content-text">
+                            Comprehensive system testing, user acceptance testing, performance optimization, bug fixes, and refinement of features based on user feedback and quality assurance results.
+                        </div>
+                    </div>
+                    
+                    <div class="content-item">
+                        <div class="content-title">• Launch & Support</div>
+                        <div class="content-text">
+                            Full system deployment, comprehensive user training program, documentation finalization, establishment of ongoing support mechanisms, and post-implementation review.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <svg class="wave-decoration" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <path d="M300,0 C250,50 200,100 150,150 C100,200 50,250 0,300" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,10 C250,60 200,110 150,160 C100,210 50,260 0,310" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,20 C250,70 200,120 150,170 C100,220 50,270 0,320" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,30 C250,80 200,130 150,180 C100,230 50,280 0,330" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,40 C250,90 200,140 150,190 C100,240 50,290 0,340" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,50 C250,100 200,150 150,200 C100,250 50,300 0,350" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,60 C250,110 200,160 150,210 C100,260 50,310 0,360" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,70 C250,120 200,170 150,220 C100,270 50,320 0,370" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,80 C250,130 200,180 150,230 C100,280 50,330 0,380" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,90 C250,140 200,190 150,240 C100,290 50,340 0,390" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+            <path d="M300,100 C250,150 200,200 150,250 C100,300 50,350 0,400" stroke="#B165FB" stroke-width="0.5" fill="none" opacity="0.7"></path>
+        </svg>
+        
+        <div class="company-logo">NEXUS INNOVATIONS</div>
+    </div>
+</body>
+</html>

@@ -222,9 +222,16 @@ def create_image_search_agent(agent):
                 "list_image": list_image,
             }
         )
-        return {"list_image": result['structured_response']['list_image']}
-    return image_search_agent
+        list_image = result['structured_response']['list_image']
+        design = state['design']
 
+        design += f"\n\n 검색한 이미지 \n"
+        for img in list_image:
+            design += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
+
+        # print(design)
+        return {"list_image": list_image, "design": design}
+    return image_search_agent
 
 
 def create_html_generate_node(html_generate_llm):

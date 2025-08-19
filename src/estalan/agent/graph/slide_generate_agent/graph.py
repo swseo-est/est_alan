@@ -30,7 +30,7 @@ LIST_TEMPLATE_FOLDER = {
 
 def preprocessing_node(state):
     print(state)
-    llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(OutputState)
+    llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(OutputState)
 
     # get_all_templates_info를 이용하여 모든 템플릿 정보 가져오기
     all_templates_info = get_all_templates_info()

@@ -96,7 +96,6 @@ def create_research_node(llm):
                     [
                         SystemMessage(content=section_writer_instructions),
                         HumanMessage(content=section_writer_inputs_formatted),
-                        HumanMessage(content="search_tool을 사용하세요. 모든 content는 검색된 내용을 기반으로만 작성하세요."),
                     ]
             }
         )
@@ -145,7 +144,7 @@ def create_research_agent(name=None):
         k=5,
     )
 
-    research_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    research_node_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
 
     research_node_agent = create_react_agent(
         research_node_llm,
@@ -156,7 +155,7 @@ def create_research_agent(name=None):
         research_node_agent
     )
 
-    search_img_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    search_img_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
 
     search_img_agent = create_react_agent(
         search_img_llm,

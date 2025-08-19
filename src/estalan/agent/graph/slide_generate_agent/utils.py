@@ -1,4 +1,5 @@
 import os
+import json
 import asyncio
 import threading
 from typing import List, Dict, Optional
@@ -6,7 +7,6 @@ from pathlib import Path
 from functools import lru_cache
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from langchain_core.tools import tool
-
 
 # 스레드 안전한 캐시를 위한 락
 _template_cache_lock = threading.Lock()
@@ -67,12 +67,23 @@ def get_html_template_content(template_dir: str, filename: str) -> Optional[str]
         # 파일 읽기 시 스레드 안전성 보장
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
+        info_json_path = os.path.join(template_dir, "info.json")
+        guideline = dict()
+        with open(info_json_path, 'r', encoding='utf-8') as f:
+            info_data = json.load(f)
+            for template in info_data["templates"]:
+                if template["filename"] == filename:
+                    guideline = template["guideline"]
+
         # 캐시에 저장
         with _template_cache_lock:
-            _template_cache[cache_key] = content
+            _template_cache[cache_key] = {
+                "content": content,
+                "guideline": guideline
+            }
         
-        return content
+            return _template_cache[cache_key]
     
     except Exception as e:
         print(f"템플릿 파일을 읽는 중 오류 발생: {e}")
@@ -271,14 +282,17 @@ def get_html_template_content_tool(filename: str, template_folder: str = "genera
         template_folder: 템플릿 폴더명 (기본값: "general")
     """
     template_dir = get_template_dir(template_folder)
-    content = get_html_template_content(template_dir, filename)
+    template_dict = get_html_template_content(template_dir, filename)
     
-    if content is None:
+    if template_dict is None:
         msg = f"파일 '{filename}'을 찾을 수 없거나 읽을 수 없습니다."
         print(msg)
-        return msg
-    
-    return f"{content}"
+        return {
+            "content": msg,
+            "guideline": ""
+        }
+
+    return template_dict
 
 
 if __name__ == '__main__':

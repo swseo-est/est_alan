@@ -312,6 +312,42 @@ html template과 동일한 포맷으로 슬라이드를 생성하세요
 4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
 5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
 6. 이미지가 영역을 초과하지 않도록, 적절리 resize하거나 crop 하세요
+7. 텍스트 영역을 최대한 활용하여 풍부한 내용을 담되, 가독성을 해치지 않는 선에서 정보량을 극대화하세요
+8. 단순한 키워드 나열이 아닌 구체적인 예시와 부연설명을 포함하여 내용을 풍성하게 전개하세요
+9. **메타적 설명("~슬라이드를 작성하겠습니다", "~이 목적입니다" 등)은 제외하고, 청중이 실제로 봐야 할 핵심 내용만 포함하세요**
+
+
+## ❌ 잘못된 예시 (메타적 설명 포함):
+```html
+<h1>맛집 선정 기준</h1>
+<p>"떡볶이 맛집 선정 기준" 슬라이드를 작성하겠습니다. 이 슬라이드는 "전국 떡볶이 맛집 도장깨기 프로젝트"를 위한 객관적이고 매력적인 맛집 선정 기준을 명확히 제시하는 것이 목적입니다.</p>
+<ul>
+  <li>맛의 균형성을 평가합니다</li>
+  <li>가격 대비 만족도를 고려합니다</li>
+</ul>
+...
+```
+
+## ✅ 올바른 예시 (청중 관점의 직접적 내용):
+```html
+<h1>떡볶이 맛집 선정 기준</h1>
+<div class="criteria-section">
+  <h2>맛 평가 기준</h2>
+  <ul>
+    <li><strong>소스의 균형</strong>: 단맛, 매운맛, 감칠맛의 조화</li>
+    <li><strong>떡의 식감</strong>: 쫄깃함과 부드러움의 적절한 비율</li>
+    <li><strong>토핑 퀄리티</strong>: 어묵, 만두, 야채의 신선도</li>
+  </ul>
+  
+  <h2>서비스 평가 기준</h2>
+  <ul>
+    <li><strong>가격 합리성</strong>: 1인분 기준 3,000~5,000원</li>
+    <li><strong>접근성</strong>: 대중교통 도보 10분 이내</li>
+    <li><strong>위생 상태</strong>: 청결한 조리 환경과 식기</li>
+  </ul>
+</div>
+...
+```
 """
         response = await html_generate_llm.ainvoke([
             HumanMessage(content=msg_content),
@@ -329,8 +365,8 @@ def create_slide_create_agent(name=None):
 
 
     # React 에이전트용 LLM (structured output 불필요)
-    slide_template_select_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
-    slide_design_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(SlideDesignNodeOutput)
+    slide_template_select_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
+    slide_design_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(SlideDesignNodeOutput)
     image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
     html_generate_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(HtmlGenerateNodeOutput)
 
@@ -434,7 +470,7 @@ if __name__ == '__main__':
     # )
     #
     #
-    # image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    # image_search_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
     # image_search_agent = create_react_agent(
     #     model=image_search_llm,
     #     tools=[search_img_tool],

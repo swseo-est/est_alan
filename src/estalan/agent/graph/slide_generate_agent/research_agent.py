@@ -68,7 +68,6 @@ def create_research_node(llm):
                     [
                         SystemMessage(content=section_writer_instructions),
                         HumanMessage(content=section_writer_inputs_formatted),
-                        HumanMessage(content="search_tool을 사용하세요. 모든 content는 검색된 내용을 기반으로만 작성하세요."),
                     ]
             }
         )

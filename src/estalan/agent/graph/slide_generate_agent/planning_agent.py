@@ -63,28 +63,8 @@ def create_generate_sections_node(llm):
                         SystemMessage(
                             content=system_instructions_query),
                         HumanMessage(
-                            content="""
-                                목차를 한글로 작성하세요.
-                            
-                                search queries that will help with planning the sections of the report.  
-                                Please use the search_tool.  
-                                Generate the sections of the report. Your response must include a 'sections' field containing a list of sections.  
-                                
-                                Each section must have: 
-                                    - slide_type: content
-                                    - research : False  
-                                    
-                                    - topic: str
-                                    - idx: int
-                                    - description: str
-                                    - name: str
-                                    
-                                    - content: ""  
-                                    - img: ""  
-                                    - html: ""  
-                                
-                                **Note:** Start the idx from 2.
-                            """)
+                            content="Let's do it."
+                        )
                     ]
                 }
                 )
@@ -181,7 +161,7 @@ def create_planning_agent(name="planning_agent"):
         k=15,
     )
 
-    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    generate_sections_node_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
 
     generate_sections_node_agent = create_react_agent(
         generate_sections_node_llm,

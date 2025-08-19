@@ -102,6 +102,32 @@ def post_processing_html_generate_node(state):
     return {}
 
 
+def pre_processing_image_search_node(state):
+    content = f"""슬라이드에 사용할 이미지를 검색하고 있습니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_image_search_start",
+        id="msg_image_search_start"
+    )
+
+    return {"messages": [msg]}
+
+def post_processing_image_search_node(state):
+    name = state["name"]
+
+    content = f"""{name} 페이지에 사용할 이미지를 검색하였습니다.
+    """
+
+    msg = create_ai_message(
+        content=content,
+        name="msg_image_search_end",
+        id="msg_image_search_end"
+    )
+    return {}
+
+
 def create_slide_template_select_node(slide_design_react_agent):
     async def slide_template_select_node(state: SlideDesignAgentState):
         topic = state["topic"]
@@ -372,6 +398,8 @@ def create_slide_create_agent(name=None):
     builder.add_node("post_processing_slide_design_node", post_processing_slide_design_node)
     builder.add_node("pre_processing_html_generate_node", pre_processing_html_generate_node)
     builder.add_node("post_processing_html_generate_node", post_processing_html_generate_node)
+    builder.add_node("pre_processing_image_search_node", pre_processing_image_search_node)
+    builder.add_node("post_processing_image_search_node", post_processing_image_search_node)
 
 
     builder.add_node("slide_template_select_node", slide_template_select_node)
@@ -383,8 +411,10 @@ def create_slide_create_agent(name=None):
     builder.add_edge("pre_processing_node", "pre_processing_slide_design_node")
     builder.add_edge("pre_processing_slide_design_node", "slide_template_select_node")
     builder.add_edge("slide_template_select_node", "slide_design_node")
-    builder.add_edge("slide_design_node", "image_search_node")
-    builder.add_edge("image_search_node", "pre_processing_html_generate_node")
+    builder.add_edge("slide_design_node", "pre_processing_image_search_node")
+    builder.add_edge("pre_processing_image_search_node", "image_search_node")
+    builder.add_edge("image_search_node", "post_processing_image_search_node")
+    builder.add_edge("post_processing_image_search_node", "pre_processing_html_generate_node")
     builder.add_edge("pre_processing_html_generate_node", "html_generate_node")
     builder.add_edge("html_generate_node", "post_processing_html_generate_node")
     builder.add_edge("post_processing_html_generate_node", "post_processing_node")

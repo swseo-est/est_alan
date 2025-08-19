@@ -12,6 +12,7 @@ from estalan.messages.utils import create_ai_message
 
 import asyncio
 from langgraph.types import Send
+from langgraph_supervisor import create_supervisor
 
 
 class OutputState(TypedDict):
@@ -142,7 +143,7 @@ def create_graph():
     # 슬라이드 생성 그래프 생성
     slide_generate_graph = create_slide_generate_graph()
 
-    # # Supervisor 생성
+    # # # Supervisor 생성
     # workflow = create_supervisor(
     #     [slide_generate_graph],
     #     model=create_chat_model(provider="azure_openai", model="gpt-4.1"),

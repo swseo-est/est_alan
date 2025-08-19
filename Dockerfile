@@ -24,7 +24,7 @@ RUN uv pip uninstall --system pip setuptools wheel
 # -- Copy Local files
 COPY entrypoint.sh /entrypoint.sh
 COPY graph.json /graph.json
-COPY est-alan-dev-account.json /est-alan-dev-account.json
+COPY est-alan-dev-account.json /deps/est_alan/est-alan-dev-account.json
 
 
 RUN chmod +x /entrypoint.sh

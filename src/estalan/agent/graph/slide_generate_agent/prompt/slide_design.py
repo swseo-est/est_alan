@@ -34,6 +34,20 @@ prompt_slide_design = """
 - 해당 html을 구성하는데 필요한 이미지 리스트를 명시한다. 
 - 아래의 출력 형식을 반드시 지킨다.
 
+### list_image 필드 포맷
+ - list_image: LIST[Image]
+ 
+Image의 양식은 아래와 같음
+
+ class Image(TypedDict):
+    title: str
+    description: str
+    url: str
+    
+
+### design 필드 포맷
+ - design : str
+ - 아래 형식으로 구성된 string
 출력 형식 — 반드시 아래 4개 구역 순서 · 레이아웃 유지
 ** 반드시 아래 포맷을 준수하세요. **
 

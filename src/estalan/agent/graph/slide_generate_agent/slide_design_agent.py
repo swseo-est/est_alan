@@ -136,6 +136,7 @@ def create_slide_template_select_node(slide_design_react_agent):
 ## 템플릿 선택 기준:
 - 슬라이드 타입 (title, contents 등)에 따른 적합성
 - 내용의 성격 (텍스트 중심, 이미지 중심, 데이터 시각화 등)
+- 내용이 정확하게 일치하지 않더라도, 유사한 작업에 사용되었다면 선정하세요
 - 레이아웃의 적합성 (가로/세로 배치, 그리드 레이아웃 등)
 - 시각적 효과의 필요성
 - 요구사항과 디자인 프롬프트의 반영
@@ -187,25 +188,19 @@ def create_slide_design_node(slide_design_llm):
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
 """
+        for i in range(10):
+            try:
+                result = await slide_design_llm.ainvoke([
+                    HumanMessage(content=msg),
+                ])
 
-        result = await slide_design_llm.ainvoke([
-            HumanMessage(content=msg),
-        ])
-
-        design = result['design']
-        print(design)
-        print(html_template)
-        design = str(design)
-
-        msg2 = f"아래 design에서 list_image를 추출하세요. \n {design}"
-        result2 = await slide_design_llm.ainvoke([
-            HumanMessage(content=msg2)
-        ])
-
-        list_image = result2['list_image']
-
-        # design += f"\n\n {content}"
-
+                design = result['design']
+                list_image = result['list_image']
+                print(result)
+                break
+            except Exception as e:
+                print(e)
+                print(result)
 
         return {'design': design, "list_image": list_image}
     return slide_design_node

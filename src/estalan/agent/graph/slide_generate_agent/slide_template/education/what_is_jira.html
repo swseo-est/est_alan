@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira란 무엇인가?</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: #FFFFFF;
+            font-family: 'Roboto', sans-serif;
+        }
+        .title-text {
+            font-size: 36px;
+            font-weight: bold;
+            color: #253858;
+        }
+        .content-text {
+            font-size: 20px;
+            color: #253858;
+            line-height: 1.6;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #0052CC 0%, #36B37E 100%);
+            border-radius: 12px;
+            padding: 24px;
+            color: white;
+        }
+        .feature-item {
+            background: rgba(0, 82, 204, 0.1);
+            border-left: 4px solid #0052CC;
+            padding: 16px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container p-12">
+        <h1 class="title-text mb-8">Jira란 무엇인가?</h1>
+        
+        <div class="grid grid-cols-2 gap-12 h-full">
+            <div class="space-y-6">
+                <div class="highlight-box">
+                    <h2 class="text-2xl font-bold mb-4">
+                        <i class="fas fa-rocket mr-3"></i>
+                        Atlassian의 프로젝트 관리 도구
+                    </h2>
+                    <p class="text-lg">Jira는 Atlassian에서 개발한 세계적인 이슈 및 프로젝트 관리 도구입니다.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3 class="text-xl font-semibold mb-2 text-0052CC">
+                        <i class="fas fa-code mr-2"></i>
+                        소프트웨어 개발 중심
+                    </h3>
+                    <p class="content-text">주로 소프트웨어 개발 프로젝트에서 사용되며, 개발 팀의 협업을 지원합니다.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3 class="text-xl font-semibold mb-2 text-0052CC">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        애자일 방법론 지원
+                    </h3>
+                    <p class="content-text">스크럼, 칸반 등 다양한 애자일 방법론을 완벽하게 지원합니다.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3 class="text-xl font-semibold mb-2 text-0052CC">
+                        <i class="fas fa-chart-line mr-2"></i>
+                        세계 점유율 1위
+                    </h3>
+                    <p class="content-text">전 세계에서 가장 많이 사용되는 프로젝트 관리 시스템입니다.</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-center">
+                <div class="text-center">
+                    <img src="/home/ubuntu/jira_presentation/KfLHR8uGHUjB.png" alt="Jira Symbol" class="w-80 h-80 mx-auto mb-6">
+                    <div class="bg-gray-100 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-253858 mb-3">핵심 기능</h3>
+                        <ul class="content-text text-left space-y-2">
+                            <li><i class="fas fa-bug text-FF5630 mr-2"></i>버그 추적 및 관리</li>
+                            <li><i class="fas fa-tasks text-36B37E mr-2"></i>작업 및 이슈 관리</li>
+                            <li><i class="fas fa-project-diagram text-0052CC mr-2"></i>프로젝트 진행 상황 파악</li>
+                            <li><i class="fas fa-users text-253858 mr-2"></i>팀 협업 및 커뮤니케이션</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

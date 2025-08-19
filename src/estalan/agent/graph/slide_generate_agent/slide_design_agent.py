@@ -48,8 +48,7 @@ def post_processing_node(state):
 def pre_processing_slide_design_node(state):
     name = state["name"]
 
-    content = f"""
-    슬라이드 디자인을 시작합니다.
+    content = f"""슬라이드 디자인을 시작합니다.
     """
 
     msg = create_ai_message(
@@ -63,8 +62,7 @@ def pre_processing_slide_design_node(state):
 def post_processing_slide_design_node(state):
     name = state["name"]
 
-    content = f"""
-    {name} 페이지 디자인을 완료하였습니다.
+    content = f"""{name} 페이지 디자인을 완료하였습니다.
     """
 
     msg = create_ai_message(
@@ -78,8 +76,7 @@ def post_processing_slide_design_node(state):
 def pre_processing_html_generate_node(state):
     name = state["name"]
 
-    content = f"""
-    슬라이드를 생성하고 있습니다.
+    content = f"""슬라이드를 생성하고 있습니다.
     """
 
     msg = create_ai_message(
@@ -93,8 +90,7 @@ def pre_processing_html_generate_node(state):
 def post_processing_html_generate_node(state):
     name = state["name"]
 
-    content = f"""
-    {name} 페이지 슬라이드를 생성하였습니다.
+    content = f"""{name} 페이지 슬라이드를 생성하였습니다.
     """
 
     msg = create_ai_message(

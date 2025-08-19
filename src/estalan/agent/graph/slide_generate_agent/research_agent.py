@@ -31,9 +31,8 @@ def post_processing_node(state):
     return {}
 
 def pre_processing_research_node(state):
-    content = f"""
-    슬라이드 생성에 필요한 조사를 시작합니다.
-    """
+    content = f"""슬라이드 생성에 필요한 조사를 시작합니다.
+"""
 
     msg = create_ai_message(
         content=content,
@@ -46,9 +45,7 @@ def pre_processing_research_node(state):
 def post_processing_research_node(state):
     name = state["name"]
 
-    content = f"""
-    {name} 페이지에 대한 조사를 완료하였습니다.
-    """
+    content = f"""{name} 페이지에 대한 조사를 완료하였습니다."""
 
     msg = create_ai_message(
         content=content,
@@ -59,9 +56,8 @@ def post_processing_research_node(state):
 
 def pre_processing_image_search_node(state):
 
-    content = f"""
-    슬라이드에 사용할 이미지를 검색하고 있습니다.
-    """
+    content = f"""슬라이드에 사용할 이미지를 검색하고 있습니다.
+"""
 
     msg = create_ai_message(
         content=content,
@@ -74,9 +70,7 @@ def pre_processing_image_search_node(state):
 def post_processing_image_search_node(state):
     name = state["name"]
 
-    content = f"""
-    {name} 페이지에 사용할 이미지를 검색하였습니다.
-    """
+    content = f"""{name} 페이지에 사용할 이미지를 검색하였습니다."""
 
     msg = create_ai_message(
         content=content,

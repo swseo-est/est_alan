@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Revolution - TechVantage Solutions</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&amp;family=Saira+Condensed:wght@700;900&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            background-color: #ececec;
+        }
+
+        .dot-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.4;
+        }
+
+        .circle-overlay {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .header-text {
+            font-family: 'Saira Condensed', sans-serif;
+            font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 1.1;
+            font-size: 7rem;
+            color: #000000;
+        }
+
+        .subtitle-text {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 400;
+            letter-spacing: 1px;
+            font-size: 2.5rem;
+            color: #000000;
+        }
+
+        .borcelle-pill {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 9999px;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Raleway', sans-serif;
+            color: white;
+        }
+
+        .nav-arrow {
+            background-color: white;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container flex flex-col items-center justify-center">
+<!-- Dot pattern background -->
+<div class="dot-pattern"></div>
+<!-- Circle overlays for depth -->
+<div class="circle-overlay" style="width: 800px; height: 800px; top: -200px; right: -200px; opacity: 0.7;"></div>
+<div class="circle-overlay" style="width: 500px; height: 500px; bottom: -200px; left: -200px; opacity: 0.5;"></div>
+<!-- Company branding -->
+<div class="absolute top-8 left-10">
+<div class="borcelle-pill">
+                TECHVANTAGE SOLUTIONS
+            </div>
+</div>
+<!-- Main content -->
+<div class="z-10 text-center px-6">
+<h1 class="header-text mb-2">AI<br/>REVOLUTION</h1>
+<p class="subtitle-text mt-4">From Innovation to Implementation</p>
+</div>
+<!-- Navigation arrow -->
+<div class="absolute bottom-8 right-10">
+<div class="nav-arrow">
+<i class="fas fa-chevron-right text-black text-xl"></i>
+</div>
+</div>
+</div>
+</body>
+</html>

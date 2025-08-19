@@ -1,0 +1,448 @@
+{
+  "template_library": {
+    "metadata": {
+      "version": "1.0",
+      "created": "2025-08-19",
+      "total_templates": 10,
+      "source_id": "ab7bc3f3-4107-4d73-868e-89eea5a6e8b4",
+      "source_name": "현대 AI 기술 비즈니스 프레젠테이션",
+      "resolution": {
+        "width": 1280,
+        "height": 720
+      },
+      "themes": ["Business", "Technology", "AI"],
+      "styles": ["Professional", "Minimalist", "Modern"]
+    },
+    "design_system": {
+      "color_palette": {
+        "primary": "#000000",
+        "primary_name": "Jet Black",
+        "secondary": "#ececec",
+        "secondary_name": "Light Gray",
+        "tertiary": "#ffffff",
+        "tertiary_name": "Pure White",
+        "background": "#ffffff",
+        "background_name": "White",
+        "text_primary": "#000000",
+        "text_secondary": "#000000",
+        "text_tertiary": "#000000"
+      },
+      "typography": {
+        "font_family": "'Saira Condensed', sans-serif / 'Raleway', sans-serif",
+        "sizes": {
+          "hero_title": "112px",
+          "main_title": "72-96px",
+          "section_title": "80px",
+          "body_text": "17-20px",
+          "caption": "14px"
+        },
+        "weights": {
+          "hero": 900,
+          "title": 900,
+          "section": 700,
+          "body": 400
+        }
+      },
+      "spacing": {
+        "slide_padding": "80px",
+        "section_margin": "32-64px",
+        "column_gap": "40px",
+        "card_padding": "16-24px"
+      }
+    },
+    "templates": [
+      {
+        "id": 1,
+        "key": "centered_title_cover_intro",
+        "name": "Centered Title Cover",
+        "category": "Cover",
+        "layout": {
+          "type": "Centered",
+          "ratio": "100%",
+          "orientation": "centered"
+        },
+        "content_areas": {
+          "center": {
+            "components": ["Large Title", "Subtitle", "Brand Pill"],
+            "alignment": "center"
+          },
+          "decorative": {
+            "components": ["Circle Overlays", "Dot Pattern"],
+            "features": ["Gradient overlays", "Geometric patterns"]
+          }
+        },
+        "use_cases": [
+          "Opening slides",
+          "Section breaks",
+          "Title slides"
+        ],
+        "design_features": [
+          "Bold typography",
+          "Circular gradient overlays",
+          "Dot pattern background",
+          "Centered hierarchy",
+          "Navigation arrow"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Corporate", "Technology", "AI"],
+          "content_types": ["Title", "Introduction", "Cover"]
+        }
+      },
+      {
+        "id": 2,
+        "key": "two_panel_highlight_section",
+        "name": "Two-Panel Highlight Section",
+        "category": "Content",
+        "layout": {
+          "type": "Split Screen",
+          "ratio": "50/50",
+          "orientation": "horizontal"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Section Title", "Body Text", "Presenter Info"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Gray Section", "Agenda Items"],
+            "features": ["Polygonal background", "Numbered list"]
+          }
+        },
+        "use_cases": [
+          "Presentation overview",
+          "Table of contents",
+          "Section introductions"
+        ],
+        "design_features": [
+          "Split layout",
+          "Polygonal clipping",
+          "Numbered agenda",
+          "Professional styling",
+          "Presenter information block"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Business", "Educational", "Overview"],
+          "content_types": ["Agenda", "Overview", "Introduction"]
+        }
+      },
+      {
+        "id": 3,
+        "key": "split_intro_section_layout",
+        "name": "Split Intro Section",
+        "category": "Content",
+        "layout": {
+          "type": "Split + Image",
+          "ratio": "50/50",
+          "orientation": "horizontal"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Section Title", "Body Text"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Editable Image"],
+            "features": ["Image container", "Professional illustration"]
+          }
+        },
+        "use_cases": [
+          "Topic introductions",
+          "Concept explanations",
+          "Visual content slides"
+        ],
+        "design_features": [
+          "Header gradient",
+          "Image integration",
+          "Clean layout",
+          "Professional styling",
+          "Editable content"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Educational", "Technical", "Explanatory"],
+          "content_types": ["Concepts", "Introductions", "Explanations"]
+        }
+      },
+      {
+        "id": 4,
+        "key": "feature_highlight_gradient_layout",
+        "name": "Feature Highlight Gradient Layout",
+        "category": "Content",
+        "layout": {
+          "type": "Full Width + Banner",
+          "sections": ["Gray Banner", "Main Content"]
+        },
+        "content_areas": {
+          "main": {
+            "components": ["Large Title", "Body Text"],
+            "alignment": "left"
+          },
+          "banner": {
+            "components": ["Gray Geometric Banner"],
+            "features": ["Polygonal clipping", "Top accent"]
+          }
+        },
+        "use_cases": [
+          "Feature highlights",
+          "Benefits presentation",
+          "Key points emphasis"
+        ],
+        "design_features": [
+          "Geometric banner",
+          "Large typography",
+          "Clean spacing",
+          "Visual hierarchy",
+          "Dot pattern background"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Marketing", "Features", "Benefits"],
+          "content_types": ["Benefits", "Features", "Highlights"]
+        }
+      },
+      {
+        "id": 5,
+        "key": "column_text_feature_slide",
+        "name": "Column Text Feature Slide",
+        "category": "Content",
+        "layout": {
+          "type": "Two Column Text",
+          "ratio": "50/50",
+          "orientation": "horizontal"
+        },
+        "content_areas": {
+          "header": {
+            "components": ["Large Title"],
+            "alignment": "left"
+          },
+          "columns": {
+            "components": ["Left Text Column", "Right Text Column"],
+            "features": ["Balanced text distribution"]
+          }
+        },
+        "use_cases": [
+          "Detailed explanations",
+          "Text-heavy content",
+          "Technical descriptions"
+        ],
+        "design_features": [
+          "Two-column layout",
+          "Circle overlays",
+          "Typography hierarchy",
+          "Gray background",
+          "Balanced spacing"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Technical", "Educational", "Detailed"],
+          "content_types": ["Explanations", "Details", "Technical content"]
+        }
+      },
+      {
+        "id": 6,
+        "key": "icon_feature_split_layout",
+        "name": "Icon Feature Split Layout",
+        "category": "Content",
+        "layout": {
+          "type": "Split + Illustration",
+          "ratio": "60/40",
+          "orientation": "horizontal"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Section Title", "Body Text"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Professional Illustration"],
+            "features": ["Monochrome line art", "Technical theme"]
+          }
+        },
+        "use_cases": [
+          "Applications showcase",
+          "Process explanations",
+          "Visual concepts"
+        ],
+        "design_features": [
+          "Triangle shape accent",
+          "Professional illustrations",
+          "Clean layout",
+          "Visual balance",
+          "Technical aesthetics"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Application", "Process", "Technical"],
+          "content_types": ["Applications", "Processes", "Use cases"]
+        }
+      },
+      {
+        "id": 7,
+        "key": "visual_icon_split_feature",
+        "name": "Visual Icon Split Feature",
+        "category": "Content",
+        "layout": {
+          "type": "Split + Large Visual",
+          "ratio": "50/50",
+          "orientation": "horizontal"
+        },
+        "content_areas": {
+          "left": {
+            "components": ["Section Title", "Body Text"],
+            "alignment": "left"
+          },
+          "right": {
+            "components": ["Large Professional Image"],
+            "features": ["Prominent visual", "Technical illustration"]
+          }
+        },
+        "use_cases": [
+          "Company presentations",
+          "Service showcases",
+          "Brand presentations"
+        ],
+        "design_features": [
+          "Geometric shapes",
+          "Large visuals",
+          "Professional styling",
+          "Brand integration",
+          "Clean hierarchy"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Corporate", "Brand", "Service"],
+          "content_types": ["Company info", "Services", "Brand story"]
+        }
+      },
+      {
+        "id": 8,
+        "key": "left_aligned_feature_intro",
+        "name": "Left-Aligned Feature Intro",
+        "category": "Content",
+        "layout": {
+          "type": "Full Width Left",
+          "alignment": "left"
+        },
+        "content_areas": {
+          "main": {
+            "components": ["Large Title", "Body Text"],
+            "alignment": "left"
+          },
+          "decorative": {
+            "components": ["Circle Overlays", "Dot Pattern"],
+            "features": ["Gray background", "Geometric accents"]
+          }
+        },
+        "use_cases": [
+          "Challenge presentations",
+          "Problem statements",
+          "Topic introductions"
+        ],
+        "design_features": [
+          "Gray background",
+          "Circle overlays",
+          "Left alignment",
+          "Typography focus",
+          "Clean spacing"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Problem", "Challenge", "Topic"],
+          "content_types": ["Challenges", "Issues", "Problems"]
+        }
+      },
+      {
+        "id": 9,
+        "key": "centered_content_feature_layout",
+        "name": "Centered Content Feature Layout",
+        "category": "Content",
+        "layout": {
+          "type": "Centered Full",
+          "alignment": "center"
+        },
+        "content_areas": {
+          "center": {
+            "components": ["Section Title", "Body Text"],
+            "alignment": "center"
+          },
+          "decorative": {
+            "components": ["Side Geometric Shapes"],
+            "features": ["Left and right accents", "Framing elements"]
+          }
+        },
+        "use_cases": [
+          "Future trends",
+          "Key announcements",
+          "Major transitions"
+        ],
+        "design_features": [
+          "Centered layout",
+          "Side geometric shapes",
+          "Full focus design",
+          "Clean typography",
+          "Minimal distractions"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Announcement", "Trend", "Future"],
+          "content_types": ["Trends", "Announcements", "Future plans"]
+        }
+      },
+      {
+        "id": 10,
+        "key": "summary_engagement_layout",
+        "name": "Summary & Engagement Layout",
+        "category": "Closing",
+        "layout": {
+          "type": "Left Content + Decorative",
+          "alignment": "left"
+        },
+        "content_areas": {
+          "main": {
+            "components": ["Section Title", "Summary Text", "Contact Info"],
+            "alignment": "left"
+          },
+          "decorative": {
+            "components": ["Multiple Circle Overlays", "Website Info"],
+            "features": ["Gray background", "Contact integration"]
+          }
+        },
+        "use_cases": [
+          "Conclusion slides",
+          "Q&A sections",
+          "Contact information"
+        ],
+        "design_features": [
+          "Gray background",
+          "Multiple overlays",
+          "Contact integration",
+          "Summary layout",
+          "Engagement focus"
+        ],
+        "suitable_for": {
+          "presentation_types": ["Conclusion", "Q&A", "Contact"],
+          "content_types": ["Summary", "Questions", "Contact info"]
+        }
+      }
+    ],
+    "usage_guidelines": {
+      "template_selection": {
+        "cover_slides": ["centered_title_cover_intro"],
+        "content_slides": [
+          "two_panel_highlight_section",
+          "split_intro_section_layout",
+          "feature_highlight_gradient_layout",
+          "column_text_feature_slide",
+          "icon_feature_split_layout",
+          "visual_icon_split_feature",
+          "left_aligned_feature_intro",
+          "centered_content_feature_layout"
+        ],
+        "closing_slides": ["summary_engagement_layout"]
+      },
+      "content_types": {
+        "overviews_and_agendas": ["two_panel_highlight_section"],
+        "topic_introductions": ["split_intro_section_layout"],
+        "feature_highlights": ["feature_highlight_gradient_layout"],
+        "detailed_explanations": ["column_text_feature_slide"],
+        "visual_concepts": ["icon_feature_split_layout", "visual_icon_split_feature"],
+        "challenges_and_problems": ["left_aligned_feature_intro"],
+        "announcements_and_trends": ["centered_content_feature_layout"],
+        "conclusions_and_contact": ["summary_engagement_layout"]
+      }
+    }
+  }
+}

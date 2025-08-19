@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Future Trends in AI - TechVantage Solutions</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&amp;family=Saira+Condensed:wght@700;900&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .dot-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(236,236,236,0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.5;
+            top: 0;
+            left: 0;
+        }
+        
+        .shape-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 100%;
+            background-color: #ececec;
+            clip-path: polygon(0 0, 100% 0, 0% 100%, 0 100%);
+        }
+        
+        .shape-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background-color: #ececec;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+        
+        .company-pill {
+            background-color: transparent;
+            border: 2px solid #000000;
+            border-radius: 9999px;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #000000;
+        }
+        
+        .nav-arrow {
+            background-color: #000000;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-family: 'Saira Condensed', sans-serif;
+            font-weight: 900;
+            color: #000000;
+            font-size: 5.5rem;
+            line-height: 1;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        
+        .body-text {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 400;
+            color: #000000;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container flex flex-col">
+<!-- Dot pattern background -->
+<div class="dot-pattern"></div>
+<!-- Geometric shapes on sides -->
+<div class="shape-left"></div>
+<div class="shape-right"></div>
+<!-- TechVantage branding -->
+<div class="absolute top-8 left-10 z-10">
+<div class="company-pill">
+                TECHVANTAGE
+            </div>
+</div>
+<!-- Main content -->
+<div class="z-10 px-20 pt-24 flex-1 flex flex-col items-center justify-center">
+<h2 class="section-title mb-12">FUTURE TRENDS IN AI</h2>
+<div class="max-w-4xl mx-auto">
+<p class="body-text">
+                    Future trends in AI include advancements in human-AI collaboration,
+                    increased use in creative industries, and the development of ethical
+                    frameworks. AI is expected to play a key role in solving global
+                    challenges like climate change and healthcare accessibility.
+                </p>
+</div>
+</div>
+<!-- Navigation arrow -->
+<div class="absolute bottom-8 right-10">
+<div class="nav-arrow">
+<i class="fas fa-chevron-right text-white text-xl"></i>
+</div>
+</div>
+</div>
+</body>
+</html>

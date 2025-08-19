@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira 마스터를 위한 팁</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: #FFFFFF;
+            font-family: 'Roboto', sans-serif;
+        }
+        .title-text {
+            font-size: 36px;
+            font-weight: bold;
+            color: #253858;
+        }
+        .content-text {
+            font-size: 20px;
+            color: #253858;
+            line-height: 1.6;
+        }
+        .feature-item {
+            background: rgba(54, 179, 126, 0.1);
+            border-left: 4px solid #36B37E;
+            padding: 16px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        .feature-item:hover {
+            background: rgba(54, 179, 126, 0.15);
+            transform: translateX(5px);
+        }
+        .tip-icon {
+            width: 40px;
+            height: 40px;
+            background: #36B37E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        .highlight-badge {
+            background: linear-gradient(135deg, #36B37E 0%, #FF5630 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .pro-tip {
+            background: linear-gradient(135deg, #0052CC 0%, #36B37E 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container p-12">
+        <div class="flex items-center mb-6">
+            <h1 class="title-text">Jira 마스터를 위한 팁</h1>
+            <span class="highlight-badge ml-4">Pro Tips</span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-12 min-h-[580px]">
+            <div class="space-y-2">
+                <div class="feature-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="tip-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2" style="color: #36B37E;">인터페이스 완벽히 익히기</h3>
+                            <p class="content-text">보드, 필터, 대시보드, JQL(Jira Query Language) 등 핵심 기능을 숙지하여 효율성 극대화</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="tip-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2" style="color: #36B37E;">체계적인 프로젝트 계획 수립</h3>
+                            <p class="content-text">명확한 목표 설정, 단계별 계획 수립, 우선순위 지정을 통한 체계적 프로젝트 관리</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="tip-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2" style="color: #36B37E;">라벨 및 컴포넌트 활용</h3>
+                            <p class="content-text">효율적인 분류와 검색을 위한 태깅 시스템 구축 및 일관된 명명 규칙 적용</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="flex items-start space-x-4">
+                        <div class="tip-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2" style="color: #36B37E;">자동화 기능 적극 활용</h3>
+                            <p class="content-text">반복 작업 자동화, 알림 설정, 워크플로 자동화를 통한 생산성 향상</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pro-tip">
+                    <h4 class="font-bold text-lg mb-2">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        Pro Tip
+                    </h4>
+                    <p class="text-sm">정기적인 보고서 검토와 팀 회고를 통해 Jira 활용 방식을 지속적으로 개선하세요!</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-center">
+                <div class="text-center">
+                    <img src="/home/ubuntu/jira_presentation/VkaqRYIaD6tP.png" alt="Jira Workflow" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                    <p class="content-text mt-4 text-gray-600">Jira 워크플로 - 고급 설정 및 자동화</p>
+                    <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
+                        <div class="bg-green-100 text-green-800 px-2 py-1 rounded">Automation</div>
+                        <div class="bg-blue-100 text-blue-800 px-2 py-1 rounded">Workflow</div>
+                        <div class="bg-purple-100 text-purple-800 px-2 py-1 rounded">Labels</div>
+                        <div class="bg-orange-100 text-orange-800 px-2 py-1 rounded">Components</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

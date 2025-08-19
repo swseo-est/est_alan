@@ -39,4 +39,4 @@ coverage
 *.coverage
 *.test.js
 *.spec.js
-tests
+src/tests

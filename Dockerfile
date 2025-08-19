@@ -1,6 +1,6 @@
 FROM docker.io/langchain/langgraph-api:3.11
 # -- Adding local package . --
-ADD . /deps/est_alan
+ADD src /deps/est_alan
 # -- End of local package . --
 
 # -- Installing all local dependencies --
@@ -28,7 +28,7 @@ COPY est-alan-dev-account.json /est-alan-dev-account.json
 
 
 RUN chmod +x /entrypoint.sh
-    
+
 WORKDIR /deps/est_alan
 
 ENTRYPOINT ["/entrypoint.sh"]

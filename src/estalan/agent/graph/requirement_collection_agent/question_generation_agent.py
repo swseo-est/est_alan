@@ -1,10 +1,10 @@
 from langgraph.graph import START, END, StateGraph
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
 from estalan.llm.utils import create_chat_model
 from estalan.utils import get_last_human_message
 from estalan.agent.graph.requirement_collection_agent.state import Question, RequirementCollectionAgentState, QuestionGenerationOutput
-
+from estalan.agent.graph.requirement_collection_agent.prompt import SLIDE_GENERATION_TASK_PROMPT
 
 
 def create_initialize_questions_node(predefined_questions: list[Question]):
@@ -43,32 +43,41 @@ def create_generate_additional_questions_node(generate_question_llm):
                 existing_requirements_text += f"- {req['summary']}: {req['detail']}\n"
 
         prompt = f"""
-        다음 목적을 위한 요구사항 수집을 위해 추가로 물어보면 좋을 질문을 3-5개 생성해주세요.
+{SLIDE_GENERATION_TASK_PROMPT}
 
-        목적: {purpose}
+## 지시사항: 다음 목적을 위한 요구사항 수집을 위해 추가로 물어보면 좋을 질문을 필요 시 3~5개 생성해주세요.
 
-        {existing_requirements_text}
+목적: {purpose}
 
-        다음 조건을 만족하는 질문을 생성해주세요:
-        1. 목적과 관련된 핵심 요구사항을 파악할 수 있는 질문
-        2. 이미 수집된 요구사항과 중복되지 않는 새로운 관점의 질문
-        3. 구체적이고 명확한 질문
-        4. 아직 파악되지 않은 요구사항 영역에 대한 질문
+{existing_requirements_text}
 
-        질문 생성 시 고려사항:
-        - 이미 수집된 요구사항과 유사한 질문은 제외
-        - 새로운 관점이나 세부사항을 파악할 수 있는 질문 우선
-        - 사용자의 답변에서 추가 요구사항을 도출할 수 있는 질문
-        """
+**중요**:
+- 슬라이드 생성에 필요한 요구사항이 
+- 사용자가 응답에 "알아서 해줘", "적당히 해줘", "너가 정해줘" 등의 의사표현을 했다면 구체적인 요구사항은 모델이 결정할 일입니다. **절대 질문을 생성하지 마세요**. 
+- 핵심 요구사항이 충분히 파악되었다면 질문을 생성하지 마세요.
+- 오직 파악하지 못한 핵심 요구사항이 있을 때만 질문을 생성하세요.
+
+다음 조건을 만족하는 질문을 생성해주세요:
+1. 목적과 관련된 핵심 요구사항을 파악할 수 있는 질문
+2. 이미 수집된 요구사항과 중복되지 않는 새로운 관점의 질문
+3. 구체적이고 명확한 질문
+4. 아직 파악되지 않은 요구사항 영역에 대한 질문
+
+질문 생성 시 고려사항:
+- 이미 수집된 요구사항과 유사한 질문은 제외
+- 새로운 관점이나 세부사항을 파악할 수 있는 질문 우선
+- 사용자의 답변에서 추가 요구사항을 도출할 수 있는 질문
+"""
 
         # LLM 호출을 통해 추가 질문 생성
-        response = await generate_question_llm.ainvoke([
-                SystemMessage(content="당신은 요구사항 수집 전문가입니다. 주어진 목적에 맞는 질문을 생성해주세요."),
-                HumanMessage(content=prompt)
-            ]
-        )
+        message = [
+            SystemMessage(content="당신은 요구사항 수집 전문가입니다. 주어진 목적에 맞는 질문을 생성해주세요."),
+            HumanMessage(content=prompt)
+        ]
+        response = await generate_question_llm.ainvoke(message)
 
         updated_questions = existing_questions + response["questions"]
+
         return {
             "questions": updated_questions,
         }

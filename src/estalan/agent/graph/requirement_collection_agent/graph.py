@@ -2,9 +2,9 @@ from langgraph_supervisor import create_supervisor
 
 from estalan.llm.utils import create_chat_model
 from estalan.agent.graph.requirement_collection_agent.state import RequirementCollectionAgentState
-from estalan.agent.graph.requirement_collection_agent.prompt import prompt_supervisor
+from estalan.agent.graph.requirement_collection_agent.prompt import prompt_supervisor2, SLIDE_GENERATION_TASK_PROMPT
 from estalan.agent.graph.requirement_collection_agent.question_generation_agent import create_question_generation_agent
-from estalan.agent.graph.requirement_collection_agent.requirement_analysis_agent import create_requirement_analysis_agent
+from estalan.agent.graph.requirement_collection_agent.requirement_analysis_agent import create_requirement_analysis_agent 
 
 
 
@@ -19,7 +19,7 @@ def create_requirement_collection_agent(predefined_question=[], name="requiremen
     requirement_collection_agent = create_supervisor(
         [question_generation_agent, requirement_analysis_agent],
         model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
-        prompt=prompt_supervisor,
+        prompt=SLIDE_GENERATION_TASK_PROMPT + prompt_supervisor2,
         state_schema=RequirementCollectionAgentState,
         supervisor_name=name + "_supervisor",
     ).compile(name=name)

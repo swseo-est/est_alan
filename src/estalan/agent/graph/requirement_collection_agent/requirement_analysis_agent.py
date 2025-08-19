@@ -3,7 +3,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 from estalan.llm.utils import create_chat_model
 from estalan.agent.graph.requirement_collection_agent.state import RequirementCollectionAgentState, ExtractRequirementOutput
-
+from estalan.agent.graph.requirement_collection_agent.prompt import SLIDE_GENERATION_TASK_PROMPT
 
 def create_extract_requirements_node(extract_llm):
     """사용자 답변에서 요구사항 추출"""
@@ -27,40 +27,44 @@ def create_extract_requirements_node(extract_llm):
         
         # LLM을 사용하여 요구사항 추출
         prompt = f"""
-        사용자의 답변에서 요구사항들을 추출해주세요.
+{SLIDE_GENERATION_TASK_PROMPT}
 
-        질문: {questions}
-        사용자 답변: {user_message}
+당신의 임무는 아래 사용자의 답변에서 요구사항들을 추출하는 것입니다.
 
-        기존 요구사항들:
-        {chr(10).join([f"- {req['requirement_id']}: {req['summary']} - {req['detail']}" for req in existing_requirements]) if existing_requirements else "없음"}
+질문: {questions}
+사용자 답변: {user_message}
 
-        다음 형식으로 요구사항을 추출해주세요:
-        - origin: 질문과 관련된 요구사항이면 'question', 관련없는 요구사항이면 'user'
-        - summary: 핵심 요구사항을 간단히 요약
-        - detail: 구체적인 요구사항 내용
-        - update_existing: 기존 요구사항과 관련된 경우 해당 요구사항의 requirement_id, 새로운 요구사항이면 null
+기존 요구사항들:
+{chr(10).join([f"- {req['requirement_id']}: {req['summary']} - {req['detail']}" for req in existing_requirements]) if existing_requirements else "없음"}
 
-        요구사항 업데이트 판단 기준:
-        1. 기존 요구사항과 동일한 주제나 내용
-        2. 기존 요구사항의 세부사항을 보완하거나 수정하는 내용
-        3. 기존 요구사항과 연관된 추가 정보
+다음 형식으로 요구사항을 추출해주세요:
+- origin: 질문과 관련된 요구사항이면 'question', 관련없는 요구사항이면 'user'
+- summary: 핵심 요구사항을 간단히 요약. 예) '예산: 100만원', '청중: 회사 동료'
+- detail: 구체적인 요구사항 내용
+- update_existing: 기존 요구사항을 수정해야하는 경우 해당 요구사항의 requirement_id, 새로운 요구사항이면 null
 
-        질문과 관련된 요구사항 판단 기준:
-        1. 질문에서 묻는 내용에 대한 직접적인 답변
-        2. 질문의 맥락과 관련된 추가 정보
-        3. 질문에서 파악하려는 요구사항과 일치하는 내용
+요구사항 업데이트 판단 기준:
+1. 기존 요구사항과 동일한 주제나 내용
+2. 기존 요구사항의 세부사항을 보완하거나 수정하는 내용
+3. 기존 요구사항과 연관된 추가 정보
 
-        질문과 관련없는 요구사항:
-        1. 질문과 전혀 다른 주제의 요구사항
-        2. 질문의 맥락을 벗어난 새로운 요구사항
-        3. 사용자가 자발적으로 언급한 추가 요구사항
-        """
+질문과 관련된 요구사항 판단 기준:
+1. 질문에서 묻는 내용에 대한 직접적인 답변
+2. 질문의 맥락과 관련된 추가 정보
+3. 질문에서 파악하려는 요구사항과 일치하는 내용
+4. 사용자 답변에서 명시적/암시적으로 파악할 수 있는 내용만 추출
 
-        response = await extract_llm.ainvoke([
+질문과 관련없는 요구사항:
+1. 질문과 전혀 다른 주제의 요구사항
+2. 질문의 맥락을 벗어난 새로운 요구사항
+3. 사용자가 자발적으로 언급한 추가 요구사항
+4. 사용자 답변에 언급되지 않은 내용
+"""
+        message = [
             SystemMessage(content="당신은 요구사항 분석 전문가입니다. 사용자의 답변에서 명시적/암묵적 요구사항을 추출하고, 질문과의 관련성을 판단하며, 기존 요구사항과의 연관성을 파악해주세요."),
             HumanMessage(content=prompt)
-        ])
+        ]
+        response = await extract_llm.ainvoke(message)
 
         # 추출된 요구사항을 처리하여 기존 요구사항 업데이트 또는 새 요구사항 추가
         updated_requirements = existing_requirements.copy()

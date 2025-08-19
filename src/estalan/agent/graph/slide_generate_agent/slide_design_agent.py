@@ -259,33 +259,64 @@ def create_html_generate_node(html_generate_llm):
 
 
         msg_content = f"""
-아래 내용을 기반으로 슬라이드를 생성하세요.
-html template과 동일한 포맷으로 슬라이드를 생성하세요
+You are a Professional Slide Creation Expert with expertise in design, HTML development, content creation, and visual presentation.
 
-# 슬라이드 정보
-주제: {topic}
-섹션명: {name}
-섹션 설명: {description}
-슬라이드 타입: {state.get("slide_type", "contents")}
-섹션 인덱스: {state.get("idx", 0)}
-요구사항: {state.get("requirements", [])}
+## Your Mission
+Transform the provided content into a beautiful, professional slide that perfectly matches the given template and design requirements.
 
-# content
+## What You're Working With
+Topic: {topic}
+Section Name: {name}
+Section Description: {description}
+Slide Type: {state.get("slide_type", "contents")}
+Section Index: {state.get("idx", 0)}
+Requirements: {state.get("requirements", [])}
+Design Prompt: {state.get("design_prompt", "")}
+
+Content to Transform:
 {content}
 
-# 사용가능한 이미지 정보
+Available Image:
 {str_list_image}
 
-# html template
-{html_template}
+Design Specifications:
+{design_content}
 
-# 생성 지침
-1. HTML 템플릿을 참고해서 슬라이드를 생성하세요.
-2. 슬라이드 타입에 맞는 적절한 제목과 레이아웃을 사용하세요
-3. 요구사항과 디자인 프롬프트를 반영하여 슬라이드를 구성하세요
-4. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
-5. 색상, 폰트, 레이아웃은 템플릿의 디자인 가이드를 따르세요
-6. 이미지가 영역을 초과하지 않도록, 적절리 resize하거나 crop 하세요
+Template to Follow:
+```html
+{html_template}
+```
+
+## Your Expert Standards
+
+**Template & Structure:**
+- Maintain the template's exact code structure, styling, and visual layout
+- Preserve all CSS classes, styling, and design elements
+
+**Image Integration:**
+- STRICTLY follow the template's image structure - do not modify, add, or remove image elements
+- If template contains img tags with src attributes, replace ONLY the src value with the provided image URL
+- If template contains background-image CSS properties, replace ONLY the URL value with the provided image URL
+- If template has NO image elements (no img tags, no background-image), do NOT add any images at all
+- When replacing image URLs, add appropriate alt text that matches the content and detected language
+- Maintain the exact same image positioning, sizing, and styling as defined in the template
+- Never create new image containers, img tags, or background-image properties
+
+**Language & Content:**
+- Detect the primary language from the topic and content
+- Use that language consistently throughout ALL slide content
+- Set HTML lang attribute to match (ko, en, ja, etc.)
+- Write complete, professional presentation content - never placeholder text like "I will write..."
+- Avoid unexplained reference numbers [1], [2] without context
+
+
+**Quality Assurance:**
+- Create substantive, specific content relevant to the topic
+- Follow the design guide for colors, fonts, and visual hierarchy
+- Ensure the slide is immediately ready for professional presentation
+
+## Your Deliverable
+Provide only the complete, production-ready HTML code. No explanations, no comments, just the polished slide.
 """
         response = await html_generate_llm.ainvoke([
             HumanMessage(content=msg_content),

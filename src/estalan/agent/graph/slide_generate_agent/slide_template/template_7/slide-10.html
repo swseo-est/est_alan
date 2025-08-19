@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korean Aesthetic - Single Image Focus</title>
+    <style>
+        /* PPTX Conversion Optimized Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #ffffff;
+            width: 1920px;   /* Updated */
+            height: 1080px;  /* Updated */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide-container {
+            width: 1920px;   /* Updated */
+            height: 1080px;  /* Updated */
+            background-color: #ffffff;
+            position: relative;
+            padding: 60px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-title {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: #1e1e1e;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .main-image-container {
+            width: 100%;
+            max-width: 900px;
+            height: 500px;
+            background-color: #f3f3f3;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(0.4) grayscale(0.1) contrast(0.95);
+        }
+        
+        .image-caption {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 16px;
+            color: #887c62;
+            text-align: center;
+            font-style: italic;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+        
+        /* Decorative elements */
+        .decorative-corner-1 {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-top: 3px solid #e2b0a6;
+            border-right: 3px solid #e2b0a6;
+            border-radius: 0 8px 0 0;
+        }
+        
+        .decorative-corner-2 {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            border-bottom: 3px solid #d4cbbb;
+            border-left: 3px solid #d4cbbb;
+            border-radius: 0 0 0 8px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            .main-image-container {
+                max-width: 800px;
+                height: 450px;
+            }
+            
+            .image-title {
+                font-size: 24px;
+            }
+            
+            .image-caption {
+                font-size: 15px;
+                max-width: 550px;
+            }
+        }
+        
+        /* Print styles for conversion */
+        @media print {
+            .decorative-corner-1,
+            .decorative-corner-2 {
+                display: none;
+            }
+            
+            body {
+                background-color: #ffffff;
+                color: #1e1e1e;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Decorative elements -->
+        <div class="decorative-corner-1"></div>
+        <div class="decorative-corner-2"></div>
+        
+        <h1 class="image-title">Visual Showcase</h1>
+        
+        <div class="main-image-container">
+            <img src="https://placehold.co/900x500/f3f3f3/887c62?text=Featured+Image" 
+                 alt="Featured showcase image" 
+                 class="main-image"
+                 onerror="this.style.backgroundColor='#f3f3f3'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.textContent='Featured Image';">
+        </div>
+        
+        <p class="image-caption">
+            This is where you can add a meaningful caption that describes the image, provides context, or tells a story that supports your presentation narrative.
+        </p>
+    </div>
+</body>
+</html>

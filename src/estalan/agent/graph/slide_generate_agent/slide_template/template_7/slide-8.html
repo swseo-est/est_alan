@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korean Aesthetic - Key Statistics</title>
+    <style>
+        /* PPTX Conversion Optimized Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #ffffff;
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            padding: 80px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        
+        .slide-title {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 36px;
+            font-weight: 600;
+            color: #1e1e1e;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 70px;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 50px;
+            max-width: 900px;
+            margin: 0 auto;
+            height: calc(100% - 200px);
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .stat-number {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1;
+        }
+        
+        .stat-number.primary {
+            color: #664b34;
+        }
+        
+        .stat-number.secondary {
+            color: #887c62;
+        }
+        
+        .stat-number.accent {
+            color: #e2b0a6;
+        }
+        
+        .stat-number.dark {
+            color: #1e1e1e;
+        }
+        
+        .stat-label {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e1e1e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-description {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.4;
+            max-width: 250px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            .stats-grid {
+                gap: 40px;
+                max-width: 800px;
+            }
+            
+            .stat-number {
+                font-size: 60px;
+            }
+            
+            .stat-label {
+                font-size: 16px;
+            }
+            
+            .stat-description {
+                font-size: 13px;
+                max-width: 220px;
+            }
+        }
+        
+        /* Print styles for conversion */
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #1e1e1e;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <h1 class="slide-title">Key Statistics</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number primary">85%</div>
+                <div class="stat-label">Customer Satisfaction</div>
+                <div class="stat-description">Measured across all touchpoints and service interactions</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number secondary">2.4M</div>
+                <div class="stat-label">Active Users</div>
+                <div class="stat-description">Monthly active users across all platforms and regions</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number accent">156</div>
+                <div class="stat-label">Countries Served</div>
+                <div class="stat-description">Global presence with localized services and support</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number dark">4.8</div>
+                <div class="stat-label">App Store Rating</div>
+                <div class="stat-description">Average rating across iOS and Android platforms</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korean Aesthetic - Our Company</title>
+    <style>
+        /* PPTX Conversion Optimized Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #ffffff;
+            width: 1920px;   /* Updated */
+            height: 1080px;  /* Updated */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide-container {
+            width: 1920px;   /* Updated */
+            height: 1080px;  /* Updated */
+            background-color: #ffffff;
+            position: relative;
+            padding: 80px;
+            box-sizing: border-box;
+        }
+        
+        .content-container {
+            display: flex;
+            gap: 80px;
+            height: 100%;
+            align-items: center;
+        }
+        
+        .image-column {
+            flex: 1;
+            height: 500px;
+        }
+        
+        .image-container {
+            width: 100%;
+            height: 100%;
+            background-color: #f3f3f3;
+            border-radius: 40px;
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        
+        .company-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 30px;
+            filter: sepia(0.6) grayscale(0.1) contrast(0.9);
+        }
+        
+        .text-column {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .section-title {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 48px;
+            font-weight: 600;
+            color: #1e1e1e;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+        
+        .intro-text {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 20px;
+            color: #1e1e1e;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .bullet-item {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 20px;
+            color: #1e1e1e;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 30px;
+            line-height: 1.5;
+        }
+        
+        .bullet-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #664b34;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .conclusion-text {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 20px;
+            color: #664b34;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-top: 25px;
+        }
+        
+        /* Decorative element */
+        .decorative-arc {
+            position: absolute;
+            top: -60px;
+            left: -60px;
+            width: 300px;
+            height: 300px;
+            border: 2px solid #e2b0a6;
+            border-radius: 50%;
+            border-top: transparent;
+            border-right: transparent;
+            z-index: 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            .content-container {
+                gap: 60px;
+            }
+            
+            .section-title {
+                font-size: 36px;
+            }
+            
+            .intro-text,
+            .bullet-item,
+            .conclusion-text {
+                font-size: 18px;
+            }
+        }
+        
+        /* Print styles for conversion */
+        @media print {
+            .decorative-arc {
+                display: none;
+            }
+            
+            body {
+                background-color: #ffffff;
+                color: #1e1e1e;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Decorative element -->
+        <div class="decorative-arc"></div>
+        
+        <div class="content-container">
+            <div class="image-column">
+                <div class="image-container">
+                    <img src="https://placehold.co/800x1000/d4cbbb/1e1e1e?text=Your+Company+Image" 
+                         alt="Aesthetic company image" 
+                         class="company-image"
+                         onerror="this.style.backgroundColor='#d4cbbb'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.textContent='Company Image';">
+                </div>
+            </div>
+            
+            <div class="text-column">
+                <h1 class="section-title">Our Company</h1>
+                
+                <p class="intro-text">
+                    Do you know what helps you make your point clear? Lists like this one:
+                </p>
+                
+                <ul class="bullet-list">
+                    <li class="bullet-item">They're simple</li>
+                    <li class="bullet-item">You can organize your ideas clearly</li>
+                    <li class="bullet-item">You'll never forget to buy milk!</li>
+                </ul>
+                
+                <p class="conclusion-text">
+                    And the most important thing: the audience won't miss the point of your presentation.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

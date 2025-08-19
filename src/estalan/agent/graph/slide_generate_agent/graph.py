@@ -24,7 +24,9 @@ LIST_TEMPLATE_FOLDER = {
     "travel": "여행과 관련된 주제에 사용",
     "compare": "비교와 관련된 주제에 사용",
     "education": "교육과 관련된 주제에 사용",
-    "data_analysis": "데이터 분석과 관련된 주제에 사용"
+    "data_analysis": "데이터 분석과 관련된 주제에 사용",
+    "template_7": "트업이나 기업이 투자자·고객·파트너에게 아이디어, 문제 해결책, 회사 소개, 주요 지표와 비전까지 체계적으로 전달하는 미니멀하고 세련된 피치덱 발표에 사용"
+
 }
 
 def preprocessing_node(state):

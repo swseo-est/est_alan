@@ -198,7 +198,7 @@ template_folder: {template_folder}
     return slide_template_select_node
 
 
-def create_slide_design_node(slide_design_llm):
+def create_slide_design_node():
     async def slide_design_node(state: SlideDesignAgentState):
         html_template = state["html_template"]
         topic = state["topic"]
@@ -220,6 +220,9 @@ def create_slide_design_node(slide_design_llm):
 섹션 인덱스: {state.get("idx", 0)}
 요구사항: {state.get("requirements", [])}
 """
+        slide_design_llm = create_chat_model(provider="google_vertexai",
+                                             model="gemini-2.5-flash").with_structured_output(SlideDesignNodeOutput)
+
         for i in range(10):
             try:
                 result = await slide_design_llm.ainvoke([
@@ -390,7 +393,7 @@ def create_slide_create_agent(name=None):
     # React 에이전트용 LLM (structured output 불필요)
     # slide_template_select_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
     slide_template_select_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
-    slide_design_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(SlideDesignNodeOutput)
+    # slide_design_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(SlideDesignNodeOutput)
     image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
     html_generate_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(HtmlGenerateNodeOutput)
 
@@ -411,7 +414,7 @@ def create_slide_create_agent(name=None):
 
 
     slide_template_select_node = create_slide_template_select_node(slide_design_react_agent)
-    slide_design_node = create_slide_design_node(slide_design_llm)
+    slide_design_node = create_slide_design_node()
     image_search_node = create_image_search_agent(image_search_agent)
     html_generate_node = create_html_generate_node(html_generate_llm)
 

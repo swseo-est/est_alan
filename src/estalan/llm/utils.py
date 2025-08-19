@@ -24,7 +24,7 @@ def create_chat_model(provider=None, model=None, structured_output=None):
     available_providers = [
         "openai",
         "azure_openai",
-        "google_vertaxai",
+        "google_vertexai",
         "anthropic",
         "mock"
     ]
@@ -39,7 +39,7 @@ def create_chat_model(provider=None, model=None, structured_output=None):
         if not HAS_OPENAI:
             raise ImportError("Azure OpenAI support is not available. Please install langchain_openai.")
         chat_model = AlanAzureChatOpenAI(model=model)
-    elif provider == "google_vertaxai":
+    elif provider == "google_vertexai":
         if not HAS_GOOGLE_VERTEXAI:
             raise ImportError("Google VertexAI support is not available. Please install langchain_google_vertexai.")
         chat_model = AlanChatVertexAI(model=model)

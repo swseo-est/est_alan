@@ -233,7 +233,6 @@ def create_slide_design_node(slide_design_llm):
                 break
             except Exception as e:
                 print(i, e)
-                raise Exception
 
         return {'design': design, "list_image": list_image}
     return slide_design_node

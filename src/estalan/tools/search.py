@@ -351,16 +351,16 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                 continue
             metadata = {
                 "title": result["title"],
-                "link": result["link"],
+                # "link": result["link"],
                 "image_url": result["imageUrl"],
                 "imageWidth": result.get("imageWidth"),
                 "imageHeight": result.get("imageHeight"),
-                "thumbnail_url": result.get("thumbnailUrl"),
-                "thumbnailWidth": result.get("thumbnailWidth"),
-                "thumbnailHeight": result.get("thumbnailHeight"),
+                # "thumbnail_url": result.get("thumbnailUrl"),
+                # "thumbnailWidth": result.get("thumbnailWidth"),
+                # "thumbnailHeight": result.get("thumbnailHeight"),
                 "domain": result.get("domain"),
                 "source": result.get("source"),
-                "google_url": result.get("googleUrl"),
+                # "google_url": result.get("googleUrl"),
                 "position": result.get("position"),
                 "type": "image",
             }

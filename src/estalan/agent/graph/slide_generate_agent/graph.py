@@ -41,6 +41,12 @@ def preprocessing_node(state):
     
     template_folder는 아래 중 하나를 선택하세요
     {list_tempalte_folder}
+    
+    Output
+        topic: str, 유저 메시지로 부터 추출한 슬라이드의 주제, ex) 제주도 여행
+        requirements: str, 유저 메시지로 부터 추출한 유저의 요구사항, ex) 3박 4일 제주도 여행 일정
+        template_folder: str, topic에 적합한 template 폴더 이름, ex) general
+
     """
     msg = HumanMessage(content=msg)
 

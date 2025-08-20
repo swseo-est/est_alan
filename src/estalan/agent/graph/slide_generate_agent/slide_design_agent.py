@@ -183,17 +183,21 @@ template_folder: {template_folder}
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
 
         # 에이전트 실행
-        result = await slide_design_react_agent.ainvoke(input_state)
-        
-        for message in result['messages']:
-            if message.type == "tool":
-                tool_result = json.loads(message.content)
+        for i in range(10):
+            try:
+                result = await slide_design_react_agent.ainvoke(input_state)
 
-        # 결과에서 디자인 정보 추출
-        return {
-            "html_template": tool_result['content'],
-            "guideline": tool_result['guideline']
-        }
+                for message in result['messages']:
+                    if message.type == "tool":
+                        tool_result = json.loads(message.content)
+
+                # 결과에서 디자인 정보 추출
+                return {
+                    "html_template": tool_result['content'],
+                    "guideline": tool_result['guideline']
+                }
+            except Exception as e:
+                print(i, e)
     
     return slide_template_select_node
 

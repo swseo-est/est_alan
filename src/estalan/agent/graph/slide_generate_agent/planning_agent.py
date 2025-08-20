@@ -70,12 +70,22 @@ def create_generate_sections_node(llm):
                 )
 
                 msg_result = generate_section_result_msg(results['structured_response']['sections'])
+
+                sections = results['structured_response']['sections']
+
+                list_check_field = ["topic", "idx", "name", "description"]
+                for s in sections:
+                    for field in list_check_field:
+                        if field not in s.keys():
+                            print(f"there are no field name {field}")
+                            raise Exception()
+
                 break
             except Exception as e:
                 print(e)
 
 
-        sections = results['structured_response']['sections']
+
         sections_refined = list()
         for s in sections:
             s_refined = s.copy()

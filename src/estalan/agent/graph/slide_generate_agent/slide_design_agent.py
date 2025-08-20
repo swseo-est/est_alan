@@ -377,10 +377,16 @@ CSS 클래스명 변경 금지: class="text-2xl font-bold mb-3 title-text" 등�
 ...
 ```
 """
-        response = await html_generate_llm.ainvoke([
-            HumanMessage(content=msg_content),
-        ])
+        for i in range(10):
+            try:
+                response = await html_generate_llm.ainvoke([
+                    HumanMessage(content=msg_content),
+                ])
+                break
+            except Exception as e:
+                print(i, e)
         return response
+
     return html_generate_node
 
 def create_slide_create_agent(name=None):

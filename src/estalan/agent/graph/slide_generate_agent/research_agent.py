@@ -62,16 +62,21 @@ def create_research_node(llm):
                                                                        section_topic=description,
                                                                        content="")
         # Format system instructions
-        results = await llm.ainvoke(
-            {
-                "messages":
-                    [
-                        SystemMessage(content=section_writer_instructions),
-                        HumanMessage(content=section_writer_inputs_formatted),
-                    ]
-            }
-        )
-        return results['structured_response']
+        for i in range(10):
+            try:
+                results = await llm.ainvoke(
+                    {
+                        "messages":
+                            [
+                                SystemMessage(content=section_writer_instructions),
+                                HumanMessage(content=section_writer_inputs_formatted),
+                            ]
+                    }
+                )
+                return results['structured_response']
+            except Exception as e:
+                print(i,e )
+
     return research_node
 
 

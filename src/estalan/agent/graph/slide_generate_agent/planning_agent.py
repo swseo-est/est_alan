@@ -70,12 +70,22 @@ def create_generate_sections_node(llm):
                 )
 
                 msg_result = generate_section_result_msg(results['structured_response']['sections'])
+
+                sections = results['structured_response']['sections']
+
+                list_check_field = ["topic", "idx", "name", "description"]
+                for s in sections:
+                    for field in list_check_field:
+                        if field not in s.keys():
+                            print(f"there are no field name {field}")
+                            raise Exception()
+
                 break
             except Exception as e:
                 print(e)
 
 
-        sections = results['structured_response']['sections']
+
         sections_refined = list()
         for s in sections:
             s_refined = s.copy()
@@ -169,7 +179,7 @@ def create_planning_agent(name="planning_agent"):
         k=15,
     )
 
-    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini", lazy=True)
 
     generate_sections_node_agent = create_react_agent(
         generate_sections_node_llm,

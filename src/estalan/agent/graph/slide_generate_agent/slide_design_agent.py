@@ -183,17 +183,21 @@ template_folder: {template_folder}
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
 
         # 에이전트 실행
-        result = await slide_design_react_agent.ainvoke(input_state)
-        
-        for message in result['messages']:
-            if message.type == "tool":
-                tool_result = json.loads(message.content)
+        for i in range(10):
+            try:
+                result = await slide_design_react_agent.ainvoke(input_state)
 
-        # 결과에서 디자인 정보 추출
-        return {
-            "html_template": tool_result['content'],
-            "guideline": tool_result['guideline']
-        }
+                for message in result['messages']:
+                    if message.type == "tool":
+                        tool_result = json.loads(message.content)
+
+                # 결과에서 디자인 정보 추출
+                return {
+                    "html_template": tool_result['content'],
+                    "guideline": tool_result['guideline']
+                }
+            except Exception as e:
+                print(i, e)
     
     return slide_template_select_node
 
@@ -233,7 +237,6 @@ def create_slide_design_node(slide_design_llm):
                 break
             except Exception as e:
                 print(i, e)
-                raise Exception
 
         return {'design': design, "list_image": list_image}
     return slide_design_node
@@ -249,18 +252,23 @@ def create_image_search_agent(agent):
         
         msg = create_ai_message(content=f"list_image의 title과 description에 맞는 이미지를 검색하고, url을 업데이트 하세요. 추가 질문은 하지말고 작업을 수행하세요. \n\n{str_list_image}")
 
-        result = await agent.ainvoke(
-            {
-                "messages": [msg],
-                "list_image": list_image,
-            }
-        )
-        list_image = result['structured_response']['list_image']
-        design = state['design']
+        for i in range(10):
+            try:
+                result = await agent.ainvoke(
+                    {
+                        "messages": [msg],
+                        "list_image": list_image,
+                    }
+                )
+                list_image = result['structured_response']['list_image']
+                design = state['design']
 
-        design += f"\n\n 검색한 이미지 \n"
-        for img in list_image:
-            design += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
+                design += f"\n\n 검색한 이미지 \n"
+                for img in list_image:
+                    design += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
+                break
+            except Exception as e:
+                print(i, e)
 
         # print(design)
         return {"list_image": list_image, "design": design}
@@ -373,10 +381,16 @@ CSS 클래스명 변경 금지: class="text-2xl font-bold mb-3 title-text" 등�
 ...
 ```
 """
-        response = await html_generate_llm.ainvoke([
-            HumanMessage(content=msg_content),
-        ])
+        for i in range(10):
+            try:
+                response = await html_generate_llm.ainvoke([
+                    HumanMessage(content=msg_content),
+                ])
+                break
+            except Exception as e:
+                print(i, e)
         return response
+
     return html_generate_node
 
 def create_slide_create_agent(name=None):
@@ -391,7 +405,7 @@ def create_slide_create_agent(name=None):
     # React 에이전트용 LLM (structured output 불필요)
     # slide_template_select_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
     slide_template_select_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
-    slide_design_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash", lazy=True).with_structured_output(SlideDesignNodeOutput)
+    slide_design_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini", lazy=True).with_structured_output(SlideDesignNodeOutput)
     image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
     html_generate_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(HtmlGenerateNodeOutput)
 

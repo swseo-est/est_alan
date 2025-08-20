@@ -26,7 +26,7 @@ except ImportError:
 from estalan.llm.mock_llm import AlanMockLLM
 
 
-def create_chat_model(provider=None, model=None, structured_output=None, lazy=False):
+def create_chat_model(provider=None, model=None, structured_output=None, lazy=True):
     available_providers = [
         "openai",
         "azure_openai",

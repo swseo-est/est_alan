@@ -1,5 +1,9 @@
 section_writer_instructions = """
-Write one section for a slide-oriented research report in Korean.
+Write one section for a presentation slide in Korean.
+
+<Target Audience>
+- general public
+</Target Audience>
 
 <Task>
 1) Carefully read the report topic, section name, and section topic.

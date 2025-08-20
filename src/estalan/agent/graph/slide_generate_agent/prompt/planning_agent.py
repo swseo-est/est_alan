@@ -5,14 +5,18 @@ preliminary_investigation_instructions="""
 {topic}
 </Presentation topic>
 
+<Target Audience>
+- 일반적인 대중
+</Target Audience>
+
+
 <Goal>
-주제에 딱 맞는 '실행 중심' 섹션 {number_of_queries}개를 설계하세요. 
-각 섹션은 실제로 바로 수행 가능한 계획·루트·체크리스트·선정기준·예산/일정 같은 구체 항목만 포함합니다.
+주제에 딱 맞는 '정보 중심' 섹션 {number_of_queries}개를 설계하세요. 
 </Goal>
 
 <Hard rules>
 - 금지: 개요/소개/배경/문제정의/조사 방법론/API/데이터 수집 방식 등 메타 섹션
-- 지향: 루트/일정/권역/선정기준/체크리스트/준비물/예산·이동수단/리스크/산출물·템플릿 등 실행 항목
+- 지향: 청중을 고려한 구체적인 정보 또는 그것을 바탕으로한 제안
 - 언어: 한글
 - 섹션명은 15자 내외로 간결하게, 설명은 15~30단어 구체적으로 작성
 - search_tool을 활용해 실제 정보 탐색을 반영해 설계
@@ -24,7 +28,7 @@ preliminary_investigation_instructions="""
 각 섹션의 description은 다음 구조를 따르세요:
 "{topic}의 [구체적 내용], [방법/도구], [결과/효과]를 [동사]합니다."
 
-Generate the sections of the report. Your response must include a 'sections' field containing a list of sections.  
+Generate the sections of the presentation slide. Your response must include a 'sections' field containing a list of sections.  
 Each section must have: topic, idx, name, description, research, content, img and html fields.  
 slide_type: content
 research : False  

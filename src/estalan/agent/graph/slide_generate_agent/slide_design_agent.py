@@ -248,18 +248,23 @@ def create_image_search_agent(agent):
         
         msg = create_ai_message(content=f"list_image의 title과 description에 맞는 이미지를 검색하고, url을 업데이트 하세요. 추가 질문은 하지말고 작업을 수행하세요. \n\n{str_list_image}")
 
-        result = await agent.ainvoke(
-            {
-                "messages": [msg],
-                "list_image": list_image,
-            }
-        )
-        list_image = result['structured_response']['list_image']
-        design = state['design']
+        for i in range(10):
+            try:
+                result = await agent.ainvoke(
+                    {
+                        "messages": [msg],
+                        "list_image": list_image,
+                    }
+                )
+                list_image = result['structured_response']['list_image']
+                design = state['design']
 
-        design += f"\n\n 검색한 이미지 \n"
-        for img in list_image:
-            design += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
+                design += f"\n\n 검색한 이미지 \n"
+                for img in list_image:
+                    design += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
+                break
+            except Exception as e:
+                print(i, e)
 
         # print(design)
         return {"list_image": list_image, "design": design}

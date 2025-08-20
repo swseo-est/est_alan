@@ -73,6 +73,7 @@ def create_research_node(llm):
                             ]
                     }
                 )
+                print(results['structured_response'])
                 return results['structured_response']
             except Exception as e:
                 print(i,e )

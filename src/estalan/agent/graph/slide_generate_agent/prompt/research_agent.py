@@ -1,18 +1,21 @@
 section_writer_instructions = """
-Write one section for a slide-oriented research report in Korean.
+Write one section for a presentation slide in Korean.
+
+<Target Audience>
+- general public
+</Target Audience>
 
 <Task>
 1) Carefully read the report topic, section name, and section topic.
 2) Review any existing section content, if provided.
 3) Use the search_tool to find domain-specific, high-signal sources.
-4) Synthesize findings into concrete, actionable content for slides.
+4) Synthesize findings into concrete informable content or concrete actionable content for slides.
 5) Output only the required fields of the schema.
 </Task>
 
 <Hard Rules>
 - Prohibited: meta sections/content such as overview/intro/background/research methodology/API/crawler/data-collection pipelines.
-- Focus: concrete details users can execute now (routes, schedules, area breakdowns, selection criteria, checklists, budget/transport, risks, deliverables/templates).
-- If the section name implies methodology or overview, reinterpret into concrete actions for the given topic.
+- Focus: Specific information tailored to the audience, or suggestions based on it
 - Write in Korean. Avoid generic statements; ground claims in sources.
 </Hard Rules>
 

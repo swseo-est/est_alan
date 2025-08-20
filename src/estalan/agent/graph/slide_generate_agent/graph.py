@@ -180,7 +180,7 @@ if __name__ == '__main__':
     result = asyncio.run(
         graph.ainvoke(
             {
-                "messages": [HumanMessage(content="100만원 이하 가성비 자전거 비교해줘")]
+                "messages": [HumanMessage(content="이스트소프트에 대한 투자 IR 자료 만들어줘")]
             }
         )
     )
@@ -191,3 +191,5 @@ if __name__ == '__main__':
 
     e = time.time()
     print(e - s)
+
+    print(result)

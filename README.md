@@ -54,3 +54,20 @@ chmod +x restart-all.sh
 ./restart-all.sh
 ```
 
+## Github SSH Key 등록 방법
+### 로컬에서 SSH 키 생성
+```bash
+ssh-keygen -t ed25519 -C "swseo@estsoft.com"
+```
+
+### SSH 에이전트 등록
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+```
+
+### GitHub 계정에 공개키 추가
+GitHub → Settings → SSH and GPG keys → New SSH key → ~/.ssh/id_ed25519.pub 내용 붙여넣기
+
+### 원격 주소를 SSH로 변경
+git remote set-url origin git@github.com:swseo-est/est_alan.git

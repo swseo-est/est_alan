@@ -34,12 +34,19 @@ def print_tool_usage_msg(state: PlanningAgentState):
     url = "https://sagradafamiliatickets.tours/wp-content/uploads/2025/03/barcelona-sunset.jpg"
     tool_usage_msg = create_block_message(
         content=f"""
-    | ![]({url}) | ![]({url}) | ![]({url}) |
-    |--------------------------------------|--------------------------------------|--------------------------------------|
-    | ![]({url}) | ![]({url}) | ![]({url}) |
-    | ![]({url}) | ![]({url}) | ![]({url}) |
-    """,
-        block_tag="image_search_tool",
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+          <img src="{url}" style="width:100%;"/>
+          <img src="{url}" style="width:100%;"/>
+          <img src="{url}" style="width:100%;"/>
+          <img src="{url}" style="width:100%;"/>
+          <img src="{url}" style="width:100%;"/>
+          <img src="{url}" style="width:100%;"/>
+          <img src="{url}" style="width:100%;"/>
+          <img src="{url}" style="width:100%;"/>
+          <img src="{url}" style="width:100%;"/>
+        </div>
+        """,
+    block_tag="image_search_tool",
         name="planning_tool_usage"
     )
 

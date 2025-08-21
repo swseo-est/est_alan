@@ -31,6 +31,18 @@ def create_init_planning_agent_node():
 
 def print_tool_usage_msg(state: PlanningAgentState):
     tool_usage_msg = create_block_message(content="웹 검색 도구를 사용 중 입니다...", block_tag="web_search_tool", name="planning_tool_usage")
+    url = "https://sagradafamiliatickets.tours/wp-content/uploads/2025/03/barcelona-sunset.jpg"
+    tool_usage_msg = create_block_message(
+        content=f"""
+    | ![]({url}) | ![]({url}) | ![]({url}) |
+    |--------------------------------------|--------------------------------------|--------------------------------------|
+    | ![]({url}) | ![]({url}) | ![]({url}) |
+    | ![]({url}) | ![]({url}) | ![]({url}) |
+    """,
+        block_tag="image_search_tool",
+        name="planning_tool_usage"
+    )
+
     return {"messages": [tool_usage_msg]}
 
 def create_generate_sections_node(llm):

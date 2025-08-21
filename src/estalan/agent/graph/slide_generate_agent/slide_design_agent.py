@@ -233,6 +233,8 @@ def create_slide_design_node(slide_design_llm):
 
                 design = result['design']
                 list_image = result['list_image']
+                for img in list_image:
+                    img['url'] = ""
                 print(result)
                 break
             except Exception as e:

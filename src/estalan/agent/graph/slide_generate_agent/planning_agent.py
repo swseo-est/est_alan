@@ -10,13 +10,12 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preliminary_investigation_instructions
 from estalan.tools.search import GoogleSerperSearchResult
 from estalan.llm import create_chat_model
-from estalan.messages.utils import create_ai_message, create_block_message      
+from estalan.messages.utils import create_ai_message, create_block_message
 from estalan.agent.graph.slide_generate_agent.state import SlideGenerateAgentMetadata, Section
 
 
 class PlanningAgentState(BaseAlanAgentState):
     metadata: SlideGenerateAgentMetadata
-
     sections: List[Section]
 
 class GenerateSectionsOutput(TypedDict):
@@ -31,25 +30,6 @@ def create_init_planning_agent_node():
 
 def print_tool_usage_msg(state: PlanningAgentState):
     tool_usage_msg = create_block_message(content="웹 검색 도구를 사용 중 입니다...", block_tag="web_search_tool", name="planning_tool_usage")
-    url = "https://sagradafamiliatickets.tours/wp-content/uploads/2025/03/barcelona-sunset.jpg"
-    tool_usage_msg = create_block_message(
-        content=f"""
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-          <img src="{url}" style="width:100%;"/>
-          <img src="{url}" style="width:100%;"/>
-          <img src="{url}" style="width:100%;"/>
-          <img src="{url}" style="width:100%;"/>
-          <img src="{url}" style="width:100%;"/>
-          <img src="{url}" style="width:100%;"/>
-          <img src="{url}" style="width:100%;"/>
-          <img src="{url}" style="width:100%;"/>
-          <img src="{url}" style="width:100%;"/>
-        </div>
-        """,
-    block_tag="image_search_tool",
-        name="planning_tool_usage"
-    )
-
     return {"messages": [tool_usage_msg]}
 
 def create_generate_sections_node(llm):

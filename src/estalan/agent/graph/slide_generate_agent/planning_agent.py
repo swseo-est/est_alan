@@ -10,7 +10,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preliminary_investigation_instructions
 from estalan.tools.search import GoogleSerperSearchResult
 from estalan.llm import create_chat_model
-from estalan.messages.utils import create_ai_message
+from estalan.messages.utils import create_ai_message, create_block_message      
 from estalan.agent.graph.slide_generate_agent.state import SlideGenerateAgentMetadata, Section
 
 
@@ -24,10 +24,14 @@ class GenerateSectionsOutput(TypedDict):
 
 def create_init_planning_agent_node():
     def init_planning_agent_node(state: PlanningAgentState):
-        print(state)
         init_msg = create_ai_message(content="검색 도구를 사용하여 목차를 생성하기 위한 조사를 시작합니다.", name="planning_agent")
+
         return {"messages": [init_msg]}
     return init_planning_agent_node
+
+def print_tool_usage_msg(state: PlanningAgentState):
+    tool_usage_msg = create_block_message(content="웹 검색 도구를 사용 중 입니다...", block_tag="web_search_tool", name="planning_tool_usage")
+    return {"messages": [tool_usage_msg]}
 
 def create_generate_sections_node(llm):
     async def generate_sections_node(state: PlanningAgentState):
@@ -195,12 +199,14 @@ def create_planning_agent(name="planning_agent"):
 
     builder = StateGraph(PlanningAgentState)
     builder.add_node("init_planning_agent_node", init_planning_agent_node)
+    builder.add_node("print_tool_usage_msg", print_tool_usage_msg)
     builder.add_node("generate_sections_node", generate_sections_node)
     builder.add_node("add_tile_slide_node", add_tile_slide_node)
     builder.add_node("add_toc_slide_node", add_toc_slide_node)
 
     builder.add_edge(START, "init_planning_agent_node")
-    builder.add_edge("init_planning_agent_node", "generate_sections_node")
+    builder.add_edge("init_planning_agent_node", "print_tool_usage_msg")
+    builder.add_edge("print_tool_usage_msg", "generate_sections_node")
     builder.add_edge("generate_sections_node", "add_toc_slide_node")
     builder.add_edge("add_toc_slide_node", "add_tile_slide_node")
 

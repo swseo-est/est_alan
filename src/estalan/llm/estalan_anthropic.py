@@ -25,6 +25,10 @@ class AlanChatAnthropicVertex(AlanBaseChatModelWrapper):
 
 
 if __name__ == '__main__':
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
     llm = AlanChatAnthropicVertex(
         model="claude-sonnet-4@20250514",
     )

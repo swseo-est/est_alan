@@ -12,6 +12,7 @@ class AlanBaseChatModelWrapper(ABC):
 
     def __init__(self, model: BaseChatModel, *, name: str | None = None):
         self._model = model
+        self._max_retry = 10
         # 래퍼 이름: 전달받지 않으면 원본 클래스명을 사용
         self.name = name or model.__class__.__name__
 
@@ -27,35 +28,40 @@ class AlanBaseChatModelWrapper(ABC):
     async def ainvoke(self, *args: Any, **kwargs: Any):
         """비동기 호출 전/후에 훅을 실행."""
         self._pre_hook(*args, **kwargs)
-        num_retry = 0
+        last_exception = None
 
-        for i in range(10):
+        for i in range(self._max_retry):
             try:
                 result = await self._model.ainvoke(*args, **kwargs)
-                break
+                return self._post_hook(result)
             except Exception as e:
-                print(f"retry {num_retry}")
-                print(e)
-                num_retry += 1
-                time.sleep(1)
-        return self._post_hook(result)
+                print(f"retry {i + 1}/{self._max_retry}")
+                print(f"Error: {e}")
+                last_exception = e
+                if i < self._max_retry - 1:  # 마지막 시도가 아니면 대기
+                    time.sleep(1)
+        
+        # 모든 retry 시도 실패 시 원본 에러를 그대로 발생
+        raise last_exception from last_exception
 
     def invoke(self, *args: Any, **kwargs: Any):
         """동기 호출 전/후에 훅을 실행."""
         self._pre_hook(*args, **kwargs)
+        last_exception = None
 
-        num_retry = 0
-        for i in range(10):
+        for i in range(self._max_retry):
             try:
                 result = self._model.invoke(*args, **kwargs)
-                break
+                return self._post_hook(result)
             except Exception as e:
-                print(f"retry {num_retry}")
-                print(e)
-                num_retry += 1
-                time.sleep(1)
+                print(f"retry {i + 1}/{self._max_retry}")
+                print(f"Error: {e}")
+                last_exception = e
+                if i < self._max_retry - 1:  # 마지막 시도가 아니면 대기
+                    time.sleep(1)
 
-        return self._post_hook(result)
+        # 모든 retry 시도 실패 시 원본 에러를 그대로 발생
+        raise last_exception from last_exception
 
     # ------------------------------------------------------------------
     # 확장 포인트: 공통 유틸리티 메서드 예시

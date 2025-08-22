@@ -9,8 +9,7 @@ from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 from langgraph.prebuilt import create_react_agent
 from estalan.agent.graph.slide_generate_agent.utils import get_html_template_list, get_html_template_content_tool
 from estalan.agent.graph.slide_generate_agent.prompt.slide_design import prompt_slide_design
-from langgraph.prebuilt.chat_agent_executor import AgentState, AgentStateWithStructuredResponse
-from estalan.tools.search import GoogleSerperSearchResult, GoogleSerperImageSearchResult
+from estalan.tools.search import GoogleSerperImageSearchResult
 
 
 
@@ -233,6 +232,8 @@ def create_slide_design_node(slide_design_llm):
 
                 design = result['design']
                 list_image = result['list_image']
+                for img in list_image:
+                    img['url'] = ""
                 print(result)
                 break
             except Exception as e:

@@ -1,7 +1,7 @@
 import os
 
 from typing import TypedDict, List
-from langgraph.prebuilt.chat_agent_executor import AgentState
+from estalan.agent.base.state import BaseAlanAgentState
 from langgraph.prebuilt import create_react_agent
 from langgraph.graph import START, END, StateGraph
 
@@ -14,7 +14,7 @@ from estalan.messages.utils import create_ai_message, create_block_message
 from estalan.agent.graph.slide_generate_agent.state import SlideGenerateAgentMetadata, Section
 
 
-class PlanningAgentState(AgentState):
+class PlanningAgentState(BaseAlanAgentState):
     metadata: SlideGenerateAgentMetadata
 
     sections: List[Section]

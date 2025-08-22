@@ -28,6 +28,13 @@ LIST_TEMPLATE_FOLDER = {
     # "data_analysis": "데이터 분석과 관련된 주제에 사용"
 }
 
+
+def msg_test_node(state):
+    msg = create_ai_message(content="test", metadata={"log_level": "debug"})
+    print(msg)
+    return {"messages": [msg]}
+
+
 def preprocessing_node(state):
     print(state)
     llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(OutputState)
@@ -41,6 +48,12 @@ def preprocessing_node(state):
     
     template_folder는 아래 중 하나를 선택하세요
     {list_tempalte_folder}
+    
+    Output
+        topic: str, 유저 메시지로 부터 추출한 슬라이드의 주제, ex) 제주도 여행
+        requirements: str, 유저 메시지로 부터 추출한 유저의 요구사항, ex) 3박 4일 제주도 여행 일정
+        template_folder: str, topic에 적합한 template 폴더 이름, ex) general
+
     """
     msg = HumanMessage(content=msg)
 
@@ -142,6 +155,20 @@ def create_slide_generate_graph(name="slide_generate_agent"):
 def create_graph():
     # 슬라이드 생성 그래프 생성
     slide_generate_graph = create_slide_generate_graph()
+    # msg_test_node와 slide_generate_graph를 연결하는 테스트 그래프 생성
+    builder = StateGraph(SlideGenerateAgentState)
+    
+    # 노드 추가
+    builder.add_node("test_node", msg_test_node)
+    builder.add_node("slide_generate", slide_generate_graph)
+    
+    # 엣지 연결
+    builder.add_edge(START, "test_node")
+    builder.add_edge("test_node", "slide_generate")
+    builder.add_edge("slide_generate", END)
+    
+    # 테스트 그래프 컴파일
+    graph = builder.compile(name="test_slide_generate_graph")
 
     # # # Supervisor 생성
     # workflow = create_supervisor(
@@ -161,7 +188,7 @@ def create_graph():
     #
     # # Compile and run
     # app = workflow.compile()
-    return slide_generate_graph
+    return graph
 
 
 

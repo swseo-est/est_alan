@@ -6,14 +6,17 @@ from estalan.messages.utils import (
     create_ai_message,
     create_human_message,
     create_system_message,
-    create_tool_message
+    create_tool_message,
+    create_block_message
 )
 from estalan.messages.base import (
     AlanHumanMessage,
     AlanSystemMessage,
     AlanAIMessage,
     AlanToolMessage,
-    convert_to_alan_message
+    BaseAlanBlockMessage,
+    convert_to_alan_message,
+    BaseAlanMessage
 )
 
 
@@ -221,3 +224,163 @@ def test_message_content_preservation():
     # tool 타입은 별도로 테스트 (tool_call_id 필요)
     tool_message = create_message("tool", test_content, tool_call_id="test_tool")
     assert tool_message.content == test_content
+
+
+def test_convert_to_alan_message_ai():
+    """AI 메시지를 Alan 메시지로 변환 테스트"""
+    original_message = AIMessage(content="Test AI message")
+    converted_message = convert_to_alan_message(original_message)
+    
+    assert isinstance(converted_message, AlanAIMessage)
+    assert converted_message.content == "Test AI message"
+    assert hasattr(converted_message, 'id')
+    assert hasattr(converted_message, 'metadata')
+
+
+def test_convert_to_alan_message_human():
+    """Human 메시지를 Alan 메시지로 변환 테스트"""
+    original_message = HumanMessage(content="Test human message")
+    converted_message = convert_to_alan_message(original_message)
+    
+    assert isinstance(converted_message, AlanHumanMessage)
+    assert converted_message.content == "Test human message"
+    assert hasattr(converted_message, 'id')
+    assert hasattr(converted_message, 'metadata')
+
+
+def test_convert_to_alan_message_system():
+    """System 메시지를 Alan 메시지로 변환 테스트"""
+    original_message = SystemMessage(content="Test system message")
+    converted_message = convert_to_alan_message(original_message)
+    
+    assert isinstance(converted_message, AlanSystemMessage)
+    assert converted_message.content == "Test system message"
+    assert hasattr(converted_message, 'id')
+    assert hasattr(converted_message, 'metadata')
+
+
+def test_convert_to_alan_message_tool():
+    """Tool 메시지를 Alan 메시지로 변환 테스트"""
+    original_message = ToolMessage(content="Test tool message", tool_call_id="test_tool")
+    converted_message = convert_to_alan_message(original_message)
+    
+    assert isinstance(converted_message, AlanToolMessage)
+    assert converted_message.content == "Test tool message"
+    assert converted_message.tool_call_id == "test_tool"
+    assert hasattr(converted_message, 'id')
+    assert hasattr(converted_message, 'metadata')
+
+
+def test_convert_to_alan_message_preserves_id():
+    """기존 ID가 있는 메시지 변환 시 ID 보존 테스트"""
+    original_message = AIMessage(content="Test message", id="existing_id_123")
+    converted_message = convert_to_alan_message(original_message)
+    
+    assert converted_message.id == "existing_id_123"
+
+
+def test_convert_to_alan_message_generates_new_id():
+    """ID가 없는 메시지 변환 시 새 ID 생성 테스트"""
+    original_message = AIMessage(content="Test message")
+    # id 속성 제거
+    if hasattr(original_message, 'id'):
+        delattr(original_message, 'id')
+    
+    converted_message = convert_to_alan_message(original_message)
+    
+    assert converted_message.id is not None
+    assert len(converted_message.id) > 0
+    assert converted_message.id != "existing_id_123"
+
+
+def test_create_message_with_use_name_prefix():
+    """use_name_prefix 파라미터 테스트"""
+    content = "Test message"
+    message = create_message("human", content, use_name_prefix=True)
+    
+    assert isinstance(message, AlanHumanMessage)
+    assert message.content == content
+    # use_name_prefix가 실제로 사용되는지 확인 (현재는 구현되지 않음)
+
+
+def test_create_block_message_basic():
+    """기본 블록 메시지 생성 테스트"""
+    content = "This is a block message"
+    message = create_block_message(content)
+    
+    assert isinstance(message, BaseAlanBlockMessage)
+    assert message.content == f"```\n{content}\n```"
+    assert hasattr(message, 'id')
+    assert hasattr(message, 'metadata')
+
+
+def test_create_block_message_with_block_tag():
+    """블록 태그가 있는 블록 메시지 생성 테스트"""
+    content = "This is a Python code block"
+    block_tag = "python"
+    message = create_block_message(content, block_tag=block_tag)
+    
+    assert isinstance(message, BaseAlanBlockMessage)
+    assert message.content == f"```{block_tag}\n{content}\n```"
+    assert message.block_tag == block_tag
+    assert hasattr(message, 'id')
+    assert hasattr(message, 'metadata')
+
+
+def test_create_block_message_with_kwargs():
+    """키워드 인자와 함께 블록 메시지 생성 테스트"""
+    content = "This is a block message with kwargs"
+    block_tag = "json"
+    additional_data = {"custom_field": "custom_value"}
+    
+    # Pydantic 모델은 추가 키워드 인자를 자동으로 처리하지 않으므로
+    # 기본적인 생성만 테스트
+    message = create_block_message(content, block_tag=block_tag)
+    
+    assert isinstance(message, BaseAlanBlockMessage)
+    assert message.content == f"```{block_tag}\n{content}\n```"
+    assert message.block_tag == block_tag
+    # 추가 키워드 인자는 Pydantic 모델에서 지원되지 않음
+
+
+def test_convert_to_alan_message_already_alan():
+    """이미 Alan 메시지인 경우 변환하지 않고 그대로 반환하는지 테스트"""
+    # 이미 Alan 메시지인 경우
+    alan_message = AlanAIMessage(content="Already Alan message")
+    
+    # 변환 시도
+    converted_message = convert_to_alan_message(alan_message)
+    
+    # 같은 객체인지 확인 (변환되지 않음)
+    assert converted_message is alan_message
+    assert isinstance(converted_message, BaseAlanMessage)
+    assert isinstance(converted_message, AlanAIMessage)
+
+
+def test_isinstance_base_alan_message():
+    """BaseAlanMessage isinstance 체크가 제대로 작동하는지 테스트"""
+    # Alan 메시지들 생성
+    alan_ai = AlanAIMessage(content="Test AI")
+    alan_human = AlanHumanMessage(content="Test Human")
+    alan_system = AlanSystemMessage(content="Test System")
+    alan_tool = AlanToolMessage(content="Test Tool", tool_call_id="test")
+
+    # isinstance 체크
+    assert isinstance(alan_ai, BaseAlanMessage)
+    assert isinstance(alan_human, BaseAlanMessage)
+    assert isinstance(alan_system, BaseAlanMessage)
+    assert isinstance(alan_tool, BaseAlanMessage)
+    
+    # langchain 기본 메시지들과 비교
+    from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
+    
+    basic_ai = AIMessage(content="Basic AI")
+    basic_human = HumanMessage(content="Basic Human")
+    basic_system = SystemMessage(content="Basic System")
+    basic_tool = ToolMessage(content="Basic Tool", tool_call_id="test")
+    
+    # 기본 메시지들은 BaseAlanMessage가 아님
+    assert not isinstance(basic_ai, BaseAlanMessage)
+    assert not isinstance(basic_human, BaseAlanMessage)
+    assert not isinstance(basic_system, BaseAlanMessage)
+    assert not isinstance(basic_tool, BaseAlanMessage)

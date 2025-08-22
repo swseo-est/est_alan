@@ -29,9 +29,10 @@ LIST_TEMPLATE_FOLDER = {
 }
 
 
-def test_node(state):
-    print(state)
-    return {"messages": [HumanMessage(content="test")]}
+def msg_test_node(state):
+    msg = create_ai_message(content="test", metadata={"log_level": "debug"})
+    print(msg)
+    return {"messages": [msg]}
 
 
 def preprocessing_node(state):
@@ -125,14 +126,12 @@ def create_slide_generate_graph(name="slide_generate_agent"):
 
     # main graph
     builder = StateGraph(SlideGenerateAgentState)
-    builder.add_node("test_node", test_node)
     builder.add_node("preprocessing_node", preprocessing_node)
     builder.add_node("planning_agent", planning_agent)
     builder.add_node("executor", executor.compile(name="executor"))
     builder.add_node("post_processing_node", post_processing_node)
 
-    builder.add_edge(START, "test_node")
-    builder.add_edge("test_node", "preprocessing_node")
+    builder.add_edge(START, "preprocessing_node")
     builder.add_edge("preprocessing_node", "planning_agent")
 
     def generate_slide(state):
@@ -156,6 +155,20 @@ def create_slide_generate_graph(name="slide_generate_agent"):
 def create_graph():
     # 슬라이드 생성 그래프 생성
     slide_generate_graph = create_slide_generate_graph()
+    # msg_test_node와 slide_generate_graph를 연결하는 테스트 그래프 생성
+    builder = StateGraph(SlideGenerateAgentState)
+    
+    # 노드 추가
+    builder.add_node("test_node", msg_test_node)
+    builder.add_node("slide_generate", slide_generate_graph)
+    
+    # 엣지 연결
+    builder.add_edge(START, "test_node")
+    builder.add_edge("test_node", "slide_generate")
+    builder.add_edge("slide_generate", END)
+    
+    # 테스트 그래프 컴파일
+    graph = builder.compile(name="test_slide_generate_graph")
 
     # # # Supervisor 생성
     # workflow = create_supervisor(
@@ -175,7 +188,7 @@ def create_graph():
     #
     # # Compile and run
     # app = workflow.compile()
-    return slide_generate_graph
+    return graph
 
 
 

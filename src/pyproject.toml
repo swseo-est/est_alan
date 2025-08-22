@@ -39,6 +39,7 @@ dependencies = [
     "langgraph-api==0.2.110",
     "pytest>=8.4.1",
     "coverage>=7.10.3",
+    "pytest-asyncio"
 ]
 
 [tool.poetry.dependencies]

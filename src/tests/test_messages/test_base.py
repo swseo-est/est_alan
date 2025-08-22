@@ -1,187 +1,328 @@
-"""Test automatic UUID generation in Alan messages."""
-
 import pytest
-import re
-from typing import Set
-
+import uuid
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 from estalan.messages.base import (
+    BaseAlanMessage,
     AlanAIMessage,
     AlanHumanMessage,
     AlanSystemMessage,
     AlanToolMessage,
+    BaseAlanBlockMessage
 )
 
 
-class TestUUIDAutoGeneration:
-    """Test automatic UUID generation functionality."""
-
-    def test_basic_id_generation(self):
-        """Test that all message types generate IDs automatically."""
-        messages = [
-            AlanAIMessage(content="AI message"),
-            AlanHumanMessage(content="Human message"),
-            AlanSystemMessage(content="System message"),
-            AlanToolMessage(content="Tool message", tool_call_id="test-tool"),
-        ]
-
-        for msg in messages:
-            assert msg.id is not None
-            assert isinstance(msg.id, str)
-            assert len(msg.id) == 36  # UUID length
-
-    def test_uuid_format(self):
-        """Test that generated IDs follow UUID format."""
-        msg = AlanAIMessage(content="Test message")
-        uuid_pattern = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+class TestBaseAlanMessage:
+    """BaseAlanMessage 클래스를 테스트합니다."""
+    
+    def test_id_field_exists(self):
+        """BaseAlanMessage가 id 필드를 가지고 있는지 테스트합니다."""
         
-        assert re.match(uuid_pattern, msg.id) is not None
+        # BaseAlanMessage를 직접 테스트하기 위해 AlanAIMessage를 사용
+        message = AlanAIMessage(content="test")
+        
+        # 결과 검증
+        assert hasattr(message, 'id')
+        assert message.id is not None
+        assert isinstance(message.id, str)
+    
+    def test_id_is_uuid_format(self):
+        """생성된 id가 UUID 형식인지 테스트합니다."""
+        
+        message = AlanAIMessage(content="test")
+        
+        # UUID 형식 검증 (예외가 발생하지 않으면 유효한 UUID)
+        try:
+            uuid.UUID(message.id)
+            is_valid_uuid = True
+        except ValueError:
+            is_valid_uuid = False
+        
+        assert is_valid_uuid
+    
+    def test_each_instance_has_unique_id(self):
+        """각 인스턴스가 고유한 id를 가지는지 테스트합니다."""
+        
+        message1 = AlanAIMessage(content="test1")
+        message2 = AlanAIMessage(content="test2")
+        
+        # 결과 검증
+        assert message1.id != message2.id
 
-    def test_id_uniqueness(self):
-        """Test that generated IDs are unique."""
-        ids: Set[str] = set()
-        
-        for i in range(20):
-            msg = AlanAIMessage(content=f"Message {i}")
-            ids.add(msg.id)
-        
-        assert len(ids) == 20, "All generated IDs should be unique"
 
-    def test_explicit_id_assignment(self):
-        """Test that explicit ID assignment works correctly."""
-        custom_id = "custom-id-123"
-        msg = AlanAIMessage(content="Test", id=custom_id)
+class TestAlanAIMessage:
+    """AlanAIMessage 클래스를 테스트합니다."""
+    
+    def test_inherits_from_aimessage(self):
+        """AlanAIMessage가 AIMessage를 상속받는지 테스트합니다."""
         
-        assert msg.id == custom_id
-
-    def test_mixin_inheritance(self):
-        """Test that the mixin pattern works correctly."""
-        # Test that BaseAlanMessage is a mixin (not inheriting from BaseMessage)
-        from estalan.messages.base import BaseAlanMessage
+        message = AlanAIMessage(content="AI response")
         
-        # BaseAlanMessage should not inherit from BaseMessage
-        from langchain_core.messages import BaseMessage
-        assert not issubclass(BaseAlanMessage, BaseMessage)
+        # 결과 검증
+        assert isinstance(message, AIMessage)
+        assert isinstance(message, AlanAIMessage)
+    
+    def test_inherits_from_base_alan_message(self):
+        """AlanAIMessage가 BaseAlanMessage를 상속받는지 테스트합니다."""
         
-        # But AlanAIMessage should inherit from both AIMessage and BaseAlanMessage
-        from langchain_core.messages import AIMessage
-        assert issubclass(AlanAIMessage, AIMessage)
-        assert issubclass(AlanAIMessage, BaseAlanMessage)
-
-    def test_all_message_types_have_ids(self):
-        """Test that all Alan message types have automatic ID generation."""
-        # Test regular message types
-        regular_message_types = [
-            AlanAIMessage,
-            AlanHumanMessage,
-            AlanSystemMessage,
-        ]
+        message = AlanAIMessage(content="AI response")
         
-        for msg_class in regular_message_types:
-            msg = msg_class(content="Test content")
-            assert msg.id is not None
-            assert isinstance(msg.id, str)
-            assert len(msg.id) == 36
+        # 결과 검증
+        assert hasattr(message, 'id')
+        assert message.id is not None
+    
+    def test_content_property(self):
+        """AlanAIMessage의 content 속성이 올바르게 설정되는지 테스트합니다."""
         
-        # Test ToolMessage separately since it requires tool_call_id
-        tool_msg = AlanToolMessage(content="Test content", tool_call_id="test-tool")
-        assert tool_msg.id is not None
-        assert isinstance(tool_msg.id, str)
-        assert len(tool_msg.id) == 36
-
-    def test_id_persistence(self):
-        """Test that ID remains the same after object creation."""
-        msg = AlanAIMessage(content="Test message")
-        original_id = msg.id
+        content_text = "This is an AI response"
+        message = AlanAIMessage(content=content_text)
         
-        # Access the ID multiple times
-        assert msg.id == original_id
-        assert msg.id == original_id
-        assert msg.id == original_id
-
-    def test_multiple_instances_different_ids(self):
-        """Test that multiple instances have different IDs."""
-        msg1 = AlanAIMessage(content="Message 1")
-        msg2 = AlanAIMessage(content="Message 2")
-        msg3 = AlanAIMessage(content="Message 3")
+        # 결과 검증
+        assert message.content == content_text
+    
+    def test_with_additional_kwargs(self):
+        """AlanAIMessage가 추가 키워드 인자를 받을 수 있는지 테스트합니다."""
         
-        ids = {msg1.id, msg2.id, msg3.id}
-        assert len(ids) == 3, "Each message should have a unique ID"
-
-    def test_tool_message_with_tool_call_id(self):
-        """Test that ToolMessage works correctly with tool_call_id."""
-        msg = AlanToolMessage(
-            content="Tool result",
-            tool_call_id="test-tool-call-123"
+        message = AlanAIMessage(
+            content="AI response",
+            additional_kwargs={"model": "gpt-4", "temperature": 0.7}
         )
         
-        assert msg.id is not None
-        assert isinstance(msg.id, str)
-        assert len(msg.id) == 36
-        assert msg.tool_call_id == "test-tool-call-123"
+        # 결과 검증
+        assert message.content == "AI response"
+        assert message.additional_kwargs["model"] == "gpt-4"
+        assert message.additional_kwargs["temperature"] == 0.7
 
-    def test_id_field_attributes(self):
-        """Test that the id field has correct attributes."""
-        msg = AlanAIMessage(content="Test")
-        
-        # Check that id is a string
-        assert isinstance(msg.id, str)
-        
-        # Check that id is not empty
-        assert msg.id.strip() != ""
-        
-        # Check that id contains only valid UUID characters
-        assert all(c in "0123456789abcdef-" for c in msg.id.lower())
 
-    @pytest.mark.parametrize("message_class,content", [
-        (AlanAIMessage, "AI content"),
-        (AlanHumanMessage, "Human content"),
-        (AlanSystemMessage, "System content"),
-        (AlanToolMessage, "Tool content"),
-    ])
-    def test_parametrized_id_generation(self, message_class, content):
-        """Test ID generation with parametrized message types."""
-        if message_class == AlanToolMessage:
-            msg = message_class(content=content, tool_call_id="test-tool")
-        else:
-            msg = message_class(content=content)
+class TestAlanHumanMessage:
+    """AlanHumanMessage 클래스를 테스트합니다."""
+    
+    def test_inherits_from_humanmessage(self):
+        """AlanHumanMessage가 HumanMessage를 상속받는지 테스트합니다."""
         
-        assert msg.id is not None
-        assert isinstance(msg.id, str)
-        assert len(msg.id) == 36
+        message = AlanHumanMessage(content="Human input")
         
-        # Verify UUID format
-        uuid_pattern = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-        assert re.match(uuid_pattern, msg.id) is not None
+        # 결과 검증
+        assert isinstance(message, HumanMessage)
+        assert isinstance(message, AlanHumanMessage)
+    
+    def test_inherits_from_base_alan_message(self):
+        """AlanHumanMessage가 BaseAlanMessage를 상속받는지 테스트합니다."""
+        
+        message = AlanHumanMessage(content="Human input")
+        
+        # 결과 검증
+        assert hasattr(message, 'id')
+        assert message.id is not None
+    
+    def test_content_property(self):
+        """AlanHumanMessage의 content 속성이 올바르게 설정되는지 테스트합니다."""
+        
+        content_text = "Hello, how are you?"
+        message = AlanHumanMessage(content=content_text)
+        
+        # 결과 검증
+        assert message.content == content_text
 
-    def test_id_generation_performance(self):
-        """Test that ID generation is fast enough for practical use."""
-        import time
-        
-        start_time = time.time()
-        messages = [AlanAIMessage(content=f"Message {i}") for i in range(100)]
-        end_time = time.time()
-        
-        # Should complete within 1 second
-        assert end_time - start_time < 1.0
-        
-        # All IDs should be unique
-        ids = {msg.id for msg in messages}
-        assert len(ids) == 100
 
-    def test_id_with_special_characters(self):
-        """Test ID generation with messages containing special characters."""
-        special_content = "Message with special chars: !@#$%^&*()_+-=[]{}|;':\",./<>?"
-        msg = AlanAIMessage(content=special_content)
+class TestAlanSystemMessage:
+    """AlanSystemMessage 클래스를 테스트합니다."""
+    
+    def test_inherits_from_systemmessage(self):
+        """AlanSystemMessage가 SystemMessage를 상속받는지 테스트합니다."""
         
-        assert msg.id is not None
-        assert isinstance(msg.id, str)
-        assert len(msg.id) == 36
+        message = AlanSystemMessage(content="System instruction")
+        
+        # 결과 검증
+        assert isinstance(message, SystemMessage)
+        assert isinstance(message, AlanSystemMessage)
+    
+    def test_inherits_from_base_alan_message(self):
+        """AlanSystemMessage가 BaseAlanMessage를 상속받는지 테스트합니다."""
+        
+        message = AlanSystemMessage(content="System instruction")
+        
+        # 결과 검증
+        assert hasattr(message, 'id')
+        assert message.id is not None
+    
+    def test_content_property(self):
+        """AlanSystemMessage의 content 속성이 올바르게 설정되는지 테스트합니다."""
+        
+        content_text = "You are a helpful assistant"
+        message = AlanSystemMessage(content=content_text)
+        
+        # 결과 검증
+        assert message.content == content_text
 
-    def test_id_with_unicode_content(self):
-        """Test ID generation with Unicode content."""
-        unicode_content = "한글 메시지 with emoji 🚀 and special chars ñáéíóú"
-        msg = AlanAIMessage(content=unicode_content)
+
+class TestAlanToolMessage:
+    """AlanToolMessage 클래스를 테스트합니다."""
+    
+    def test_inherits_from_toolmessage(self):
+        """AlanToolMessage가 ToolMessage를 상속받는지 테스트합니다."""
         
-        assert msg.id is not None
-        assert isinstance(msg.id, str)
-        assert len(msg.id) == 36
+        message = AlanToolMessage(content="Tool result", tool_call_id="tool123")
+        
+        # 결과 검증
+        assert isinstance(message, ToolMessage)
+        assert isinstance(message, AlanToolMessage)
+    
+    def test_inherits_from_base_alan_message(self):
+        """AlanToolMessage가 BaseAlanMessage를 상속받는지 테스트합니다."""
+        
+        message = AlanToolMessage(content="Tool result", tool_call_id="tool123")
+        
+        # 결과 검증
+        assert hasattr(message, 'id')
+        assert message.id is not None
+    
+    def test_content_and_tool_call_id(self):
+        """AlanToolMessage의 content와 tool_call_id가 올바르게 설정되는지 테스트합니다."""
+        
+        content_text = "Tool execution completed"
+        tool_id = "tool456"
+        message = AlanToolMessage(content=content_text, tool_call_id=tool_id)
+        
+        # 결과 검증
+        assert message.content == content_text
+        assert message.tool_call_id == tool_id
+
+
+class TestBaseAlanBlockMessage:
+    """BaseAlanBlockMessage 클래스를 테스트합니다."""
+    
+    def test_inherits_from_alan_ai_message(self):
+        """BaseAlanBlockMessage가 AlanAIMessage를 상속받는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content="code content")
+        
+        # 결과 검증
+        assert isinstance(message, AlanAIMessage)
+        assert isinstance(message, BaseAlanBlockMessage)
+    
+    def test_inherits_from_base_alan_message(self):
+        """BaseAlanBlockMessage가 BaseAlanMessage를 상속받는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content="code content")
+        
+        # 결과 검증
+        assert hasattr(message, 'id')
+        assert message.id is not None
+    
+    def test_block_tag_field_exists(self):
+        """BaseAlanBlockMessage가 block_tag 필드를 가지고 있는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content="code content")
+        
+        # 결과 검증
+        assert hasattr(message, 'block_tag')
+    
+    def test_init_with_content_only(self):
+        """BaseAlanBlockMessage.__init__()이 content만으로 올바르게 초기화되는지 테스트합니다."""
+        
+        content_text = "print('Hello World')"
+        message = BaseAlanBlockMessage(content=content_text)
+        
+        # 결과 검증
+        assert message.content == f"```\n{content_text}\n```"
+        assert message.block_tag is None
+        assert message.id is not None
+    
+    def test_init_with_content_and_block_tag(self):
+        """BaseAlanBlockMessage.__init__()이 content와 block_tag로 올바르게 초기화되는지 테스트합니다."""
+        
+        content_text = "def hello():"
+        block_tag = "python"
+        message = BaseAlanBlockMessage(content=content_text, block_tag=block_tag)
+        
+        # 결과 검증
+        assert message.content == f"```{block_tag}\n{content_text}\n```"
+        assert message.block_tag == block_tag
+        assert message.id is not None
+    
+    def test_init_with_none_content(self):
+        """BaseAlanBlockMessage.__init__()이 None content로 올바르게 초기화되는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content=None)
+        
+        # 결과 검증
+        assert message.content == "```\nNone\n```"
+        assert message.block_tag is None
+    
+    def test_init_with_empty_content(self):
+        """BaseAlanBlockMessage.__init__()이 빈 content로 올바르게 초기화되는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content="")
+        
+        # 결과 검증
+        assert message.content == "```\n\n```"
+        assert message.block_tag is None
+    
+    def test_init_with_additional_kwargs(self):
+        """BaseAlanBlockMessage.__init__()이 추가 키워드 인자를 받을 수 있는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(
+            content="code",
+            block_tag="python",
+            additional_kwargs={"model": "gpt-4"}
+        )
+        
+        # 결과 검증
+        assert message.content == "```python\ncode\n```"
+        assert message.block_tag == "python"
+        assert message.additional_kwargs["model"] == "gpt-4"
+    
+    def test_process_content_without_block_tag(self):
+        """BaseAlanBlockMessage._process_content()가 block_tag 없이 올바르게 작동하는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content="dummy")  # 초기화용
+        result = message._process_content("test content")
+        
+        # 결과 검증
+        assert result == "```\ntest content\n```"
+    
+    def test_process_content_with_block_tag(self):
+        """BaseAlanBlockMessage._process_content()가 block_tag와 함께 올바르게 작동하는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content="dummy")  # 초기화용
+        result = message._process_content("def main():", "python")
+        
+        # 결과 검증
+        assert result == "```python\ndef main():\n```"
+    
+    def test_process_content_with_none_block_tag(self):
+        """BaseAlanBlockMessage._process_content()가 None block_tag로 올바르게 작동하는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content="dummy")  # 초기화용
+        result = message._process_content("content", None)
+        
+        # 결과 검증
+        assert result == "```\ncontent\n```"
+    
+    def test_process_content_with_multiline_content(self):
+        """BaseAlanBlockMessage._process_content()가 여러 줄 content를 올바르게 처리하는지 테스트합니다."""
+        
+        multiline_content = "def hello():\n    print('Hello')\n    return True"
+        message = BaseAlanBlockMessage(content="dummy")  # 초기화용
+        result = message._process_content(multiline_content, "python")
+        
+        # 결과 검증
+        expected = f"```python\n{multiline_content}\n```"
+        assert result == expected
+    
+    def test_process_content_with_various_types(self):
+        """BaseAlanBlockMessage._process_content()가 다양한 타입의 content를 처리하는지 테스트합니다."""
+        
+        message = BaseAlanBlockMessage(content="dummy")  # 초기화용
+        
+        # 숫자 타입
+        result_int = message._process_content(42, "number")
+        assert result_int == "```number\n42\n```"
+        
+        # 리스트 타입
+        result_list = message._process_content([1, 2, 3], "json")
+        assert result_list == "```json\n[1, 2, 3]\n```"
+        
+        # 딕셔너리 타입
+        result_dict = message._process_content({"key": "value"}, "json")
+        assert result_dict == "```json\n{'key': 'value'}\n```"

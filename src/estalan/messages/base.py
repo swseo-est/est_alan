@@ -1,72 +1,112 @@
 import uuid
-from typing import Optional, Any
-from pydantic import Field
+from typing import Optional, Any, Literal
+from pydantic import Field, BaseModel, ConfigDict
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, BaseMessage, ToolMessage
+from logging import getLogger
+
+class AlanMessageMetadata(BaseModel):
+    """Alan 메시지의 메타데이터를 정의하는 모델"""
+    model_config = ConfigDict(frozen=True)
+    
+    rendering_option: Literal["str", "json", "html"] = "str"
+    log_level: Literal["info", "error", "debug", "warning"] = "info"
 
 
 def default_metadata_factory() -> dict:
+    """기본 메타데이터 팩토리 함수"""
     return {
         "rendering_option": "str",
+        "log_level": "info",
     }
 
 
-
 class BaseAlanMessage:
-    """Mixin class that provides automatic UUID generation for message IDs."""
+    """Alan 메시지의 기본 클래스 - UUID 자동 생성 및 메타데이터 제공"""
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), coerce_numbers_to_str=True)
-    metadata: dict = Field(default_factory=default_metadata_factory)
+    metadata: AlanMessageMetadata = Field(default_factory=default_metadata_factory)
 
 
 class AlanAIMessage(AIMessage, BaseAlanMessage):
+    """Alan AI 메시지 클래스"""
     pass
 
 
 class AlanHumanMessage(HumanMessage, BaseAlanMessage):
+    """Alan Human 메시지 클래스"""
     pass
 
 
 class AlanSystemMessage(SystemMessage, BaseAlanMessage):
+    """Alan System 메시지 클래스"""
     pass
 
 
 class AlanToolMessage(ToolMessage, BaseAlanMessage):
+    """Alan Tool 메시지 클래스"""
     pass
+
+
+class BaseAlanBlockMessage(AlanAIMessage):
+    """Alan 블록 메시지의 기본 클래스"""
+    block_tag: Optional[str] = Field(default=None, coerce_numbers_to_str=True)
+
+    def _process_content(self, content: Any, block_tag: Optional[str] = None) -> str:
+        """
+        content를 코드블록으로 후처리하는 메서드
+        
+        Args:
+            content: 원본 content
+            block_tag: 블록 태그 (선택사항)
+            
+        Returns:
+            후처리된 content (코드블록으로 감싸짐)
+        """
+        if block_tag:
+            return f"```{block_tag}\n{content}\n```"
+        else:
+            return f"```\n{content}\n```"
+    
+    def __init__(self, content: Any = None, block_tag: Optional[str] = None, **kwargs):
+        processed_content = self._process_content(content, block_tag)
+        # Pydantic 모델과 호환되도록 super().__init__ 호출 후 block_tag 설정
+        super().__init__(content=processed_content, **kwargs)
+        # block_tag는 이미 Field로 정의되어 있으므로 kwargs를 통해 전달되어야 함
+        if block_tag is not None:
+            object.__setattr__(self, 'block_tag', block_tag)
 
 
 def convert_to_alan_message(message: BaseMessage) -> BaseAlanMessage:
     """
     BaseMessage를 BaseAlanMessage로 변환하는 함수
-    Pydantic 내부 속성은 제외하고 필요한 속성만 동적으로 복사
+    필요한 속성만 선택적으로 복사하여 안전하게 변환
     """
-    # AIMessage 인스턴스의 모든 속성을 동적으로 탐색하여 복사
+
+    if isinstance(message, BaseAlanMessage):
+        return message
+
+    # 필요한 기본 속성들만 선택적으로 복사
     kwargs = {}
-
-    # __dict__를 통해 모든 인스턴스 속성 접근
-    for attr_name, attr_value in message.__dict__.items():
-        # private 속성과 Pydantic 내부 속성 제외
-        if (not attr_name.startswith('_') and
-            not attr_name.startswith('__pydantic') and
-            attr_name not in ['__dict__', '__slots__']):
-            kwargs[attr_name] = attr_value
-
-    # __slots__를 통해 모든 슬롯 속성도 접근 (일부 클래스는 __slots__ 사용)
-    if hasattr(message.__class__, '__slots__'):
-        for slot_name in message.__class__.__slots__:
-            if hasattr(message, slot_name):
-                slot_value = getattr(message, slot_name)
-                # Pydantic 내부 속성 제외
-                if not slot_name.startswith('__pydantic'):
-                    kwargs[slot_name] = slot_value
-
-    # content는 필수 속성이므로 별도로 확인
-    if 'content' not in kwargs:
-        kwargs['content'] = message.content
-
+    
+    # content는 필수 속성
+    kwargs['content'] = message.content
+    
+    # 안전한 속성들만 복사 (명시적으로 허용된 속성들)
+    safe_attributes = [
+        'id', 'name', 'additional_kwargs', 'response_metadata',
+        'tool_calls', 'tool_call_id', 'example'
+    ]
+    
+    for attr_name in safe_attributes:
+        if hasattr(message, attr_name):
+            attr_value = getattr(message, attr_name)
+            if attr_value is not None:
+                kwargs[attr_name] = attr_value
+    
     # ID가 None이거나 비어있는 경우 새로운 UUID 생성
     if not kwargs.get('id'):
         kwargs['id'] = str(uuid.uuid4())
-
-    # AlanMessage 생성 (동적으로 수집된 모든 속성 사용)
+    
+    # AlanMessage 생성
     if isinstance(message, AIMessage):
         return AlanAIMessage(**kwargs)
     elif isinstance(message, HumanMessage):
@@ -76,33 +116,4 @@ def convert_to_alan_message(message: BaseMessage) -> BaseAlanMessage:
     elif isinstance(message, ToolMessage):
         return AlanToolMessage(**kwargs)
     else:
-        raise Exception(f"Unsupported message type: {type(message)}. Please Add Message Type to convert_to_alan_message function")
-
-
-class BaseAlanBlockMessage(AlanAIMessage, BaseAlanMessage):
-    block_tag: Optional[str] = Field(default=None, coerce_numbers_to_str=True)
-
-    def __init__(self, content: Any = None, block_tag: Optional[str] = None, **kwargs):
-        # content를 후처리하는 메서드
-        processed_content = self._process_content(content, block_tag)
-
-        # AIMessage의 __init__을 호출하여 처리된 content를 전달
-        super().__init__(content=processed_content, **kwargs)
-
-    def _process_content(self, content: Any, block_tag: Optional[str] = None) -> Any:
-        """
-        content를 후처리하는 메서드입니다.
-        하위 클래스에서 이 메서드를 오버라이드하여 원하는 후처리 로직을 구현할 수 있습니다.
-
-        Args:
-            content: 원본 content
-            block_tag: 블록 태그 (선택사항)
-
-        Returns:
-            후처리된 content (코드블록으로 감싸짐)
-        """
-        # content를 코드블록으로 감싸기
-        if block_tag:
-            return f"```{block_tag}\n{content}\n```"
-        else:
-            return f"```\n{content}\n```"
+        raise ValueError(f"Unsupported message type: {type(message)}. Please Add Message Type to convert_to_alan_message function")

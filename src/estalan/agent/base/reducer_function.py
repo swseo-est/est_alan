@@ -20,6 +20,7 @@ def add_messages_for_alan(left: Messages, right: Messages) -> Messages:
     # left와 right를 리스트로 변환
     left_list = left if isinstance(left, list) else [left]
     right_list = right if isinstance(right, list) else [right]
+    right_list = add_messages([], right_list)
     
     # right에 있는 메시지들을 Alan 메시지로 변환
     processed_right = []
@@ -29,4 +30,4 @@ def add_messages_for_alan(left: Messages, right: Messages) -> Messages:
         processed_right.append(alan_message)
     
     # Alan 메시지로 변환된 메시지들을 기존 add_messages로 처리
-    return add_messages(left_list, processed_right)
+    return left_list + right_list

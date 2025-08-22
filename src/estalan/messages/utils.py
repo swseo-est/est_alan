@@ -3,7 +3,7 @@ from langchain_core.messages import BaseMessage
 from estalan.messages.base import AlanHumanMessage, AlanSystemMessage, AlanAIMessage, AlanToolMessage, BaseAlanBlockMessage
 
 
-def create_message(message_type: str, content: str, use_name_prefix=False, *args, **kwargs) -> BaseMessage:
+def create_message(message_type: str, content: str, *args, **kwargs) -> BaseMessage:
     if message_type == "human":
         return AlanHumanMessage(content=content, *args, **kwargs)
     elif message_type == "system":

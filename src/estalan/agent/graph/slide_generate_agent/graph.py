@@ -30,7 +30,22 @@ LIST_TEMPLATE_FOLDER = {
 
 
 def msg_test_node(state):
-    msg = create_ai_message(content="test", metadata={"log_level": "debug"})
+    url = "https://sagradafamiliatickets.tours/wp-content/uploads/2025/03/barcelona-sunset.jpg"
+    msg = f"""<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <img src="{url}" style="width:100%;"/>
+        <img src="{url}" style="width:100%;"/>
+        <img src="{url}" style="width:100%;"/>
+        <img src="{url}" style="width:100%;"/>
+        <img src="{url}" style="width:100%;"/>
+        <img src="{url}" style="width:100%;"/>
+        <img src="{url}" style="width:100%;"/>
+        <img src="{url}" style="width:100%;"/>
+        <img src="{url}" style="width:100%;"/>
+    </div>
+        """
+
+    msg = create_ai_message(content=msg, metadata={"log_level": "debug", "rendering_option": "html"}, name="msg_test_node")
+
     print(msg)
     return {"messages": [msg]}
 
@@ -201,7 +216,7 @@ if __name__ == '__main__':
     result = asyncio.run(
         graph.ainvoke(
             {
-                "messages": [HumanMessage(content="이스트소프트에 대한 투자 IR 자료 만들어줘")]
+                "messages": ["이스트소프트에 대한 투자 IR 자료 만들어줘"]
             }
         )
     )

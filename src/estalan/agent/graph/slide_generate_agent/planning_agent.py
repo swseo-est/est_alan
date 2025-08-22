@@ -10,13 +10,12 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from estalan.agent.graph.slide_generate_agent.prompt.planning_agent import preliminary_investigation_instructions
 from estalan.tools.search import GoogleSerperSearchResult
 from estalan.llm import create_chat_model
-from estalan.messages.utils import create_ai_message, create_block_message      
+from estalan.messages.utils import create_ai_message, create_block_message
 from estalan.agent.graph.slide_generate_agent.state import SlideGenerateAgentMetadata, Section
 
 
 class PlanningAgentState(BaseAlanAgentState):
     metadata: SlideGenerateAgentMetadata
-
     sections: List[Section]
 
 class GenerateSectionsOutput(TypedDict):

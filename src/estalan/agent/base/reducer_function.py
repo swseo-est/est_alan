@@ -31,3 +31,10 @@ def add_messages_for_alan(left: Messages, right: Messages) -> Messages:
     
     # Alan 메시지로 변환된 메시지들을 기존 add_messages로 처리
     return left_list + right_list
+
+
+def update_metadata(metadata_new: dict, metadata: dict):
+    for key, value in metadata_new.items():
+        metadata[key] = value
+
+    return metadata

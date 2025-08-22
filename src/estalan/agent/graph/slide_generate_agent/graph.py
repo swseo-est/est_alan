@@ -6,6 +6,7 @@ from estalan.agent.graph.slide_generate_agent.planning_agent import create_plann
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
 from estalan.agent.graph.slide_generate_agent.state import ExecutorState, Section, SlideGenerateAgentState
+from estalan.agent.base.node import alan_agent_start_node, alan_agent_finish_node
 
 from estalan.llm.utils import create_chat_model
 from estalan.messages.utils import create_ai_message
@@ -30,6 +31,7 @@ LIST_TEMPLATE_FOLDER = {
 
 
 def msg_test_node(state):
+    print(state)
     url = "https://sagradafamiliatickets.tours/wp-content/uploads/2025/03/barcelona-sunset.jpg"
     msg = f"""<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
         <img src="{url}" style="width:100%;"/>
@@ -45,8 +47,6 @@ def msg_test_node(state):
         """
 
     msg = create_ai_message(content=msg, metadata={"log_level": "debug", "rendering_option": "html"}, name="msg_test_node")
-
-    print(msg)
     return {"messages": [msg]}
 
 
@@ -193,13 +193,17 @@ def create_graph():
     builder = StateGraph(SlideGenerateAgentState)
     
     # 노드 추가
+    builder.add_node("start_node", alan_agent_start_node)
     builder.add_node("test_node", msg_test_node)
+    builder.add_node("finish_node", alan_agent_finish_node)
     builder.add_node("agent", workflow)
     
     # 엣지 연결
-    builder.add_edge(START, "test_node")
+    builder.add_edge(START, "start_node")
+    builder.add_edge("start_node", "test_node")
     builder.add_edge("test_node", "agent")
-    builder.add_edge("agent", END)
+    builder.add_edge("agent", "finish_node")
+    builder.add_edge("finish_node", END)
 
     # Compile and run
     app = builder.compile()

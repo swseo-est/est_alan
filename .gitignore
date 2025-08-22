@@ -5,3 +5,4 @@
 est-alan-dev-account.json
 /.env.dockerfile
 __pycache__
+/est-alan-prod-account.json

@@ -28,6 +28,12 @@ LIST_TEMPLATE_FOLDER = {
     # "data_analysis": "데이터 분석과 관련된 주제에 사용"
 }
 
+
+def test_node(state):
+    print(state)
+    return {"messages": [HumanMessage(content="test")]}
+
+
 def preprocessing_node(state):
     print(state)
     llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(OutputState)
@@ -119,12 +125,14 @@ def create_slide_generate_graph(name="slide_generate_agent"):
 
     # main graph
     builder = StateGraph(SlideGenerateAgentState)
+    builder.add_node("test_node", test_node)
     builder.add_node("preprocessing_node", preprocessing_node)
     builder.add_node("planning_agent", planning_agent)
     builder.add_node("executor", executor.compile(name="executor"))
     builder.add_node("post_processing_node", post_processing_node)
 
-    builder.add_edge(START, "preprocessing_node")
+    builder.add_edge(START, "test_node")
+    builder.add_edge("test_node", "preprocessing_node")
     builder.add_edge("preprocessing_node", "planning_agent")
 
     def generate_slide(state):
@@ -149,25 +157,25 @@ def create_graph():
     # 슬라이드 생성 그래프 생성
     slide_generate_graph = create_slide_generate_graph()
 
-    # # Supervisor 생성
-    workflow = create_supervisor(
-        [slide_generate_graph],
-        model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
-        prompt= """
-                사용자와 대화를 통해 슬라이드 생성에 필요한 정보들을 수집하세요.
-
-                충분한 정보가 모이면 slide_generate_agent를 이용하여, 슬라이드를 생성하세요.
-                마지막 메시지를 통해 다음 에이전트에 충분한 정보를 전달하세요.
-                다음 에이전트는 마지막 메시지만을 참조합니다.
-            """
-        ,
-        state_schema=SlideGenerateAgentState,
-        output_mode="full_history",
-    )
-
-    # Compile and run
-    app = workflow.compile()
-    return app
+    # # # Supervisor 생성
+    # workflow = create_supervisor(
+    #     [slide_generate_graph],
+    #     model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
+    #     prompt= """
+    #             사용자와 대화를 통해 슬라이드 생성에 필요한 정보들을 수집하세요.
+    #
+    #             충분한 정보가 모이면 slide_generate_agent를 이용하여, 슬라이드를 생성하세요.
+    #             마지막 메시지를 통해 다음 에이전트에 충분한 정보를 전달하세요.
+    #             다음 에이전트는 마지막 메시지만을 참조합니다.
+    #         """
+    #     ,
+    #     state_schema=SlideGenerateAgentState,
+    #     output_mode="full_history",
+    # )
+    #
+    # # Compile and run
+    # app = workflow.compile()
+    return slide_generate_graph
 
 
 

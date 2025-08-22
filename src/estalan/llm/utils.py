@@ -23,8 +23,6 @@ try:
 except ImportError:
     HAS_ANTHROPIC_VERTEXAI = False  
 
-from estalan.llm.mock_llm import AlanMockLLM
-
 
 def create_chat_model(provider=None, model=None, structured_output=None, lazy=True):
     available_providers = [
@@ -33,7 +31,6 @@ def create_chat_model(provider=None, model=None, structured_output=None, lazy=Tr
         "google_vertexai",
         "anthropic",
         "anthropic_vertexai",
-        "mock"
     ]
     if provider not in available_providers:
         raise Exception(f"Unsupported provider: {provider}. Available providers: {available_providers}")
@@ -59,8 +56,6 @@ def create_chat_model(provider=None, model=None, structured_output=None, lazy=Tr
             if not HAS_ANTHROPIC_VERTEXAI:
                 raise ImportError("VertexAI support is not available. Please install langchain_anthropic_vertexai.")
             chat_model = AlanChatAnthropicVertex(model=model)
-        elif provider == "mock":
-            chat_model = AlanMockLLM(model=model)
         else:
             raise Exception(f"Unsupported provider: {provider}")
 

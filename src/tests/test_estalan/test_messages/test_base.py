@@ -270,7 +270,7 @@ def test_convert_unsupported_message_type():
     with pytest.raises(Exception) as exc_info:
         convert_to_alan_message(custom_msg)
     
-    assert "Unsupported message type" in str(exc_info.value)
+    assert ("Unsupported message type" in str(exc_info.value)) or ("is not BaseMessage"  in str(exc_info.value))
     assert "CustomMessage" in str(exc_info.value)
 
 

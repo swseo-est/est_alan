@@ -57,8 +57,8 @@ def merge_message(left: Messages, right: Messages) -> Messages:
 
 
 
-def update_metadata(metadata_new: dict, metadata: dict):
+def update_metadata(metadata_old: dict, metadata_new: dict):
     for key, value in metadata_new.items():
-        metadata[key] = value
+        metadata_old[key] = value
 
-    return metadata
+    return metadata_old

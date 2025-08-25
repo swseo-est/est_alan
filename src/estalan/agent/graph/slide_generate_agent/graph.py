@@ -6,7 +6,8 @@ from estalan.agent.graph.slide_generate_agent.planning_agent import create_plann
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
 from estalan.agent.graph.slide_generate_agent.state import ExecutorState, Section, SlideGenerateAgentState
-from estalan.agent.base.node import alan_agent_start_node, alan_agent_finish_node
+from estalan.agent.base.node import create_alan_agent_start_node, alan_agent_finish_node
+from estalan.agent.base.state import BaseAlanAgentState
 
 from estalan.llm.utils import create_chat_model
 from estalan.messages.utils import create_ai_message
@@ -176,13 +177,15 @@ def create_graph():
 
 
     builder = StateGraph(SlideGenerateAgentState)
-    
+
+    alan_agent_start_node = create_alan_agent_start_node([BaseAlanAgentState, SlideGenerateAgentState])
+
     # 노드 추가
     builder.add_node("start_node", alan_agent_start_node)
     builder.add_node("test_node", msg_test_node)
-    builder.add_node("finish_node", alan_agent_finish_node)
     builder.add_node("agent", workflow)
-    
+    builder.add_node("finish_node", alan_agent_finish_node)
+
     # 엣지 연결
     builder.add_edge(START, "start_node")
     builder.add_edge("start_node", "test_node")

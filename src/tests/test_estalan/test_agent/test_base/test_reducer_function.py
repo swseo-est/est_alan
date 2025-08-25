@@ -152,7 +152,7 @@ def test_update_metadata_basic_update():
     metadata = {"key1": "value1", "key2": "value2"}
     metadata_new = {"key3": "value3", "key4": "value4"}
     
-    result = update_metadata(metadata_new, metadata)
+    result = update_metadata(metadata, metadata_new)
     
     assert result == metadata  # 원본 딕셔너리가 수정됨
     assert metadata["key1"] == "value1"
@@ -166,7 +166,7 @@ def test_update_metadata_overwrite_existing():
     metadata = {"key1": "old_value", "key2": "value2"}
     metadata_new = {"key1": "new_value", "key3": "value3"}
     
-    result = update_metadata(metadata_new, metadata)
+    result = update_metadata(metadata, metadata_new)
     
     assert result == metadata
     assert metadata["key1"] == "new_value"  # 기존 값이 덮어써짐
@@ -191,7 +191,7 @@ def test_update_metadata_empty_original_metadata():
     metadata = {}
     metadata_new = {"key1": "value1", "key2": "value2"}
     
-    result = update_metadata(metadata_new, metadata)
+    result = update_metadata(metadata, metadata_new)
     
     assert result == metadata
     assert metadata["key1"] == "value1"

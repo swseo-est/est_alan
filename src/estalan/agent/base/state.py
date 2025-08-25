@@ -234,3 +234,121 @@ def _get_default_value_for_type(field_type: Any) -> Any:
             return field_type()
         except:
             return None
+
+
+def state_to_json(state_obj: Any, indent: int = 2, ensure_ascii: bool = False) -> str:
+    """
+    계층적으로 구성된 TypedDict 객체를 JSON 문자열로 변환합니다.
+    
+    Args:
+        state_obj: 변환할 상태 객체 (TypedDict, Pydantic BaseModel, 일반 객체 등)
+        indent: JSON 들여쓰기 크기 (기본값: 2)
+        ensure_ascii: ASCII 문자만 사용할지 여부 (기본값: False, 한글 지원)
+        
+    Returns:
+        JSON 문자열
+        
+    Raises:
+        TypeError: JSON으로 직렬화할 수 없는 객체가 포함된 경우
+        ValueError: 객체 변환 중 오류가 발생한 경우
+    """
+    import json
+    from datetime import datetime, date
+    from decimal import Decimal
+    from uuid import UUID
+    
+    def _convert_to_serializable(obj: Any) -> Any:
+        """
+        객체를 JSON 직렬화 가능한 형태로 변환합니다.
+        
+        Args:
+            obj: 변환할 객체
+            
+        Returns:
+            JSON 직렬화 가능한 객체
+        """
+        if obj is None:
+            return None
+        elif isinstance(obj, (str, int, float, bool)):
+            return obj
+        elif isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        elif isinstance(obj, Decimal):
+            return float(obj)
+        elif isinstance(obj, UUID):
+            return str(obj)
+        elif isinstance(obj, bytes):
+            return obj.decode('utf-8', errors='replace')
+        elif isinstance(obj, (list, tuple)):
+            return [_convert_to_serializable(item) for item in obj]
+        elif isinstance(obj, dict):
+            return {str(k): _convert_to_serializable(v) for k, v in obj.items()}
+        elif hasattr(obj, '__dict__'):
+            # 일반 객체의 경우 __dict__ 사용
+            return _convert_to_serializable(obj.__dict__)
+        elif hasattr(obj, 'model_dump'):
+            # Pydantic BaseModel의 경우
+            return _convert_to_serializable(obj.model_dump())
+        elif hasattr(obj, 'dict'):
+            # Pydantic v1 스타일
+            return _convert_to_serializable(obj.dict())
+        elif hasattr(obj, '__annotations__'):
+            # TypedDict나 dataclass의 경우
+            result = {}
+            for attr_name in dir(obj):
+                if not attr_name.startswith('_'):
+                    try:
+                        attr_value = getattr(obj, attr_name)
+                        if not callable(attr_value):
+                            result[attr_name] = _convert_to_serializable(attr_value)
+                    except Exception:
+                        continue
+            return result
+        else:
+            # 기타 객체는 문자열로 변환 시도
+            try:
+                return str(obj)
+            except Exception:
+                return f"<non-serializable: {type(obj).__name__}>"
+    
+    try:
+        # 객체를 JSON 직렬화 가능한 형태로 변환
+        serializable_obj = _convert_to_serializable(state_obj)
+        
+        # JSON 문자열로 변환
+        return json.dumps(
+            serializable_obj, 
+            indent=indent, 
+            ensure_ascii=ensure_ascii,
+            default=str  # 마지막 수단으로 str() 사용
+        )
+    except Exception as e:
+        raise ValueError(f"상태 객체를 JSON으로 변환하는 중 오류 발생: {e}")
+
+
+def state_to_json_pretty(state_obj: Any) -> str:
+    """
+    계층적으로 구성된 TypedDict 객체를 보기 좋게 포맷된 JSON 문자열로 변환합니다.
+    
+    Args:
+        state_obj: 변환할 상태 객체
+        
+    Returns:
+        보기 좋게 포맷된 JSON 문자열
+    """
+    return state_to_json(state_obj, indent=2, ensure_ascii=False)
+
+
+def state_to_json_compact(state_obj: Any) -> str:
+    """
+    계층적으로 구성된 TypedDict 객체를 압축된 JSON 문자열로 변환합니다.
+    
+    Args:
+        state_obj: 변환할 상태 객체
+        
+    Returns:
+        압축된 JSON 문자열 (공백 없음)
+    """
+    return state_to_json(state_obj, indent=None, ensure_ascii=False)
+
+

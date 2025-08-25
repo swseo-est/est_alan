@@ -1,5 +1,5 @@
-from typing import List, Annotated, TypedDict, Optional, Dict, Any
-from langgraph.prebuilt.chat_agent_executor import AgentState
+from typing import TypedDict
+from estalan.agent.base.state import BaseAlanAgentState
 
 
 # Question Generation Agent
@@ -17,12 +17,14 @@ class Requirement(TypedDict):
     detail: str
     priority: str
     status: str
-    
+
     impact: list[str]
-    conversation_history: list[dict]
     origin: str  # 'user' | 'question' | 'inferred' (선택)
 
 
-class RequirementCollectionAgentState(AgentState):
+class RequirementCollectionState(TypedDict):
     requirements: list[Requirement]  # 수집된 모든 요구사항
-    questions: list[Question]  # 사전정의 질문
+
+
+class RequirementCollectionAgentState(BaseAlanAgentState):
+    requirements: list[Requirement]  # 수집된 모든 요구사항

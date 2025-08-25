@@ -81,3 +81,34 @@ prompt_supervisor = """
 
 현재 상황을 분석하여 적절한 에이전트를 선택하고, 사용자와의 대화를 통해 요구사항을 체계적으로 수집해주세요.
 """
+
+prompt_extract_requirements = """
+사용자의 답변에서 요구사항들을 추출해주세요.
+
+질문: {questions}
+사용자 답변: {user_message}
+
+기존 요구사항들:
+{chr(10).join([f"- {req['requirement_id']}: {req['summary']} - {req['detail']}" for req in existing_requirements]) if existing_requirements else "없음"}
+
+다음 형식으로 요구사항을 추출해주세요:
+- origin: 질문과 관련된 요구사항이면 'question', 관련없는 요구사항이면 'user'
+- summary: 핵심 요구사항을 간단히 요약
+- detail: 구체적인 요구사항 내용
+- update_existing: 기존 요구사항과 관련된 경우 해당 요구사항의 requirement_id, 새로운 요구사항이면 null
+
+요구사항 업데이트 판단 기준:
+1. 기존 요구사항과 동일한 주제나 내용
+2. 기존 요구사항의 세부사항을 보완하거나 수정하는 내용
+3. 기존 요구사항과 연관된 추가 정보
+
+질문과 관련된 요구사항 판단 기준:
+1. 질문에서 묻는 내용에 대한 직접적인 답변
+2. 질문의 맥락과 관련된 추가 정보
+3. 질문에서 파악하려는 요구사항과 일치하는 내용
+
+질문과 관련없는 요구사항:
+1. 질문과 전혀 다른 주제의 요구사항
+2. 질문의 맥락을 벗어난 새로운 요구사항
+3. 사용자가 자발적으로 언급한 추가 요구사항
+"""

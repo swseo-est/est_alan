@@ -1,12 +1,16 @@
 import pytest
 from pydantic import ValidationError
+from typing import TypedDict, List
 
 from estalan.agent.base.state import (
     AlanAgentMetaData,
     BaseAlanAgentState,
     Canvas,
     AlanAgentStateWithCanvas,
-    create_default_state
+    create_default_state,
+    state_to_json,
+    state_to_json_pretty,
+    state_to_json_compact
 )
 from estalan.agent.base.reducer_function import add_messages_for_alan
 from langchain_core.messages import HumanMessage
@@ -134,3 +138,249 @@ def test_create_default_state_basic():
     print(f"initialization 타입: {metadata_hints['initialization']}")
     print(f"initialization origin: {get_origin(metadata_hints['initialization'])}")
     print(f"initialization args: {get_args(metadata_hints['initialization'])}")
+
+
+# JSON 변환 함수 테스트
+def test_state_to_json_basic():
+    """기본적인 상태 객체를 JSON으로 변환하는 테스트"""
+    metadata = AlanAgentMetaData(
+        chat_status="available",
+        status="start",
+        initialization=True
+    )
+    
+    json_str = state_to_json(metadata)
+    assert isinstance(json_str, str)
+    assert "available" in json_str
+    assert "start" in json_str
+    assert "true" in json_str  # JSON에서 boolean은 소문자
+
+
+def test_state_to_json_pretty():
+    """보기 좋게 포맷된 JSON 변환 테스트"""
+    metadata = AlanAgentMetaData(
+        chat_status="available",
+        status="start"
+    )
+    
+    json_str = state_to_json_pretty(metadata)
+    assert isinstance(json_str, str)
+    assert "\n" in json_str  # 들여쓰기가 있으면 줄바꿈이 포함됨
+    assert "  " in json_str  # 들여쓰기 공백이 포함됨
+    assert "available" in json_str
+
+
+def test_state_to_json_compact():
+    """압축된 JSON 변환 테스트"""
+    metadata = AlanAgentMetaData(
+        chat_status="available",
+        status="start"
+    )
+    
+    json_str = state_to_json_compact(metadata)
+    assert isinstance(json_str, str)
+    assert "\n" not in json_str  # 줄바꿈이 없어야 함
+    assert "  " not in json_str  # 들여쓰기 공백이 없어야 함
+    assert "available" in json_str
+
+
+def test_state_to_json_with_nested_typeddict():
+    """중첩된 TypedDict를 JSON으로 변환하는 테스트"""
+    
+    class UserInfo(TypedDict):
+        name: str
+        age: int
+    
+    class ProjectInfo(TypedDict):
+        id: str
+        title: str
+        tags: List[str]
+    
+    class ComplexState(TypedDict):
+        user: UserInfo
+        projects: List[ProjectInfo]
+        metadata: AlanAgentMetaData
+    
+    complex_state = ComplexState(
+        user=UserInfo(name="홍길동", age=30),
+        projects=[
+            ProjectInfo(id="proj-001", title="AI 프로젝트", tags=["AI", "ML"]),
+            ProjectInfo(id="proj-002", title="웹 프로젝트", tags=["React", "TypeScript"])
+        ],
+        metadata=AlanAgentMetaData(
+            chat_status="available",
+            status="start"
+        )
+    )
+    
+    json_str = state_to_json_pretty(complex_state)
+    assert "홍길동" in json_str
+    assert "AI 프로젝트" in json_str
+    assert "React" in json_str
+    assert "available" in json_str
+
+
+def test_state_to_json_with_base_alan_agent_state():
+    """BaseAlanAgentState를 JSON으로 변환하는 테스트"""
+    state = BaseAlanAgentState(
+        messages=[HumanMessage(content="안녕하세요!")],
+        structured_response={"response": "테스트 응답"},
+        metadata=AlanAgentMetaData(
+            chat_status="available",
+            status="start",
+            initialization=True
+        )
+    )
+    
+    json_str = state_to_json_pretty(state)
+    assert "안녕하세요!" in json_str
+    assert "테스트 응답" in json_str
+    assert "available" in json_str
+    assert "human" in json_str  # HumanMessage 타입
+
+
+def test_state_to_json_with_canvas_state():
+    """AlanAgentStateWithCanvas를 JSON으로 변환하는 테스트"""
+    state = AlanAgentStateWithCanvas(
+        messages=[HumanMessage(content="테스트 메시지")],
+        structured_response={},
+        metadata=AlanAgentMetaData(
+            chat_status="available",
+            status="start"
+        ),
+        canvases=[
+            Canvas(type="markdown", metadata={"title": "마크다운 캔버스"}),
+            Canvas(type="html", metadata={"title": "HTML 캔버스"})
+        ]
+    )
+    
+    json_str = state_to_json_pretty(state)
+    assert "테스트 메시지" in json_str
+    assert "markdown" in json_str
+    assert "HTML 캔버스" in json_str
+    assert "available" in json_str
+
+
+def test_state_to_json_with_special_types():
+    """특수 타입들을 포함한 객체를 JSON으로 변환하는 테스트"""
+    import json
+    from datetime import datetime, date
+    from decimal import Decimal
+    from uuid import uuid4
+    
+    # 일반 딕셔너리로 테스트 (TypedDict는 런타임에 특수 타입을 직접 포함할 수 없음)
+    special_state = {
+        "string_val": "테스트 문자열",
+        "int_val": 42,
+        "float_val": 3.14,
+        "bool_val": True,
+        "list_val": [1, 2, 3],
+        "dict_val": {"key": "value"},
+        "none_val": None,
+        "datetime_val": datetime(2024, 1, 1, 12, 0, 0),
+        "date_val": date(2024, 1, 1),
+        "decimal_val": Decimal("123.45"),
+        "uuid_val": uuid4(),
+        "bytes_val": b"test bytes"
+    }
+    
+    json_str = state_to_json_pretty(special_state)
+    assert "테스트 문자열" in json_str
+    assert "42" in json_str
+    assert "3.14" in json_str
+    assert "true" in json_str
+    assert "1" in json_str and "2" in json_str and "3" in json_str  # 리스트 내용 확인
+    assert "null" in json_str  # None은 JSON에서 null로 변환
+
+
+def test_state_to_json_with_unicode():
+    """유니코드 문자(한글 등)를 포함한 JSON 변환 테스트"""
+    metadata = AlanAgentMetaData(
+        chat_status="available",
+        status="start"
+    )
+    
+    # 한글과 특수 문자가 포함된 추가 필드
+    metadata["korean_text"] = "안녕하세요! 반갑습니다."
+    metadata["special_chars"] = "🚀✨🎉"
+    metadata["emoji_text"] = "이모지 테스트 🎯🎲🎮"
+    
+    json_str = state_to_json_pretty(metadata)
+    assert "안녕하세요" in json_str
+    assert "반갑습니다" in json_str
+    assert "🚀" in json_str
+    assert "🎯" in json_str
+
+
+def test_state_to_json_error_handling():
+    """JSON 변환 중 오류 처리 테스트"""
+    # 직렬화할 수 없는 객체를 포함한 딕셔너리
+    class NonSerializableObject:
+        def __init__(self):
+            self.data = "test"
+    
+    problematic_state = {
+        "normal_field": "정상 필드",
+        "problematic_field": NonSerializableObject()
+    }
+    
+    # 오류가 발생하지 않고 __dict__를 통해 변환되어야 함
+    json_str = state_to_json_pretty(problematic_state)
+    assert "정상 필드" in json_str
+    assert "data" in json_str  # __dict__의 내용이 포함됨
+    assert "test" in json_str  # __dict__의 값이 포함됨
+
+
+def test_state_to_json_with_empty_objects():
+    """빈 객체들을 JSON으로 변환하는 테스트"""
+    empty_state = {
+        "empty_list": [],
+        "empty_dict": {},
+        "empty_string": "",
+        "null_value": None
+    }
+    
+    json_str = state_to_json_pretty(empty_state)
+    assert "[]" in json_str
+    assert "{}" in json_str
+    assert '""' in json_str
+    assert "null" in json_str
+
+
+def test_state_to_json_indent_options():
+    """다양한 들여쓰기 옵션 테스트"""
+    metadata = AlanAgentMetaData(
+        chat_status="available",
+        status="start"
+    )
+    
+    # 기본 들여쓰기 (2)
+    json_default = state_to_json(metadata, indent=2)
+    assert "  " in json_default
+    
+    # 4칸 들여쓰기
+    json_indent_4 = state_to_json(metadata, indent=4)
+    assert "    " in json_indent_4
+    
+    # 압축 (들여쓰기 없음)
+    json_compact = state_to_json(metadata, indent=None)
+    assert "  " not in json_compact
+    assert "\n" not in json_compact
+
+
+def test_state_to_json_ensure_ascii():
+    """ensure_ascii 옵션 테스트"""
+    metadata = AlanAgentMetaData(
+        chat_status="available",
+        status="start"
+    )
+    metadata["korean"] = "한글"
+    
+    # ensure_ascii=False (기본값, 한글 지원)
+    json_unicode = state_to_json(metadata, ensure_ascii=False)
+    assert "한글" in json_unicode
+    
+    # ensure_ascii=True (ASCII만 사용)
+    json_ascii = state_to_json(metadata, ensure_ascii=True)
+    assert "한글" not in json_ascii
+    assert "\\u" in json_ascii  # 유니코드 이스케이프 시퀀스

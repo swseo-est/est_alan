@@ -1,4 +1,4 @@
-from estalan.agent.graph.requirement_collection_agent import create_requirement_collection_agent
+from estalan.prebuilt.requirement_analysis_agent import create_requirement_analysis_agent
 from dotenv import load_dotenv
 import asyncio
 
@@ -14,6 +14,6 @@ async def get_graph():
 
     async with _lock:
         if _graph is None:
-            _graph = create_requirement_collection_agent()
+            _graph = create_requirement_analysis_agent()
 
     return _graph

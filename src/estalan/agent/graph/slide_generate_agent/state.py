@@ -2,7 +2,7 @@ from langchain_core.messages import BaseMessage
 
 from typing import List, Annotated, TypedDict, Optional, Sequence
 from langgraph.graph.message import add_messages
-from estalan.agent.base.state import BaseAlanAgentState
+from estalan.agent.base.state import BaseAlanAgentState, AlanAgentMetaData
 from estalan.agent.base.reducer_function import update_metadata
 import operator
 
@@ -35,12 +35,11 @@ class ExecutorState(Section):
     template_folder: str
 
 
-class SlideGenerateAgentMetadata(TypedDict):
+class SlideGenerateAgentMetadata(AlanAgentMetaData):
     topic: str
     requirements: str
     num_sections: int
     num_slides: int
-    status: str
 
 
 class SlideGenerateAgentState(BaseAlanAgentState):

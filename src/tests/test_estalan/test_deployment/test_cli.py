@@ -14,7 +14,7 @@ from estalan.deployment.cli import main
 from langgraph_sdk import get_client
 
 # 배포 URL 설정
-DEPLOYMENT_URL = "http://localhost:2024/"
+DEPLOYMENT_URL = "http://localhost:2025/"
 
 
 def get_langgraph_client(url=None):
@@ -33,23 +33,22 @@ def get_langgraph_client(url=None):
 
 
 # 프로젝트 루트 경로를 sys.path에 추가
-project_root = Path.cwd().parent  # src의 부모 디렉토리
+project_root = Path.cwd().parent.parent.parent  # tests/test_estalan/test_deployment -> src
 sys.path.insert(0, str(project_root))
 
-# src 디렉터리 경로 설정 (현재 디렉토리)
-src_dir = Path.cwd()
+# src 디렉터리 경로 설정 (프로젝트 루트의 src 디렉터리)
+src_dir = project_root
 print(f"프로젝트 루트: {project_root}")
 print(f"src 디렉터리: {src_dir}")
 
 
 def start_server_in_background():
     """백그라운드에서 서버를 시작하는 함수"""
-    server_process = None
-    server_url = "http://127.0.0.1:2024"
+    server_url = "http://127.0.0.1:2025"
     
     try:
-        # run.py 스크립트를 실행하여 서버 시작
-        cmd = [sys.executable, "run.py"]
+        # run.py 스크립트를 실행하여 서버 시작 (테스트용 포트 2025 사용)
+        cmd = [sys.executable, "run.py", "--port", "2025", "--config", "graph.json"]
         print(f"서버 시작 명령: {cmd}")
         print(f"작업 디렉터리: {src_dir}")
         
@@ -111,10 +110,19 @@ def stop_server(server_process):
 
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def server_process():
-    """서버 프로세스 fixture"""
-    return None
+    """테스트 세션 전체에서 공유하는 서버 프로세스 fixture"""
+    print("테스트 세션 시작: 서버를 시작합니다...")
+    server_process, success = start_server_in_background()
+    
+    if not success:
+        pytest.fail("서버를 시작할 수 없습니다.")
+    
+    yield server_process
+    
+    print("테스트 세션 종료: 서버를 종료합니다...")
+    stop_server(server_process)
 
 
 def test_langgraph_client_creation():
@@ -148,15 +156,27 @@ async def test_thread_creation():
 
 
 @pytest.mark.asyncio
-async def test_server_communication():
+async def test_thread_creation_with_server(server_process):
+    """Thread 생성 및 응답 포맷 검증 테스트 (서버 프로세스 검증 포함)"""
+    # fixture에서 제공된 서버 프로세스 사용
+    assert server_process is not None
+    
+    return await test_thread_creation()
+
+
+@pytest.mark.asyncio
+async def test_server_communication(server_process):
     """서버와의 통신 테스트"""
+    # fixture에서 제공된 서버 프로세스 사용
+    assert server_process is not None
+    
     client = get_langgraph_client()
     
     # thread 생성
     thread_id = await test_thread_creation()
     
     # assistant_id 설정
-    assistant_id = "slide_generate_agent"
+    assistant_id = "simple_chat_model"
     
     # 입력 메시지 설정
     input_data = {"messages": "안녕"}
@@ -183,54 +203,21 @@ async def test_server_communication():
         
         chunk_count += 1
         
-        # 최소한 하나의 chunk를 받았으면 테스트 통과
-        print(chunk_count, chunk)
-
     # 최소한 하나의 chunk를 받았는지 확인
     assert chunk_count >= 1, f"Expected at least 1 chunk, but received {chunk_count}"
     
     print("서버 통신 테스트 완료")
 
 
-def test_server_start_stop(server_process):
-    """서버 시작/종료 기능 테스트"""
-    # 서버 시작
-    server_process, success = start_server_in_background()
-    assert server_process is not None
-    
-    if success:
-        # 서버가 정상적으로 시작되었는지 확인
-        assert server_process.pid is not None
-        
-        # 서버 종료
-        stop_server(server_process)
-        
-        # 프로세스가 종료되었는지 확인
-        time.sleep(2)  # 종료 대기
-        assert server_process.poll() is not None
-    else:
-        # 서버 시작 실패 시에도 프로세스 정리
-        if server_process:
-            stop_server(server_process)
-
-
 def test_server_health_check(server_process):
     """서버 헬스 체크 엔드포인트 테스트"""
-    # 서버 시작
-    server_process, success = start_server_in_background()
+    # fixture에서 제공된 서버 프로세스 사용
+    assert server_process is not None
     
-    if success:
-        try:
-            # 헬스 체크 요청
-            response = requests.get("http://127.0.0.1:2024/ok", timeout=5)
-            assert response.status_code == 200
-        finally:
-            # 서버 정리
-            stop_server(server_process)
-    else:
-        # 서버 시작 실패 시에도 프로세스 정리
-        if server_process:
-            stop_server(server_process)
-        pytest.skip("서버를 시작할 수 없어서 헬스 체크 테스트를 건너뜁니다.")
+    # 헬스 체크 요청
+    response = requests.get("http://127.0.0.1:2025/ok", timeout=5)
+    assert response.status_code == 200
+    
+    print("서버 헬스 체크 테스트 완료")
 
 

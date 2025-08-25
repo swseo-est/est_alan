@@ -67,7 +67,7 @@ def run_server(
     ui: dict | None = None,
     ui_config: dict | None = None,
     disable_persistence: bool = False,
-    allow_blocking: bool = False,
+    allow_blocking: bool = True,
     runtime_edition: Literal["inmem", "community", "postgres"] = "inmem",
     server_level: str = "WARNING",
     **kwargs: typing.Any,

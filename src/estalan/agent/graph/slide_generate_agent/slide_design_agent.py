@@ -126,8 +126,6 @@ def post_processing_image_search_node(state):
     msg = create_ai_message(
         content=content,
         name="msg_image_search_end",
-        id="msg_image_search_end",
-        allow_duplicate=True
     )
     return {"messages": [msg]}
 
@@ -138,7 +136,7 @@ def print_image_grid_node(state):
     list_url = list()
     for img in list_image:
         list_url.append(img["url"])
-    msg = create_image_grid_message(list_url, name="print_image_grid_node", allow_duplicate=True)
+    msg = create_image_grid_message(list_url, name="print_image_grid_node")
     print(msg)
     return {"messages": [msg]}
 

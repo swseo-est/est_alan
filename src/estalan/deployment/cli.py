@@ -338,7 +338,7 @@ def main():
     with open(args.config, encoding="utf-8") as f:
         config_data = json.load(f)
 
-    graphs = config_data.get("agent", {})
+    graphs = config_data
     run_server(
         args.host,
         args.port,

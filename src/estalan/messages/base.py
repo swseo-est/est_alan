@@ -24,6 +24,9 @@ class BaseAlanMessage:
     """Alan 메시지의 기본 클래스 - UUID 자동 생성 및 메타데이터 제공"""
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), coerce_numbers_to_str=True)
     metadata: AlanMessageMetadata = Field(default_factory=default_metadata_factory)
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 
 class AlanAIMessage(AIMessage, BaseAlanMessage):

@@ -3,13 +3,14 @@ import json
 from langchain_core.messages import HumanMessage
 from typing import TypedDict, List
 from langgraph.graph import START, END, StateGraph
-from estalan.llm import create_chat_model
-from estalan.messages.utils import create_ai_message
-from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 from langgraph.prebuilt import create_react_agent
+
 from estalan.agent.graph.slide_generate_agent.utils import get_html_template_list, get_html_template_content_tool
 from estalan.agent.graph.slide_generate_agent.prompt.slide_design import prompt_slide_design
 from estalan.tools.search import GoogleSerperImageSearchResult
+from estalan.llm import create_chat_model
+from estalan.messages.utils import create_ai_message, create_image_grid_message
+from estalan.agent.graph.slide_generate_agent.state import ExecutorState
 
 
 
@@ -125,9 +126,21 @@ def post_processing_image_search_node(state):
     msg = create_ai_message(
         content=content,
         name="msg_image_search_end",
-        id="msg_image_search_end"
+        id="msg_image_search_end",
+        allow_duplicate=True
     )
-    return {}
+    return {"messages": [msg]}
+
+
+def print_image_grid_node(state):
+    list_image = state["list_image"]
+
+    list_url = list()
+    for img in list_image:
+        list_url.append(img["url"])
+    msg = create_image_grid_message(list_url, name="print_image_grid_node", allow_duplicate=True)
+    print(msg)
+    return {"messages": [msg]}
 
 
 def create_slide_template_select_node(slide_design_react_agent):
@@ -440,6 +453,7 @@ def create_slide_create_agent(name=None):
     builder.add_node("post_processing_html_generate_node", post_processing_html_generate_node)
     builder.add_node("pre_processing_image_search_node", pre_processing_image_search_node)
     builder.add_node("post_processing_image_search_node", post_processing_image_search_node)
+    builder.add_node("print_image_grid_node", print_image_grid_node)
 
 
     builder.add_node("slide_template_select_node", slide_template_select_node)
@@ -450,11 +464,17 @@ def create_slide_create_agent(name=None):
     builder.add_edge(START, "pre_processing_node")
     builder.add_edge("pre_processing_node", "pre_processing_slide_design_node")
     builder.add_edge("pre_processing_slide_design_node", "slide_template_select_node")
+
     builder.add_edge("slide_template_select_node", "slide_design_node")
+
     builder.add_edge("slide_design_node", "pre_processing_image_search_node")
+
     builder.add_edge("pre_processing_image_search_node", "image_search_node")
     builder.add_edge("image_search_node", "post_processing_image_search_node")
-    builder.add_edge("post_processing_image_search_node", "pre_processing_html_generate_node")
+    builder.add_edge("post_processing_image_search_node", "print_image_grid_node")
+
+
+    builder.add_edge("print_image_grid_node", "pre_processing_html_generate_node")
     builder.add_edge("pre_processing_html_generate_node", "html_generate_node")
     builder.add_edge("html_generate_node", "post_processing_html_generate_node")
     builder.add_edge("post_processing_html_generate_node", "post_processing_node")

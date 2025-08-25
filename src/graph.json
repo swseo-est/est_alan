@@ -1,0 +1,6 @@
+{
+  "agent":{
+    "simple_chat_model": "./deployment/simple_chat_model/src/agent/graph.py:get_graph",
+    "slide_generate_agent": "./deployment/slide_generate_agent/src/agent/graph.py:get_graph"
+  }
+}

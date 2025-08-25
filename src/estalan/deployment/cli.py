@@ -306,7 +306,7 @@ def main():
         # LangSmith 설정: 설정 파일 경로
         # langgraph.json 파일에 LangSmith 관련 설정을 포함할 수 있음
         # "env" 섹션에 LANGCHAIN_* 환경변수들을 정의 가능
-        "--config", default="langgraph.json", help="Path to configuration file"
+        "--config", default="graph.json", help="Path to configuration file"
     )
     parser.add_argument(
         "--n-jobs-per-worker",
@@ -334,14 +334,11 @@ def main():
 
     args = parser.parse_args()
 
+    # graph.json 파일 읽기
     with open(args.config, encoding="utf-8") as f:
         config_data = json.load(f)
 
-    graphs = config_data.get("graphs", {})
-    ui = config_data.get("ui")
-    ui_config = config_data.get("ui_config")
-    # LangSmith 설정: 설정 파일에서 환경변수 로드
-    # config_data.get("env")에서 LANGCHAIN_* 환경변수들을 가져와서 서버에 전달
+    graphs = config_data.get("agent", {})
     run_server(
         args.host,
         args.port,
@@ -350,13 +347,10 @@ def main():
         n_jobs_per_worker=args.n_jobs_per_worker,
         # 브라우저 설정: CLI 인자에 따라 API 문서 자동 열기 여부 결정
         # --no-browser 옵션이 있으면 False, 없으면 True로 설정
-        open_browser=not args.no_browser,
         tunnel=args.tunnel,
         debug_port=args.debug_port,
         wait_for_client=args.wait_for_client,
         env=config_data.get("env", None),
-        ui=ui,
-        ui_config=ui_config,
     )
 
 

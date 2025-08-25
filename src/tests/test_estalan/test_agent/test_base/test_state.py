@@ -5,7 +5,8 @@ from estalan.agent.base.state import (
     AlanAgentMetaData,
     BaseAlanAgentState,
     Canvas,
-    AlanAgentStateWithCanvas
+    AlanAgentStateWithCanvas,
+    create_default_state
 )
 from estalan.agent.base.reducer_function import add_messages_for_alan
 from langchain_core.messages import HumanMessage
@@ -95,3 +96,41 @@ def test_alan_agent_state_with_canvas_inheritance():
     assert "metadata" in state
     assert "canvases" in state
     assert state["canvases"] == []
+
+
+def test_create_default_state_basic():
+    """create_default_state 함수의 기본 동작을 테스트합니다"""
+    # TypedDict 클래스에 대해 기본 상태 생성
+    default_state = create_default_state(BaseAlanAgentState)
+    
+    # 기본값이 올바르게 설정되었는지 확인
+    assert isinstance(default_state, dict)
+    
+    # BaseAlanAgentState의 필수 필드들 확인
+    assert "messages" in default_state
+    assert "metadata" in default_state
+    
+    # messages 필드는 빈 리스트여야 함
+    assert default_state["messages"] == []
+    
+    # metadata 필드는 AlanAgentMetaData의 기본값을 가져야 함
+    assert isinstance(default_state["metadata"], dict)
+    assert "chat_status" in default_state["metadata"]
+    assert "status" in default_state["metadata"]
+    assert "initialization" in default_state["metadata"]
+    
+    # Literal 타입의 실제 구조 확인
+    from typing import get_type_hints, get_origin, get_args
+    metadata_hints = get_type_hints(AlanAgentMetaData)
+    
+    print(f"생성된 기본 상태: {default_state}")
+    print(f"metadata 내용: {default_state['metadata']}")
+    print(f"chat_status 타입: {metadata_hints['chat_status']}")
+    print(f"chat_status origin: {get_origin(metadata_hints['chat_status'])}")
+    print(f"chat_status args: {get_args(metadata_hints['chat_status'])}")
+    print(f"status 타입: {metadata_hints['status']}")
+    print(f"status origin: {get_origin(metadata_hints['status'])}")
+    print(f"status args: {get_args(metadata_hints['status'])}")
+    print(f"initialization 타입: {metadata_hints['initialization']}")
+    print(f"initialization origin: {get_origin(metadata_hints['initialization'])}")
+    print(f"initialization args: {get_args(metadata_hints['initialization'])}")

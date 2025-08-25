@@ -6,6 +6,8 @@ from estalan.agent.base.state import BaseAlanAgentState, AlanAgentMetaData
 from estalan.agent.base.reducer_function import update_metadata
 import operator
 
+from estalan.prebuilt.requirement_analysis_agent import Requirement
+
 
 class Section(TypedDict):
     description: str
@@ -47,3 +49,6 @@ class SlideGenerateAgentState(BaseAlanAgentState):
     slides: Annotated[List[Section], operator.add]
 
     metadata: Annotated[SlideGenerateAgentMetadata, update_metadata]
+
+    requirements: list[Requirement]  # 수집된 모든 요구사항
+    requirements_docs: str

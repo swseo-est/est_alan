@@ -5,20 +5,28 @@ from estalan.prebuilt.requirement_analysis_agent.state import RequirementCollect
 from estalan.prebuilt.requirement_analysis_agent.tools import Tools
 from estalan.prebuilt.requirement_analysis_agent.context_schema import Configuration
 from estalan.prebuilt.requirement_analysis_agent.prompt import PROMPT_REQUIREMENT_ANALYSIS
+from estalan.agent.base.state import state_to_json_pretty, state_to_json_compact
 
 
+def post_agent_node(state):
+    requirements = state.get('requirements', [])
+    docs = state_to_json_compact(requirements)
+    return {"requirements_docs": docs}
 
-def create_requirement_analysis_agent():
-    llm = create_chat_model(provider="azure_openai", model="gpt-4o")
+
+def create_requirement_analysis_agent(model=None, name="requirement_analysis_agent"):
+    if model is None:
+        model = create_chat_model(provider="azure_openai", model="gpt-4o")
 
     agent = create_react_agent(
-        model=llm,
+        model=model,
         tools=Tools,
         prompt=PROMPT_REQUIREMENT_ANALYSIS,
         state_schema=RequirementCollectionAgentState,
         response_format=RequirementCollectionState,
+        post_agent_node=post_agent_node,
+        name=name
     )
-
     return agent
 
 

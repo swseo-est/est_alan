@@ -9,6 +9,8 @@ from estalan.agent.graph.slide_generate_agent.state import ExecutorState, Sectio
 from estalan.agent.base.node import create_alan_agent_start_node, alan_agent_finish_node
 from estalan.agent.base.state import BaseAlanAgentState
 
+from estalan.prebuilt.requirement_analysis_agent import create_requirement_analysis_agent
+
 from estalan.llm.utils import create_chat_model
 from estalan.messages.utils import create_ai_message
 
@@ -157,16 +159,22 @@ def create_graph():
     # 슬라이드 생성 그래프 생성
     slide_generate_graph = create_slide_generate_graph()
     # msg_test_node와 slide_generate_graph를 연결하는 테스트 그래프 생성
-    
+    requirement_analysis_agent = create_requirement_analysis_agent()
 
     # # # Supervisor 생성
     workflow = create_supervisor(
-        [slide_generate_graph],
+        [requirement_analysis_agent, slide_generate_graph],
         model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
         prompt= """
                 사용자와 대화를 통해 슬라이드 생성에 필요한 정보들을 수집하세요.
+                
+                requirement_analysis_agent를 이용해서, 사용자 대화에서 요구사항을 추가/업데이트/삭제 등 관리하세요.
+                요구사항과 관련된 모든 작업은 requirement_analysis_agent에게 위임하세요.
+                
+                수집된 요구사항이 충분하지 않다면 사용자에게 질문을 통해, 요구사항을 더 수집하세요.
     
                 충분한 정보가 모이면 slide_generate_agent를 이용하여, 슬라이드를 생성하세요.
+                
                 마지막 메시지를 통해 다음 에이전트에 충분한 정보를 전달하세요.
                 다음 에이전트는 마지막 메시지만을 참조합니다.
             """

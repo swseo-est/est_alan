@@ -24,7 +24,9 @@ class Requirement(TypedDict):
 
 class RequirementCollectionState(TypedDict):
     requirements: list[Requirement]  # 수집된 모든 요구사항
+    requirements_docs: str
 
 
 class RequirementCollectionAgentState(BaseAlanAgentState):
     requirements: list[Requirement]  # 수집된 모든 요구사항
+    requirements_docs: str

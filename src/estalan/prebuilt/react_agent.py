@@ -15,7 +15,11 @@ def update_structured_response(state: Dict[str, Any]) -> Dict[str, Any]:
         Dict[str, Any]: 구조화된 응답 데이터
     """
     structured_response = state.get("structured_response", {})
-    return structured_response
+
+    # reset structured_response
+    updated_state = structured_response | {"structured_response": {}}
+    return updated_state
+
 
 def create_react_agent(*args, state_schema=None, pre_agent_node=None, post_agent_node=None, name=None, **kwargs):
     """

@@ -1,3 +1,6 @@
+# 요구사항 분석 에이전트 도구 모듈
+# 에이전트가 요구사항을 생성, 수정, 관리하는 데 사용하는 도구들을 정의합니다.
+
 from typing import Optional, List, Dict, Any
 from langchain_core.tools import tool
 import uuid
@@ -8,6 +11,7 @@ from estalan.agent.base.state import state_to_json_pretty, state_to_json_compact
 
 
 # ===== READ (조회) 도구들 =====
+# 요구사항 조회 관련 도구들 (현재 미구현)
 
 # ===== CREATE (생성) 도구들 =====
 
@@ -30,7 +34,7 @@ def create_requirement(
         origin: str - 요구사항 출처 (user/question/inferred), 기본값: user
         
     Returns:
-        Dict[str, Any]: 생성된 요구사항 정보와 결과 메시지
+        str: 생성된 요구사항 정보 (JSON 형태)
     """
     requirement_id = str(uuid.uuid4())
     new_requirement: Requirement = {
@@ -59,12 +63,13 @@ def update_requirement(
     요구사항의 특정 필드를 수정합니다.
     
     Args:
+        requirement_old: Requirement - 수정할 기존 요구사항
         requirement_id: str - 수정할 요구사항의 ID
         field: str - 수정할 필드명 (detail/priority/status/category)
         value: str - 새로운 값
         
     Returns:
-        Dict[str, Any]: 수정 결과 정보
+        str: 수정된 요구사항 정보 (JSON 형태)
     """
     valid_fields = {
         "detail": "상세 내용",
@@ -94,12 +99,13 @@ def update_requirement_bulk(
     요구사항의 여러 필드를 한번에 수정합니다.
     
     Args:
+        requirement_old: Requirement - 수정할 기존 요구사항
         requirement_id: str - 수정할 요구사항의 ID
         updates: Dict[str, Any] - 수정할 필드와 값들의 딕셔너리
                 예: {"detail": "새로운 내용", "priority": "High", "status": "approved"}
         
     Returns:
-        Dict[str, Any]: 수정 결과 정보
+        str: 수정된 요구사항 정보 (JSON 형태)
     """
     valid_fields = {
         "detail": "상세 내용",
@@ -123,9 +129,10 @@ def update_requirement_bulk(
 
 
 # ===== 도구 목록 =====
+# 에이전트에서 사용할 수 있는 모든 도구들을 정의합니다.
 
 Tools = [
-    # READ 도구들
+    # READ 도구들 (현재 미구현)
     
     # CREATE 도구들
     create_requirement,
@@ -134,5 +141,5 @@ Tools = [
     update_requirement,
     update_requirement_bulk,
 
-    # DELETE 도구들
+    # DELETE 도구들 (현재 미구현)
 ]

@@ -163,8 +163,6 @@ def create_slide_generate_agent(name="slide_generate_agent"):
     return builder.compile(name=name)
 
 
-
-
 def create_graph(in_memory=False):
     requirement_analysis_agent = create_requirement_analysis_agent()
     planning_agent = create_planning_agent(name="planning_agent")
@@ -217,6 +215,8 @@ async def run_agent(list_user_inputs):
                 {"configurable": {"thread_id": "1"}}
             )
         print("updated state: ", result)
+        # for msg in result["messages"]:
+        #     print(msg.content)
 
     return result
 
@@ -228,7 +228,8 @@ if __name__ == '__main__':
     s = time.time()
 
     list_user_inputs = [initial_msg, "아니야 10일 일정으로 부탁해", "슬라이드 개수는 12장이 좋겠어", "종아 슬라이드를 생성해줘"]
-    list_user_inputs = ["제주도 여행을 주제로 추가 질문없이 슬라이드를 생성해줘", "슬라이드를 생성해줘"]
+    list_user_inputs = [initial_msg, "종아 슬라이드를 생성해줘", "종아 슬라이드를 생성해줘"]
+
     result = asyncio.run(run_agent(list_user_inputs))
 
     for state in result['slides']:

@@ -24,7 +24,7 @@ def generate_section_result_msg(sections):
         msg_section = f"""{int(section["idx"]) + 1}. {section["name"]} - {section["description"]} \n"""
         msg += msg_section
 
-    msg = create_ai_message(content=msg, name="planning_agent")
+    msg = create_ai_message(content=msg)
     return msg
 
 

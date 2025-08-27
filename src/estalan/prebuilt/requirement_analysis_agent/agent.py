@@ -23,7 +23,7 @@ def pre_agent_node(state):
     else:
         msg = "현재 등록된 요구사항은 없습니다."
 
-    return {"messages": [create_ai_message(content=msg)]}
+    return {"messages": [create_ai_message(content=msg, name=None)]}
 
 
 def post_agent_node(state):

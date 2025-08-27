@@ -61,8 +61,12 @@ def update_requirement(existing_requirements, new_requirements):
     unique_requirements = {}
     for req in existing_requirements + new_requirements:
         # 순서 상 new_requirements가 뒤에 호출되어 덮어씌어짐
-        req_id = req.get('requirement_id')
-        unique_requirements[req_id] = req
+        try:
+            req_id = req.get('requirement_id')
+            unique_requirements[req_id] = req
+        except Exception as e:
+            print(e, req, existing_requirements + new_requirements)
+            continue
 
     # 중복 제거된 요구사항 리스트로 변환
     final_requirements = list(unique_requirements.values())

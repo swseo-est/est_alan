@@ -21,8 +21,8 @@ Write one section for a presentation slide in Korean.
 
 <Search Keyword Guidance>
 - Tailor queries to the topic domain. 
-- For travel/맛집 topics, include 지역명 + 핵심키워드(맛집/리뷰/주소/지도/영업시간/가격/웨이팅/위생) in queries, and prefer credible map/blog/review sources.
-- For 기업/산업 주제, include 공식 사이트/보도자료/사업보고서/시장조사 키워드.
+- For travel/restaurant topics, include location names + core keywords (restaurants/reviews/addresses/maps/hours/prices/waiting/hygiene) in queries, and prefer credible map/blog/review sources.
+- For corporate/industry topics, include official sites/press releases/business reports/market research keywords.
 
 <Writing Guidelines>
 - If existing section content is not populated, write from scratch
@@ -34,18 +34,18 @@ Write one section for a presentation slide in Korean.
 </Writing Guidelines>
 
 <Final Check>
-1) 모든 근거는 명시된 Source에 기반하는지 확인
-2) 각 URL은 Source 목록에 한 번만 등장
-3) 출처 번호는 1,2,3... 순차 부여(누락 금지)
+1) Verify that all evidence is based on specified sources
+2) Each URL appears only once in the source list
+3) Source numbers are assigned sequentially 1,2,3... (no omissions allowed)
 </Final Check>
 """
 
 section_search_img_instruction = """
-보고서 주제, 섹션 이름, 섹션 주제와 가장 연관성이 높은 이미지를 1장 선택하세요.
+Select 1 image that is most relevant to the report topic, section name, and section topic.
 
 <Task>
-1. 보고서 주제, 섹션 이름, 섹션 주제를 꼼꼼하게 검토합니다.
-2. 보고서 주제, 섹션 이름, 섹션 주제와 가장 연관성이 높은 이미지를 1장 선택하세요.
+1. Carefully review the report topic, section name, and section topic.
+2. Select 1 image that is most relevant to the report topic, section name, and section topic.
 </Task>
 """
 

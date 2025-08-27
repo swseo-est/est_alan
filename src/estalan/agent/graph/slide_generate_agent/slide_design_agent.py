@@ -143,40 +143,40 @@ def create_slide_template_select_node(slide_design_react_agent):
         list_html_file = get_html_template_list(template_folder)
 
 
-        # React 에이전트를 위한 프롬프트 템플릿
+        # Prompt template for React agent
         prompt_slide_template_select = f"""
-당신은 슬라이드 디자인 전문가입니다. 주어진 내용에 가장 적합한 HTML 템플릿을 선택해야 합니다.
+You are a slide design expert. You need to select the most suitable HTML template for the given content.
 
-## 데이터
-주제: {topic}
-섹션명: {name}
-섹션 설명: {description}
-내용: {content}
-슬라이드 타입: {state.get("slide_type", "contents")}
-섹션 인덱스: {state.get("idx", 0)}
-요구사항: {state.get("requirements", [])}
-
-
-## 템플릿 선택 기준:
-- 슬라이드 타입 (title, contents 등)에 따른 적합성
-- 내용의 성격 (텍스트 중심, 이미지 중심, 데이터 시각화 등)
-- 내용이 정확하게 일치하지 않더라도, 유사한 작업에 사용되었다면 선정하세요
-- 레이아웃의 적합성 (가로/세로 배치, 그리드 레이아웃 등)
-- 시각적 효과의 필요성
-- 요구사항과 디자인 프롬프트의 반영
+## Data
+Topic: {topic}
+Section Name: {name}
+Section Description: {description}
+Content: {content}
+Slide Type: {state.get("slide_type", "contents")}
+Section Index: {state.get("idx", 0)}
+Requirements: {state.get("requirements", [])}
 
 
-## 사용 가능한 HTML 템플릿 목록:
+## Template Selection Criteria:
+- Suitability according to slide type (title, contents, etc.)
+- Nature of content (text-focused, image-focused, data visualization, etc.)
+- Select if used for similar tasks, even if content doesn't match exactly
+- Layout suitability (horizontal/vertical arrangement, grid layout, etc.)
+- Need for visual effects
+- Reflection of requirements and design prompts
+
+
+## Available HTML Template List:
 {list_html_file}
 
 ## get_html_template_content_tool parameter
 template_folder: {template_folder}
 
-## 규칙
-1. 위의 템플릿 목록에서 내용에 가장 적합한 템플릿을 선택하세요.
-2. 조회한 template html 코드를 html_template에 변경없이 넣으세요
-3. get_html_template_content_tool을 통해 조회된 template을 넣으세요.
-4. ** 임의로 html을 생성하면 안됩니다. **
+## Rules
+1. Select the most suitable template from the above template list for the content.
+2. Put the queried template html code into html_template without changes
+3. Insert the template queried through get_html_template_content_tool.
+4. ** Do not generate html arbitrarily. **
 """
         input_state = state.copy()
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
@@ -210,18 +210,18 @@ def create_slide_design_node(slide_design_llm):
         content = state["content"]
         # img_url = state["img_url"]
 
-        # React 에이전트를 위한 프롬프트 템플릿
+        # Prompt template for React agent
         msg = f"""
 {prompt_slide_design}
 
-## 데이터
-주제: {topic}
-섹션명: {name}
-섹션 설명: {description}
-내용: {content}
-슬라이드 타입: {state.get("slide_type", "contents")}
-섹션 인덱스: {state.get("idx", 0)}
-요구사항: {state.get("requirements", [])}
+## Data
+Topic: {topic}
+Section Name: {name}
+Section Description: {description}
+Content: {content}
+Slide Type: {state.get("slide_type", "contents")}
+Section Index: {state.get("idx", 0)}
+Requirements: {state.get("requirements", [])}
 """
 
         for i in range(10):
@@ -247,11 +247,11 @@ def create_image_search_agent(agent):
     async def image_search_agent(state: SlideDesignAgentState):
         list_image = state["list_image"]
 
-        str_list_image = "list_image 정보\n"
+        str_list_image = "list_image information\n"
         for img in list_image:
             str_list_image += f"title: {img['title']}\ndescription: {img['description']}\n\n"
         
-        msg = create_ai_message(content=f"list_image의 title과 description에 맞는 이미지를 검색하고, url을 업데이트 하세요. 추가 질문은 하지말고 작업을 수행하세요. \n\n{str_list_image}")
+        msg = create_ai_message(content=f"Search for images that match the title and description of list_image, and update the url. Don't ask additional questions and perform the task. \n\n{str_list_image}")
 
         for i in range(10):
             try:
@@ -264,7 +264,7 @@ def create_image_search_agent(agent):
                 list_image = result['structured_response']['list_image']
                 design = state['design']
 
-                design += f"\n\n 검색한 이미지 \n"
+                design += f"\n\n Searched Images \n"
                 for img in list_image:
                     design += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
                 break
@@ -306,51 +306,53 @@ def create_html_generate_node(html_generate_llm):
 
 
         msg_content = f"""
-아래 내용을 기반으로 슬라이드를 생성하세요.
+Generate a slide based on the content below.
 
-# 슬라이드 정보
-주제: {topic}
-섹션명: {name}
-섹션 설명: {description}
-슬라이드 타입: {state.get("slide_type", "contents")}
-섹션 인덱스: {state.get("idx", 0)}
-요구사항: {state.get("requirements", [])}
+# Slide Information
+Topic: {topic}
+Section Name: {name}
+Section Description: {description}
+Slide Type: {state.get("slide_type", "contents")}
+Section Index: {state.get("idx", 0)}
+Requirements: {state.get("requirements", [])}
 
-# content
+# Content
 {content}
 
-# 사용가능한 이미지 정보
+# Available Image Information
 {str_list_image}
 
-# guideline
+# Guideline
 {guideline}
 
-# html template
+# HTML Template
 {html_template}
 
-# 생성 지침
-## 금지사항
+# Generation Guidelines
+## Prohibited Actions
+- Do not change HTML tag structures like <div>, <h3>, <p>, <i>, etc.
+- Do not change CSS class names like class="text-2xl font-bold mb-3 title-text"
+- Do not change template layout: maintain existing container structure
+- Do not add new HTML elements: do not add new tags or structures not in template
 
-HTML 태그 구조 변경 금지: <div>, <h3>, <p>, <i> 등의 태그 구조를 변경하지 마세요
-CSS 클래스명 변경 금지: class="text-2xl font-bold mb-3 title-text" 등의 클래스를 변경하지 마세요
-템플릿 레이아웃 변경 금지: 기존 컨테이너 구조를 유지하세요
-새로운 HTML 요소 추가 금지: 템플릿에 없는 새로운 태그나 구조를 추가하지 마세요
+## Allowed Operations
+- Replace text content only: change only text inside <p>, <h3> tags
+- Change icons: change only the fa-hiking part in <i class="fas fa-hiking"> to appropriate icons
+- Replace image URLs: change only the src attribute value
 
-## 허용되는 작업
-텍스트 내용만 교체: <p>, <h3> 태그 내부의 텍스트만 변경
-아이콘 변경: <i class="fas fa-hiking"> 에서 fa-hiking 부분만 적절한 아이콘으로 변경
-이미지 URL 교체: src 속성 값만 변경
+## Other Guidelines
+1. Use appropriate titles and layouts suitable for the slide type
+2. Configure slides reflecting requirements and design prompts
+3. Place images in appropriate positions when image URLs are provided
+4. Maximize text areas for rich content while maintaining readability
+5. Include specific examples and explanations rather than simple keyword listings
+6. Content should not exceed what is specified in the guideline
+7. **Exclude meta descriptions and include only core content the audience needs to see**
 
-## 기타 지침
-1. 슬라이드 타입에 맞는 적절한 제목과 레이아웃을 사용하세요
-2. 요구사항과 디자인 프롬프트를 반영하여 슬라이드를 구성하세요
-3. 이미지 URL이 제공된 경우 적절한 위치에 배치하세요
-4. 텍스트 영역을 최대한 활용하여 풍부한 내용을 담되, 가독성을 해치지 않는 선에서 정보량을 극대화하세요
-5. 단순한 키워드 나열이 아닌 구체적인 예시와 부연설명을 포함하여 내용을 풍성하게 전개하세요
-6. 단, 내용은 guideline에 명시된 이상을 넘지 않아야 합니다.
-7. **메타적 설명("~슬라이드를 작성하겠습니다", "~이 목적입니다" 등)은 제외하고, 청중이 실제로 봐야 할 핵심 내용만 포함하세요**
+## Example Guidelines
+Focus on direct, actionable content rather than meta-descriptions about creating the slide.
 
-## ❌ 잘못된 예시 (메타적 설명 포함):
+## ❌ Wrong Example (included meta descriptions):
 ```html
 <h1>맛집 선정 기준</h1>
 <p>"떡볶이 맛집 선정 기준" 슬라이드를 작성하겠습니다. 이 슬라이드는 "전국 떡볶이 맛집 도장깨기 프로젝트"를 위한 객관적이고 매력적인 맛집 선정 기준을 명확히 제시하는 것이 목적입니다.</p>
@@ -361,7 +363,7 @@ CSS 클래스명 변경 금지: class="text-2xl font-bold mb-3 title-text" 등�
 ...
 ```
 
-## ✅ 올바른 예시 (청중 관점의 직접적 내용):
+## ✅ Correct Example:
 ```html
 <h1>떡볶이 맛집 선정 기준</h1>
 <div class="criteria-section">
@@ -381,6 +383,7 @@ CSS 클래스명 변경 금지: class="text-2xl font-bold mb-3 title-text" 등�
 </div>
 ...
 ```
+
 """
         for i in range(10):
             try:

@@ -114,9 +114,9 @@ def create_add_tile_slide_node():
             "slide_type": "title",
             "topic": title,
             "idx": 0,  # 타이틀 슬라이드는 첫 번째
-            "name": "타이틀",
-            "description": f"{title}에 대한 프레젠테이션 타이틀 페이지",
-            "requirements": ["타이틀 텍스트", "부제목 또는 설명"],
+            "name": "Title",
+            "description": f"Presentation title page for {title}",
+            "requirements": ["Title text", "Subtitle or description"],
             "research": False, 
             "content": "",
             "img_url": "", 
@@ -145,17 +145,17 @@ def create_add_toc_slide_node():
                 section_list.append(f"{section.get('idx', 0)}. {section.get('name', '')}")
         
         # 목차 문자열 생성
-        contents_text = "\n".join(section_list) if section_list else "목차 항목들이 정의되지 않았습니다."
+        contents_text = "\n".join(section_list) if section_list else "Table of contents items are not defined."
         
         # 목차 슬라이드에 해당하는 section 정의
         contents_section: Section = {
             "slide_type": "toc",
             "topic": topic,
             "idx": 1,
-            "name": "목차",
-            "description": f"{topic}에 대한 프레젠테이션 목차 페이지\n\n{contents_text}",
+            "name": "Table of Contents",
+            "description": f"Presentation table of contents page for {topic}\n\n{contents_text}",
             "requirements": [
-                "content slide_type에 대해서 목차를 나열시 idx 번호를 제거하고 출력하세요"
+                "When listing table of contents for content slide_type, remove idx numbers and output"
             ],
             "research": False,
             "content": "", 

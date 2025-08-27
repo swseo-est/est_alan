@@ -15,11 +15,16 @@ class AlanAgentMetaData(TypedDict):
     initialization: Literal[False, True]
 
 
+def update_remaining_step(old, new):
+    return 25
+
+
 class BaseAlanAgentState(AgentStateWithStructuredResponse):
     messages: Annotated[Sequence[BaseMessage], add_messages_for_alan]
     metadata: Annotated[AlanAgentMetaData, update_metadata]
     private_state: Annotated[Dict, update_metadata]
     shared_state: Annotated[Dict, update_metadata]
+    # remaining_steps: Annotated[int, update_remaining_step]
 
 
 class Canvas(TypedDict):

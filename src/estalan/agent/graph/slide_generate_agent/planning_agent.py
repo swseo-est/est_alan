@@ -101,7 +101,7 @@ def create_analyze_requirements_node(llm):
                 print(f"요구사항 분석 중 오류 발생: {e}")
 
         msg_result = generate_analysis_result_msg(topic, num_sections)
-        print(msg_result)
+        # print(msg_result)
         
         # metadata 업데이트
         metadata = state["metadata"].copy()

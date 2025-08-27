@@ -1,4 +1,5 @@
-from typing import TypedDict, Annotated
+from typing_extensions import TypedDict, Annotated
+
 from estalan.agent.base.state import BaseAlanAgentState
 
 

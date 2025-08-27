@@ -1,4 +1,6 @@
-from typing import Dict, Annotated, Sequence, Literal, TypedDict, Type, TypeVar, Union, get_type_hints, get_origin, get_args, Any
+from typing import Dict, Sequence, Literal, Type, TypeVar, Union, get_type_hints, get_origin, get_args, Any
+from typing_extensions import TypedDict, Annotated
+
 from langchain_core.messages import BaseMessage
 from langgraph.prebuilt.chat_agent_executor import AgentStateWithStructuredResponse
 

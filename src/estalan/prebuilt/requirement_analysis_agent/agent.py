@@ -1,3 +1,5 @@
+from langgraph.graph import StateGraph, START, END
+
 from estalan.llm.utils import create_chat_model
 
 from estalan.prebuilt.react_agent import create_react_agent
@@ -6,6 +8,22 @@ from estalan.prebuilt.requirement_analysis_agent.tools import Tools
 from estalan.prebuilt.requirement_analysis_agent.context_schema import Configuration
 from estalan.prebuilt.requirement_analysis_agent.prompt import PROMPT_REQUIREMENT_ANALYSIS
 from estalan.agent.base.state import state_to_json_pretty, state_to_json_compact
+from estalan.prebuilt.requirement_analysis_agent.converter import requirements_to_markdown, markdown_to_requirements, validate_conversion
+from estalan.messages.utils import create_ai_message
+import json
+
+
+def pre_agent_node(state):
+
+    requirements_docs = state.get("requirements_docs", "")
+
+    if requirements_docs:
+        msg = "기존 등록된 요구사항은 다음과 같습니다. 새로운 유저 메시지를 분석해서 요구사항을 추가/업데이트 하세요\n"
+        msg += requirements_docs
+    else:
+        msg = "현재 등록된 요구사항은 없습니다."
+
+    return {"messages": [create_ai_message(content=msg)]}
 
 
 def post_agent_node(state):

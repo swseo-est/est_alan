@@ -5,13 +5,18 @@ preliminary_investigation_instructions="""
 {topic}
 </Presentation topic>
 
+<User Requirements>
+{requirements}
+</User Requirements>
+
 <Target Audience>
 - 일반적인 대중
 </Target Audience>
 
-
 <Goal>
 주제에 딱 맞는 '정보 중심' 섹션 {number_of_queries}개를 설계하세요. 
+사용자의 요구사항을 반드시 고려하여 설계하세요.
+요구사항에 명시된 카테고리, 우선순위, 상세 내용을 반영하여 섹션을 구성하세요.
 </Goal>
 
 <Hard rules>
@@ -20,6 +25,8 @@ preliminary_investigation_instructions="""
 - 언어: 한글
 - 섹션명은 15자 내외로 간결하게, 설명은 15~30단어 구체적으로 작성
 - search_tool을 활용해 실제 정보 탐색을 반영해 설계
+- 사용자 요구사항을 반드시 반영하여 설계
+- 요구사항의 우선순위(High/Medium/Low)를 고려하여 중요한 내용을 먼저 다루는 섹션을 설계
 </Hard rules>
 
 <Output>

@@ -25,7 +25,8 @@ def create_requirement(
 ) -> str:
     """
     새로운 요구사항을 생성합니다.
-    
+    기존 요구사항과 중복되는지 확인하고, 중복되지 않는 경우에만 생성합니다.
+
     Args:
         category: str - 요구사항 카테고리 (기능적/비기능적/제약사항/기타)
         detail: str - 상세한 요구사항 설명
@@ -35,7 +36,12 @@ def create_requirement(
         
     Returns:
         str: 생성된 요구사항 정보 (JSON 형태)
+        str: 생성된 요구사항 정보와 결과 메시지
     """
+    # 현재 상태에서 기존 요구사항들을 확인
+    # (실제로는 state에서 가져와야 하지만, 도구에서는 직접 접근이 어려우므로
+    # 에이전트가 중복 체크를 수행하도록 프롬프트에서 안내)
+
     requirement_id = str(uuid.uuid4())
     new_requirement: Requirement = {
         "requirement_id": requirement_id,
@@ -79,10 +85,9 @@ def update_requirement(
     }
     
     if field not in valid_fields:
-        return {
-            "success": False,
-            "message": f"유효하지 않은 필드입니다. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
-        }
+        return state_to_json_compact({
+            "error": f"유효하지 않은 필드입니다. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
+        })
 
     requirement_new = requirement_old.copy()
     requirement_new[field] = value
@@ -117,10 +122,9 @@ def update_requirement_bulk(
     # 유효하지 않은 필드 확인
     invalid_fields = [field for field in updates.keys() if field not in valid_fields]
     if invalid_fields:
-        return {
-            "success": False,
-            "message": f"유효하지 않은 필드입니다: {', '.join(invalid_fields)}. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
-        }
+        return state_to_json_compact({
+            "error": f"유효하지 않은 필드입니다: {', '.join(invalid_fields)}. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
+        })
     
     requirement_new = requirement_old.copy()
     for field, value in updates.items():

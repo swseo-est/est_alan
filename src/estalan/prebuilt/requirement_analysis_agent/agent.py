@@ -1,6 +1,3 @@
-# 요구사항 분석 에이전트 생성 모듈
-# 사용자의 자연어 입력을 분석하여 구체적인 요구사항으로 변환하는 에이전트를 생성합니다.
-
 from estalan.llm.utils import create_chat_model
 
 from estalan.prebuilt.react_agent import create_react_agent
@@ -15,26 +12,34 @@ def post_agent_node(state):
     """
     에이전트 실행 후 처리 노드
     요구사항 목록을 JSON 형태로 변환하여 문서화합니다.
-    
+
     Args:
         state: 에이전트 상태 정보
-        
+
     Returns:
         dict: 요구사항 문서화 결과
     """
+    """
+    에이전트 실행 후 요구사항 상태를 정리하
+    """
     requirements = state.get('requirements', [])
-    docs = state_to_json_compact(requirements)
-    return {"requirements_docs": docs}
+    # JSON과 Markdown 생성
+    markdown_docs = requirements_to_markdown(requirements)
+
+    return {
+        "messages": state["messages"],
+        "requirements_docs": markdown_docs,  # Markdown 형태
+    }
 
 
 def create_requirement_analysis_agent(model=None, name="requirement_analysis_agent"):
     """
     요구사항 분석 에이전트를 생성합니다.
-    
+
     Args:
         model: 사용할 언어 모델 (기본값: Azure OpenAI GPT-4o)
         name: 에이전트 이름 (기본값: "requirement_analysis_agent")
-        
+
     Returns:
         생성된 요구사항 분석 에이전트
     """
@@ -48,17 +53,68 @@ def create_requirement_analysis_agent(model=None, name="requirement_analysis_age
         state_schema=RequirementCollectionAgentState,
         response_format=RequirementCollectionState,
         post_agent_node=post_agent_node,
+        pre_agent_node=pre_agent_node,
         name=name
     )
     return agent
+
+def create_input_subagent_node(name=None):
+    if name is None:
+        raise ValueError("name is required")
+
+    def input_subagent_node(state):
+        # 외부 state에서 internal state를 추출
+        internal_state = state[name]
+        internal_state["messages"] = state["messages"]
+        return internal_state
+    return input_subagent_node
+
+
+def create_output_subagent_node(name=None):
+    if name is None:
+        raise ValueError("name is required")
+
+    def output_subagent_node(state):
+        # 내부 state를 외부 state로 변환
+
+        private_state = state
+        shared_state = {"requirements_docs": state["requirements_docs"]}
+
+        return {
+            "private_state" : {name: private_state},
+            "shared_state" : {name: shared_state},
+        }
+    return output_subagent_node
+
+
+def create_requirement_analysis_subagent(model=None, state_schema=None, name="requirement_analysis_agent", state_name="requirement_analysis_agent_state"):
+    requirement_analysis_agent = create_requirement_analysis_agent(model, name)
+    input_subagent_node = create_input_subagent_node(state_name)
+    output_subagent_node = create_output_subagent_node(state_name)
+
+    builder = StateGraph(state_schema)
+
+    builder.add_node("input", input_subagent_node)
+    builder.add_node("output", output_subagent_node)
+    builder.add_node(name, requirement_analysis_agent)
+
+    builder.add_edge(START, "input")
+    builder.add_edge("input", name)
+    builder.add_edge(name, "output")
+    builder.add_edge("output", END)
+
+    graph = builder.compile(name=name)
+
+    return graph
 
 
 if __name__ == "__main__":
     # 테스트 실행 코드
     from dotenv import load_dotenv
+    from estalan.prebuilt.requirement_analysis_agent.prompt import test_prompt
 
     load_dotenv()
 
-    graph = create_requirement_analysis_agent()
-    result = graph.invoke({"messages": "나는 3박 4일 제주도 여행을 계획 중이야."})
-    print(result)
+    agent = create_requirement_analysis_agent()
+    result = agent.invoke({"messages": test_prompt})
+    print(result["requirements_docs"])

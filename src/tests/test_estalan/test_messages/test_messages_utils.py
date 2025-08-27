@@ -201,15 +201,13 @@ def test_message_has_metadata():
     
     for msg_type in message_types:
         message = create_message(msg_type, "Test content")
-        assert hasattr(message, 'metadata')
-        assert isinstance(message.metadata, dict)
-        assert "rendering_option" in message.metadata
+        assert message.metadata
+        assert message.metadata.rendering_option
     
     # tool 타입은 별도로 테스트 (tool_call_id 필요)
     tool_message = create_message("tool", "Test content", tool_call_id="test_tool")
     assert hasattr(tool_message, 'metadata')
-    assert isinstance(tool_message.metadata, dict)
-    assert "rendering_option" in tool_message.metadata
+    assert tool_message.metadata.rendering_option
 
 
 def test_message_content_preservation():

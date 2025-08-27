@@ -47,7 +47,7 @@ def msg_test_node(state):
 
 
 def preprocessing_node(state):
-    llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(OutputState)
+    llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(OutputState)
 
     list_tempalte_folder = ""
     for key in LIST_TEMPLATE_FOLDER.keys():
@@ -113,7 +113,7 @@ def post_processing_executor_node(state):
 
 
 def post_processing_node(state):
-    msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name=None)
+    msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.")
     print(msg)
     metadata = state["metadata"].copy()
     metadata["status"] = "finish"
@@ -175,7 +175,6 @@ def create_graph(in_memory=False):
         prompt=prompt_supervisor,
         state_schema=SlideGenerateAgentState,
         output_mode="full_history",
-        add_handoff_messages=False
     ).compile()
 
 

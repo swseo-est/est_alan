@@ -70,5 +70,3 @@ class SlideGenerateAgentState(BaseAlanAgentState):
 
     requirements: list[Requirement]  # 수집된 모든 요구사항
     requirements_docs: str
-
-    # requirement_analysis_agent_state: RequirementCollectionAgentState

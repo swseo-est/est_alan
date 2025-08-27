@@ -1,4 +1,4 @@
-from typing_extensions import TypedDict, Annotated
+from typing_extensions import TypedDict
 
 from estalan.agent.base.state import BaseAlanAgentState
 
@@ -84,8 +84,6 @@ class RequirementCollectionAgentState(BaseAlanAgentState):
     """
     requirements: list[Requirement]  # 수집된 모든 요구사항
     requirements_docs: str
-    requirements: Annotated[list[Requirement], update_requirement]  # 수집된 모든 요구사항
-    requirements_docs: str  # Markdown 형태
 
 
 

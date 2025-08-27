@@ -1,15 +1,13 @@
 import uuid
-from typing import Optional, Any, Literal
-from pydantic import Field, BaseModel, ConfigDict
+from typing import Optional, Any, Literal, TypedDict
+from pydantic import Field
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, BaseMessage, ToolMessage
 from logging import getLogger
 
-class AlanMessageMetadata(BaseModel):
+class AlanMessageMetadata(TypedDict):
     """Alan 메시지의 메타데이터를 정의하는 모델"""
-    model_config = ConfigDict(frozen=True)
-
-    rendering_option: Literal["str", "json", "html"] = "str"
-    log_level: Literal["info", "error", "debug", "warning"] = "info"
+    rendering_option: Literal["str", "json", "html"]
+    log_level: Literal["info", "error", "debug", "warning"]
 
 
 def default_metadata_factory() -> dict:
@@ -85,7 +83,7 @@ def convert_to_alan_message(message: BaseMessage) -> BaseAlanMessage:
     필요한 속성만 선택적으로 복사하여 안전하게 변환
     """
 
-    if isinstance(message, BaseAlanMessage):
+    if isinstance(message, BaseAlanMessage) or isinstance(message, ToolMessage) or isinstance(message, SystemMessage):
         return message
 
     if not isinstance(message, BaseMessage):

@@ -1,12 +1,12 @@
 from langchain_core.messages import BaseMessage
 
-from typing import List, Annotated, TypedDict, Optional, Sequence
+from typing import List, Annotated, TypedDict, Sequence
 from langgraph.graph.message import add_messages
 from estalan.agent.base.state import BaseAlanAgentState, AlanAgentMetaData
 from estalan.agent.base.reducer_function import update_metadata
 import operator
 
-from estalan.prebuilt.requirement_analysis_agent import Requirement
+from estalan.prebuilt.requirement_analysis_agent import Requirement, RequirementCollectionAgentState
 
 
 class Section(TypedDict):
@@ -44,6 +44,12 @@ class SlideGenerateAgentMetadata(AlanAgentMetaData):
     num_slides: int
 
 
+class PlanningAgentState(BaseAlanAgentState):
+    metadata: SlideGenerateAgentMetadata
+    sections: List[Section]
+    requirements_docs: str  # 요구사항 문서화된 정보
+
+
 class SlideGenerateAgentState(BaseAlanAgentState):
     sections: List[Section]
     slides: Annotated[List[Section], operator.add]
@@ -52,3 +58,5 @@ class SlideGenerateAgentState(BaseAlanAgentState):
 
     requirements: list[Requirement]  # 수집된 모든 요구사항
     requirements_docs: str
+
+    # requirement_analysis_agent_state: RequirementCollectionAgentState

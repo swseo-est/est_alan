@@ -1,2 +1,2 @@
-from estalan.prebuilt.requirement_analysis_agent.agent import create_requirement_analysis_agent
+from estalan.prebuilt.requirement_analysis_agent.agent import *
 from estalan.prebuilt.requirement_analysis_agent.state import *

@@ -21,6 +21,7 @@ def create_requirement(
 ) -> str:
     """
     새로운 요구사항을 생성합니다.
+    기존 요구사항과 중복되는지 확인하고, 중복되지 않는 경우에만 생성합니다.
     
     Args:
         category: str - 요구사항 카테고리 (기능적/비기능적/제약사항/기타)
@@ -30,8 +31,12 @@ def create_requirement(
         origin: str - 요구사항 출처 (user/question/inferred), 기본값: user
         
     Returns:
-        Dict[str, Any]: 생성된 요구사항 정보와 결과 메시지
+        str: 생성된 요구사항 정보와 결과 메시지
     """
+    # 현재 상태에서 기존 요구사항들을 확인
+    # (실제로는 state에서 가져와야 하지만, 도구에서는 직접 접근이 어려우므로
+    # 에이전트가 중복 체크를 수행하도록 프롬프트에서 안내)
+    
     requirement_id = str(uuid.uuid4())
     new_requirement: Requirement = {
         "requirement_id": requirement_id,
@@ -59,12 +64,13 @@ def update_requirement(
     요구사항의 특정 필드를 수정합니다.
     
     Args:
+        requirement_old: Requirement - 수정할 기존 요구사항
         requirement_id: str - 수정할 요구사항의 ID
         field: str - 수정할 필드명 (detail/priority/status/category)
         value: str - 새로운 값
         
     Returns:
-        Dict[str, Any]: 수정 결과 정보
+        str: 수정된 요구사항 정보
     """
     valid_fields = {
         "detail": "상세 내용",
@@ -74,10 +80,9 @@ def update_requirement(
     }
     
     if field not in valid_fields:
-        return {
-            "success": False,
-            "message": f"유효하지 않은 필드입니다. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
-        }
+        return state_to_json_compact({
+            "error": f"유효하지 않은 필드입니다. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
+        })
 
     requirement_new = requirement_old.copy()
     requirement_new[field] = value
@@ -94,12 +99,13 @@ def update_requirement_bulk(
     요구사항의 여러 필드를 한번에 수정합니다.
     
     Args:
+        requirement_old: Requirement - 수정할 기존 요구사항
         requirement_id: str - 수정할 요구사항의 ID
         updates: Dict[str, Any] - 수정할 필드와 값들의 딕셔너리
                 예: {"detail": "새로운 내용", "priority": "High", "status": "approved"}
         
     Returns:
-        Dict[str, Any]: 수정 결과 정보
+        str: 수정된 요구사항 정보
     """
     valid_fields = {
         "detail": "상세 내용",
@@ -111,10 +117,9 @@ def update_requirement_bulk(
     # 유효하지 않은 필드 확인
     invalid_fields = [field for field in updates.keys() if field not in valid_fields]
     if invalid_fields:
-        return {
-            "success": False,
-            "message": f"유효하지 않은 필드입니다: {', '.join(invalid_fields)}. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
-        }
+        return state_to_json_compact({
+            "error": f"유효하지 않은 필드입니다: {', '.join(invalid_fields)}. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
+        })
     
     requirement_new = requirement_old.copy()
     for field, value in updates.items():

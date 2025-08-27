@@ -18,8 +18,11 @@ def create_alan_agent_start_node(
         Returns:
             초기화된 상태
         """
+
+        metadata = state.get("metadata", {})
+
         # state에서 initialization 값을 올바르게 가져오기
-        initialization = state.get("initialization", False)
+        initialization = metadata.get("initialization", False)
 
         updated_state = {"metadata": dict()}
         if not initialization:

@@ -1,6 +1,4 @@
-from typing import Annotated, Sequence, Literal, TypedDict, Type, TypeVar, Union, get_type_hints, get_origin, get_args, Any
-from typing_extensions import get_type_hints as get_type_hints_ext
-
+from typing import Dict, Annotated, Sequence, Literal, TypedDict, Type, TypeVar, Union, get_type_hints, get_origin, get_args, Any
 from langchain_core.messages import BaseMessage
 from langgraph.prebuilt.chat_agent_executor import AgentStateWithStructuredResponse
 
@@ -9,7 +7,7 @@ from estalan.agent.base.reducer_function import add_messages_for_alan, update_me
 # 상태 클래스용 타입 변수
 T = TypeVar('T')
 
-class AlanAgentMetaData(TypedDict, total=False):
+class AlanAgentMetaData(TypedDict):
     chat_status: Literal["available", "unavailable"]
     status: Literal["start", "finish"]
     initialization: Literal[False, True]
@@ -18,6 +16,8 @@ class AlanAgentMetaData(TypedDict, total=False):
 class BaseAlanAgentState(AgentStateWithStructuredResponse):
     messages: Annotated[Sequence[BaseMessage], add_messages_for_alan]
     metadata: Annotated[AlanAgentMetaData, update_metadata]
+    private_state: Annotated[Dict, update_metadata]
+    shared_state: Annotated[Dict, update_metadata]
 
 
 class Canvas(TypedDict):
@@ -151,6 +151,28 @@ def _get_default_value_for_type(field_type: Any) -> Any:
             if non_none_types:
                 # Optional 타입에 대해 None 반환
                 return None
+            else:
+                return None
+        else:
+            # Union[T1, T2, ...]에서 None이 없는 경우, 첫 번째 타입의 기본값 사용
+            non_none_types = [arg for arg in args if arg != type(None)]
+            if non_none_types:
+                # 첫 번째 non-None 타입의 기본값을 시도
+                first_type = non_none_types[0]
+                try:
+                    return _get_default_value_for_type(first_type)
+                except Exception:
+                    # 첫 번째 타입이 실패하면 다음 타입 시도
+                    for other_type in non_none_types[1:]:
+                        try:
+                            return _get_default_value_for_type(other_type)
+                        except Exception:
+                            continue
+                    # 모든 타입이 실패하면 빈 딕셔너리 반환 (dict가 포함된 경우)
+                    if dict in non_none_types:
+                        return {}
+                    # 마지막 수단으로 None 반환
+                    return None
             else:
                 return None
     

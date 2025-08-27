@@ -1,27 +1,28 @@
 from langgraph.graph import START, END, StateGraph
 from langchain_core.messages import HumanMessage, BaseMessage
+from langgraph.checkpoint.memory import InMemorySaver
 
 from typing import List, Annotated, TypedDict, Sequence
 from estalan.agent.graph.slide_generate_agent.planning_agent import create_planning_agent
 from estalan.agent.graph.slide_generate_agent.research_agent import create_research_agent
 from estalan.agent.graph.slide_generate_agent.slide_design_agent import create_slide_create_agent
 from estalan.agent.graph.slide_generate_agent.state import ExecutorState, Section, SlideGenerateAgentState
+from estalan.agent.graph.slide_generate_agent.prompt.supervisor import prompt_supervisor
+
 from estalan.agent.base.node import create_alan_agent_start_node, alan_agent_finish_node
 from estalan.agent.base.state import BaseAlanAgentState
 
-from estalan.prebuilt.requirement_analysis_agent import create_requirement_analysis_agent
+from estalan.prebuilt.requirement_analysis_agent import create_requirement_analysis_agent, create_requirement_analysis_subagent
 
 from estalan.llm.utils import create_chat_model
 from estalan.messages.utils import create_ai_message
 
 import asyncio
 from langgraph.types import Send
-from langgraph_supervisor import create_supervisor
+from estalan.prebuilt.supervisor import create_supervisor
 
 
 class OutputState(TypedDict):
-    topic: str
-    requirements: str
     template_folder: str
 
 LIST_TEMPLATE_FOLDER = {
@@ -34,54 +35,65 @@ LIST_TEMPLATE_FOLDER = {
 
 
 def msg_test_node(state):
-    print(state)
-    return {}
+    print("Supervisor 결과:", state)
+    
+    # supervisor의 결과에서 요구사항 정보 추출
+    requirements_docs = state.get("requirements_docs", "")
+    
+    # 요구사항 정보를 포함하여 다음 단계로 전달
+    return {
+        "requirements_docs": requirements_docs
+    }
 
 
 def preprocessing_node(state):
-    print(state)
     llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(OutputState)
 
     list_tempalte_folder = ""
     for key in LIST_TEMPLATE_FOLDER.keys():
         list_tempalte_folder += f"{key}: {LIST_TEMPLATE_FOLDER[key]}\n"
 
+    topic = state["metadata"]["topic"]
+    requirements_docs = state.get("requirements_docs", "")
+
     msg = f"""
-    슬라이드 topic과 유저 요구사항 requirement 그리고 template_folder를 추출하세요. topic을 한글로 추출하세요.
+    슬라이드 topic 주제와 유저 요구사항 requirement을 고려해서 template_folder를 추출하세요.
+    
+    # topic
+    {topic}
+    
+    # requirements
+    {requirements_docs}
     
     template_folder는 아래 중 하나를 선택하세요
     {list_tempalte_folder}
     
     Output
-        topic: str, 유저 메시지로 부터 추출한 슬라이드의 주제, ex) 제주도 여행
-        requirements: str, 유저 메시지로 부터 추출한 유저의 요구사항, ex) 3박 4일 제주도 여행 일정
         template_folder: str, topic에 적합한 template 폴더 이름, ex) general
-
     """
     msg = HumanMessage(content=msg)
 
     num_retry = 10
     for i in range(num_retry):
         try:
-            updated_state = llm.invoke([msg] + state["messages"])
+            updated_state = llm.invoke(state["messages"] + [msg])
 
-            node_message = create_ai_message(content=f"{updated_state['topic']}을 주제로 슬라이드를 생성하도록 하겠습니다.",
+            node_message = create_ai_message(content=f"{topic}을 주제로 슬라이드를 생성하도록 하겠습니다.",
                                              name="msg_planning_start")
 
-            metadata = {
-                "topic": updated_state["topic"],
-                "requirements": updated_state["requirements"],
-                "template_folder": updated_state["template_folder"],
-                "num_sections": 5,
-                "num_slides": 7,
-                "status": "start"
-            }
-            print(metadata)
+            metadata = state["metadata"].copy()
+            metadata["template_folder"] = updated_state["template_folder"]
             break
         except Exception as e:
             print(e)
 
-    return {"metadata": metadata, "messages": [node_message]}
+    # 요구사항 수집 에이전트의 결과가 있다면 requirements_docs 필드에 추가
+    requirements_docs = state.get("requirements_docs", "")
+    
+    return {
+        "metadata": metadata, 
+        "messages": [node_message], 
+    }
 
 
 class ExecutorOutput(TypedDict):
@@ -108,10 +120,8 @@ def post_processing_node(state):
     return {"messages": [msg], "metadata": metadata}
 
 
-def create_slide_generate_graph(name="slide_generate_agent"):
+def create_slide_generate_agent(name="slide_generate_agent"):
     """슬라이드 생성 메인 그래프"""
-    planning_agent = create_planning_agent(name="planning_agent")
-
     ## subroutine
     executor = StateGraph(ExecutorState, output_schema=ExecutorOutput)
 
@@ -130,12 +140,10 @@ def create_slide_generate_graph(name="slide_generate_agent"):
     # main graph
     builder = StateGraph(SlideGenerateAgentState)
     builder.add_node("preprocessing_node", preprocessing_node)
-    builder.add_node("planning_agent", planning_agent)
     builder.add_node("executor", executor.compile(name="executor"))
     builder.add_node("post_processing_node", post_processing_node)
 
     builder.add_edge(START, "preprocessing_node")
-    builder.add_edge("preprocessing_node", "planning_agent")
 
     def generate_slide(state):
         return [
@@ -145,7 +153,7 @@ def create_slide_generate_graph(name="slide_generate_agent"):
             ) for s in state["sections"]]
 
     builder.add_conditional_edges(
-        "planning_agent",
+        "preprocessing_node",
         generate_slide,
         ["executor"]
     )
@@ -155,30 +163,18 @@ def create_slide_generate_graph(name="slide_generate_agent"):
     return builder.compile(name=name)
 
 
-def create_graph():
-    # 슬라이드 생성 그래프 생성
-    slide_generate_graph = create_slide_generate_graph()
-    # msg_test_node와 slide_generate_graph를 연결하는 테스트 그래프 생성
+
+
+def create_graph(in_memory=False):
     requirement_analysis_agent = create_requirement_analysis_agent()
+    planning_agent = create_planning_agent(name="planning_agent")
+    slide_generate_graph = create_slide_generate_agent(name="slide_generate_agent")
 
     # # # Supervisor 생성
     workflow = create_supervisor(
-        [requirement_analysis_agent, slide_generate_graph],
-        model=create_chat_model(provider="azure_openai", model="gpt-4.1"),
-        prompt= """
-                사용자와 대화를 통해 슬라이드 생성에 필요한 정보들을 수집하세요.
-                
-                requirement_analysis_agent를 이용해서, 사용자 대화에서 요구사항을 추가/업데이트/삭제 등 관리하세요.
-                요구사항과 관련된 모든 작업은 requirement_analysis_agent에게 위임하세요.
-                
-                수집된 요구사항이 충분하지 않다면 사용자에게 질문을 통해, 요구사항을 더 수집하세요.
-    
-                충분한 정보가 모이면 slide_generate_agent를 이용하여, 슬라이드를 생성하세요.
-                
-                마지막 메시지를 통해 다음 에이전트에 충분한 정보를 전달하세요.
-                다음 에이전트는 마지막 메시지만을 참조합니다.
-            """
-        ,
+        [requirement_analysis_agent, planning_agent, slide_generate_graph],
+        model=create_chat_model(provider="google_vertexai", model="gemini-2.5-flash"),
+        prompt=prompt_supervisor,
         state_schema=SlideGenerateAgentState,
         output_mode="full_history",
     ).compile()
@@ -201,26 +197,40 @@ def create_graph():
     builder.add_edge("agent", "finish_node")
     builder.add_edge("finish_node", END)
 
+    if in_memory:
+        checkpointer = InMemorySaver()
+    else:
+        checkpointer = None
+
     # Compile and run
-    app = builder.compile()
+    app = builder.compile(checkpointer=checkpointer)
     return app
 
+
+async def run_agent(list_user_inputs):
+    graph = create_graph(in_memory=True)
+
+    for msg in list_user_inputs:
+        print("user input : ", msg)
+        result = await graph.ainvoke(
+                {"messages": [msg]},
+                {"configurable": {"thread_id": "1"}}
+            )
+        print("updated state: ", result)
+
+    return result
 
 
 if __name__ == '__main__':
     import time
+    from estalan.agent.graph.slide_generate_agent.tests.inputs import initial_msg
 
     s = time.time()
 
-    graph = create_graph()
-    result = asyncio.run(
-        graph.ainvoke(
-            {
-                "messages": ["이스트소프트에 대한 투자 IR 자료 만들어줘. 추가 질문은 하지말고 만들어"]
-            }
-        )
-    )
-    print(result)
+    list_user_inputs = [initial_msg, "아니야 10일 일정으로 부탁해", "슬라이드 개수는 12장이 좋겠어", "종아 슬라이드를 생성해줘"]
+    list_user_inputs = ["제주도 여행을 주제로 추가 질문없이 슬라이드를 생성해줘", "슬라이드를 생성해줘"]
+    result = asyncio.run(run_agent(list_user_inputs))
+
     for state in result['slides']:
         with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
             f.write(state['html'])

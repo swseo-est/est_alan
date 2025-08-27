@@ -24,7 +24,7 @@ def generate_section_result_msg(sections):
         msg_section = f"""{int(section["idx"]) + 1}. {section["name"]} - {section["description"]} \n"""
         msg += msg_section
 
-    msg = create_ai_message(content=msg)
+    msg = create_ai_message(content=msg, name=None)
     return msg
 
 
@@ -54,7 +54,7 @@ def create_analyze_requirements_node(llm):
             msg = f"요구사항 분석 결과:\n"
             msg += f"- 주제: {topic}\n"
             msg += f"- 추천 섹션 개수: {num_sections}개\n"
-            msg = create_ai_message(content=msg, name="planning_agent", metadata={"log_level": "debug"})
+            msg = create_ai_message(content=msg, name=None, metadata={"log_level": "debug"})
             return msg
 
         # requirements_docs에서 요구사항 정보 추출

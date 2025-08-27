@@ -113,7 +113,7 @@ def post_processing_executor_node(state):
 
 
 def post_processing_node(state):
-    msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name="msg_slide_generation_finish")
+    msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name=None)
     print(msg)
     metadata = state["metadata"].copy()
     metadata["status"] = "finish"
@@ -175,6 +175,7 @@ def create_graph(in_memory=False):
         prompt=prompt_supervisor,
         state_schema=SlideGenerateAgentState,
         output_mode="full_history",
+        add_handoff_messages=False
     ).compile()
 
 

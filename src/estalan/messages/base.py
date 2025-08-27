@@ -1,5 +1,6 @@
 import uuid
-from typing import Optional, Any, Literal, TypedDict
+from typing import Optional, Any, Literal
+from typing_extensions import TypedDict
 from pydantic import Field
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, BaseMessage, ToolMessage
 from logging import getLogger

@@ -176,7 +176,7 @@ def create_generate_sections_node(llm):
         metadata = state["metadata"].copy()
         metadata["num_sections"] = len(sections_refined)
 
-        updated_state = {"messages": [msg_result], "metadata": metadata, "sections": sections_refined}
+        updated_state = {"metadata": metadata, "sections": sections_refined}
         return updated_state
 
     return generate_sections_node

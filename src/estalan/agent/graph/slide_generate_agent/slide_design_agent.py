@@ -137,7 +137,7 @@ def print_image_grid_node(state):
     for img in list_image:
         list_url.append(img["url"])
     msg = create_image_grid_message(list_url, name="print_image_grid_node")
-    print(msg)
+    # print(msg)
     return {"messages": [msg]}
 
 
@@ -245,7 +245,7 @@ def create_slide_design_node(slide_design_llm):
                 list_image = result['list_image']
                 for img in list_image:
                     img['url'] = ""
-                print(result)
+                # print(result)
                 break
             except Exception as e:
                 print(i, e)
@@ -282,7 +282,6 @@ def create_image_search_agent(agent):
             except Exception as e:
                 print(i, e)
 
-        # print(design)
         return {"list_image": list_image, "design": design}
     return image_search_agent
 

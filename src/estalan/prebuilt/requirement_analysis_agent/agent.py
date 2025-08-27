@@ -20,7 +20,8 @@ def pre_agent_node(state):
     else:
         msg = "현재 등록된 요구사항은 없습니다."
 
-    return {"messages": [create_ai_message(content=msg)]}
+    ai_msg = create_ai_message(content=msg, name="previous_req", metadata={"log_level": "debug"})
+    return {"messages": [ai_msg]}
 
 
 def post_agent_node(state):
@@ -41,8 +42,13 @@ def post_agent_node(state):
     # JSON과 Markdown 생성
     markdown_docs = requirements_to_markdown(requirements)
 
+    msg = "업데이트된 요구사항은 다음과 같습니다.\n"
+    msg += markdown_docs
+
+    ai_msg = create_ai_message(content=msg, name="updated_req", metadata={"log_level": "debug"})
+
     return {
-        "messages": state["messages"],
+        "messages": state["messages"] + [ai_msg],
         "requirements_docs": markdown_docs,  # Markdown 형태
     }
 
@@ -59,7 +65,7 @@ def create_requirement_analysis_agent(model=None, name="requirement_analysis_age
         생성된 요구사항 분석 에이전트
     """
     if model is None:
-        model = create_chat_model(provider="azure_openai", model="gpt-4o")
+        model = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
 
     agent = create_react_agent(
         model=model,

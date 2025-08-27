@@ -76,7 +76,7 @@ def preprocessing_node(state):
     num_retry = 10
     for i in range(num_retry):
         try:
-            updated_state = llm.invoke(state["messages"] + [msg])
+            updated_state = llm.invoke([msg])
 
             node_message = create_ai_message(content=f"{topic}을 주제로 슬라이드를 생성하도록 하겠습니다.",
                                              name="msg_planning_start")
@@ -87,9 +87,6 @@ def preprocessing_node(state):
         except Exception as e:
             print(e)
 
-    # 요구사항 수집 에이전트의 결과가 있다면 requirements_docs 필드에 추가
-    requirements_docs = state.get("requirements_docs", "")
-    
     return {
         "metadata": metadata, 
         "messages": [node_message], 
@@ -113,7 +110,7 @@ def post_processing_executor_node(state):
 
 
 def post_processing_node(state):
-    msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.")
+    msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name="end_msg")
     print(msg)
     metadata = state["metadata"].copy()
     metadata["status"] = "finish"
@@ -229,6 +226,7 @@ if __name__ == '__main__':
 
     list_user_inputs = [initial_msg, "아니야 10일 일정으로 부탁해", "슬라이드 개수는 12장이 좋겠어", "종아 슬라이드를 생성해줘"]
     list_user_inputs = [initial_msg, "종아 슬라이드를 생성해줘", "종아 슬라이드를 생성해줘"]
+    list_user_inputs = ["떡볶이 맛집 전국 투어 계획해줘", "목차 생성해줘", "종아 슬라이드를 생성해줘"]
 
     result = asyncio.run(run_agent(list_user_inputs))
 

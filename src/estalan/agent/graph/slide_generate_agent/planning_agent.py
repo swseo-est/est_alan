@@ -108,6 +108,7 @@ def create_analyze_requirements_node(llm):
         metadata = state["metadata"].copy()
         metadata["topic"] = topic
         metadata["num_sections"] = num_sections
+        metadata["num_slides"] = num_sections + 2
         
         return {
             "messages": [msg_result], 

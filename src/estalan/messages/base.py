@@ -119,7 +119,8 @@ def convert_to_alan_message(message: BaseMessage) -> BaseAlanMessage:
         if isinstance(tool_calls, list) and len(tool_calls) > 0:
             # metadata가 이미 있는 경우 기존 값 유지, 없는 경우 새로 생성
             if 'metadata' not in kwargs:
-                kwargs['metadata'] = {}
+                kwargs['metadata'] = default_metadata_factory()
+            # log_level만 debug로 변경하고 나머지는 기본값 유지
             kwargs['metadata']['log_level'] = 'debug'
 
     # AlanMessage 생성

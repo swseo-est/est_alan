@@ -11,7 +11,7 @@ from langchain_core.messages import BaseMessage
 from langgraph.prebuilt import InjectedState
 from pydantic import BaseModel, Field
 
-from estalan.logging_config import get_logger
+from estalan.logging.base import get_logger
 from estalan.tools.base import AsyncTool
 from estalan.tools.utils import noop, retry_on_api_empty
 
@@ -69,7 +69,7 @@ class BaseGoogleSerperResult(AsyncTool):
         run_manager: Optional[AsyncCallbackManagerForToolRun] = None,
         **kwargs,
     ) -> list:
-        logger.debug(f"Starting {self.__class__.__name__} search")
+        logger.debug("검색 시작", search_type=self.__class__.__name__, query_count=len(query or []))
         dispatcher = adispatch_custom_event if verbose else noop
 
         query = query or ["뉴스"]
@@ -77,7 +77,7 @@ class BaseGoogleSerperResult(AsyncTool):
             query = [query]
 
         query = list(set(query))
-        logger.debug(f"Search queries: {query}")
+        logger.debug("검색 쿼리 정리됨", queries=query, unique_count=len(query))
 
         await dispatcher("event", {"keyword": query})
 
@@ -99,9 +99,11 @@ class BaseGoogleSerperResult(AsyncTool):
             await dispatcher("event", {"speak": f"{keywords}로 검색하고 있어요."})
 
         async def fetch_results(q):
-            logger.debug(f"Fetching results for query: {q}")
+            logger.debug("개별 쿼리 결과 가져오기", query=q)
             result = await self.api_wrapper.aresults(q)
-            return self._parse_results(result)
+            parsed = self._parse_results(result)
+            logger.debug("쿼리 결과 파싱 완료", query=q, result_count=len(parsed))
+            return parsed
 
         @retry_on_api_empty()
         async def fetch_all_results(query: list[str]):
@@ -115,7 +117,7 @@ class BaseGoogleSerperResult(AsyncTool):
 
         try:
             results = await fetch_all_results(query_w_options) or []
-            logger.debug(f"Retrieved {len(results)} search results")
+            logger.debug("검색 결과 수집 완료", total_results=len(results))
 
             if self.__class__.__name__ != "GoogleSerperNewsResult" and results:
                 await dispatcher(
@@ -136,13 +138,12 @@ class BaseGoogleSerperResult(AsyncTool):
                 doc["page_content"] = ", ".join(doc["page_content"])
 
             final_results = list(merged_results.values())
-            logger.info(
-                f"{self.__class__.__name__} completed with {len(final_results)} merged results"
-            )
+            logger.info("검색 완료", search_type=self.__class__.__name__, 
+                       original_results=len(results), merged_results=len(final_results))
             return final_results
 
         except Exception as e:
-            logger.error(f"Error in {self.__class__.__name__}: {str(e)}")
+            logger.error("검색 중 오류 발생", search_type=self.__class__.__name__, error=str(e))
             raise
 
     def convert_to_iso8601(self, time_str):
@@ -202,7 +203,7 @@ class GoogleSerperSearchResult(BaseGoogleSerperResult):
         api_key: str,
         k: int = 5,
     ) -> AsyncTool:
-        logger.debug(f"Creating GoogleSerperSearchResult with k={k}")
+        logger.debug("GoogleSerperSearchResult 생성", k=k)
         return cls(
             api_wrapper=GoogleSerperAPIWrapper(
                 hl="en",
@@ -257,7 +258,7 @@ class GoogleSerperSearchResult(BaseGoogleSerperResult):
                 }
             )
 
-        logger.debug(f"Parsed {len(docs)} search results")
+        logger.debug("검색 결과 파싱 완료", result_count=len(docs))
         return docs
 
 
@@ -271,7 +272,7 @@ class GoogleSerperNewsResult(BaseGoogleSerperResult):
         api_key: str,
         k: int = 5,
     ) -> AsyncTool:
-        logger.debug(f"Creating GoogleSerperNewsResult with k={k}")
+        logger.debug("GoogleSerperNewsResult 생성", k=k)
         return cls(
             api_wrapper=GoogleSerperAPIWrapper(
                 hl="en",
@@ -308,7 +309,7 @@ class GoogleSerperNewsResult(BaseGoogleSerperResult):
                 }
             )
 
-        logger.debug(f"Parsed {len(docs)} news results")
+        logger.debug("뉴스 결과 파싱 완료", result_count=len(docs))
         return docs
 
 
@@ -322,7 +323,7 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
         api_key: str,
         k: int = 10,
     ) -> AsyncTool:
-        logger.debug(f"Creating GoogleSerperImageSearchResult with k={k}")
+        logger.debug("GoogleSerperImageSearchResult 생성", k=k)
         return cls(
             api_wrapper=GoogleSerperAPIWrapper(
                 hl="en",
@@ -340,7 +341,7 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
     ):
         docs = []
         if "images" not in results:
-            logger.warning("No images found in search results")
+            logger.warning("검색 결과에 이미지가 없음")
             return docs
         image_results = results["images"]
 
@@ -393,7 +394,7 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
             if num_pass > self.k:
                 break
 
-        logger.debug(f"Parsed {len(docs)} image results")
+        logger.debug("이미지 결과 파싱 완료", result_count=len(docs))
         return docs
 
     async def _arun(
@@ -402,7 +403,7 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
         run_manager: Optional[AsyncCallbackManagerForToolRun] = None,
         **kwargs,
     ):
-        logger.debug("Starting image search")
+        logger.debug("이미지 검색 시작", query_count=len(query or []))
 
         query = query or ["이미지"]
 
@@ -411,9 +412,11 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
         results = []
 
         async def fetch_results(q):
-            logger.debug(f"Fetching image results for query: {q}")
+            logger.debug("이미지 검색 결과 가져오기", query=q)
             result = await self.api_wrapper.aresults(q)
-            return self._parse_results(result)
+            parsed = self._parse_results(result)
+            logger.debug("이미지 결과 파싱 완료", query=q, result_count=len(parsed))
+            return parsed
 
         try:
             # 각 쿼리에 대해 결과를 비동기적으로 가져옴
@@ -428,13 +431,11 @@ class GoogleSerperImageSearchResult(BaseGoogleSerperResult):
                     merged_results[link] = doc
 
             final_results = list(merged_results.values())
-            logger.info(
-                f"Image search completed with {len(final_results)} unique results"
-            )
+            logger.info("이미지 검색 완료", unique_results=len(final_results), total_results=len(results))
             return final_results
 
         except Exception as e:
-            logger.error(f"Error in image search: {str(e)}")
+            logger.error("이미지 검색 중 오류 발생", error=str(e))
             raise
 
 
@@ -454,7 +455,7 @@ class RapidYoutubeSearchResult(AsyncTool):
         api_endpoint: str,
         k: int = 10,
     ) -> AsyncTool:
-        logger.debug(f"Creating RapidYoutubeSearchResult with k={k}")
+        logger.debug("RapidYoutubeSearchResult 생성", k=k, api_endpoint=api_endpoint)
         return cls(
             api_key=api_key,
             api_endpoint=api_endpoint,
@@ -467,14 +468,14 @@ class RapidYoutubeSearchResult(AsyncTool):
         run_manager: Optional[AsyncCallbackManagerForToolRun] = None,
         **kwargs,
     ):
-        logger.debug("Starting YouTube video search")
+        logger.debug("YouTube 비디오 검색 시작", query_count=len(query or []))
 
         try:
             videos = []
             video_ids = set()
 
             for keyword in query:
-                logger.debug(f"Searching videos for keyword: {keyword}")
+                logger.debug("키워드별 비디오 검색", keyword=keyword)
                 for video in (
                     get_video_list_by_keyword(
                         keyword, api_key=self.api_key, api_endpoint=self.api_endpoint
@@ -490,11 +491,11 @@ class RapidYoutubeSearchResult(AsyncTool):
                 for i, video in enumerate(videos)
             ]
 
-            logger.info(f"YouTube search completed with {len(results)} unique videos")
+            logger.info("YouTube 검색 완료", unique_videos=len(results), total_videos=len(videos))
             return results
 
         except Exception as e:
-            logger.error(f"Error in YouTube video search: {str(e)}")
+            logger.error("YouTube 비디오 검색 중 오류 발생", error=str(e))
             raise
 
 

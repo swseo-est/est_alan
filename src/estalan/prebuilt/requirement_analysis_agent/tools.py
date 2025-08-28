@@ -8,6 +8,10 @@ import json
 from datetime import datetime
 from .state import Requirement
 from estalan.agent.base.state import state_to_json_pretty, state_to_json_compact
+from estalan.logging.base import get_logger
+
+# 로거 초기화
+logger = get_logger(__name__)
 
 
 # ===== READ (조회) 도구들 =====
@@ -38,6 +42,8 @@ def create_requirement(
         str: 생성된 요구사항 정보 (JSON 형태)
         str: 생성된 요구사항 정보와 결과 메시지
     """
+    logger.info("새 요구사항 생성 시작", category=category, priority=priority, origin=origin)
+    
     # 현재 상태에서 기존 요구사항들을 확인
     # (실제로는 state에서 가져와야 하지만, 도구에서는 직접 접근이 어려우므로
     # 에이전트가 중복 체크를 수행하도록 프롬프트에서 안내)
@@ -52,6 +58,9 @@ def create_requirement(
         "impact": impact or [],
         "origin": origin
     }
+    
+    logger.info("새 요구사항 생성 완료", requirement_id=requirement_id, 
+                detail_length=len(detail), impact_count=len(impact or []))
     
     return state_to_json_compact(new_requirement)
 
@@ -77,6 +86,8 @@ def update_requirement(
     Returns:
         str: 수정된 요구사항 정보 (JSON 형태)
     """
+    logger.info("요구사항 수정 시작", requirement_id=requirement_id, field=field, value=value)
+    
     valid_fields = {
         "detail": "상세 내용",
         "priority": "우선순위",
@@ -88,11 +99,16 @@ def update_requirement(
     
     if field not in valid_fields:
         err_msg = f"유효하지 않은 필드입니다. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
+        logger.error("유효하지 않은 필드로 요구사항 수정 시도", field=field, valid_fields=list(valid_fields.keys()))
         print(err_msg)
         return state_to_json_compact({"error": err_msg})
 
     requirement_new = requirement_old.copy()
     requirement_new[field] = value
+    
+    logger.info("요구사항 수정 완료", requirement_id=requirement_id, field=field, 
+                old_value=requirement_old.get(field), new_value=value)
+    
     return state_to_json_compact(requirement_new)
 
 

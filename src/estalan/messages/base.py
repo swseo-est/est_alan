@@ -63,15 +63,24 @@ class BaseAlanBlockMessage(AlanAIMessage):
         Returns:
             후처리된 content (코드블록으로 감싸짐)
         """
-        # 이미 코드블록으로 감싸져 있는지 확인
+        # 이미 코드블록으로 감싸져 있는지 확인 (더 정확한 감지)
         content_str = str(content)
-        is_already_wrapped = content_str.strip().startswith('```') and content_str.strip().endswith('```')
+        stripped_content = content_str.strip()
+        
+        # 여러 가지 중복 감싸기 패턴 확인
+        is_already_wrapped = (
+            (stripped_content.startswith('```') and stripped_content.endswith('```')) or
+            (stripped_content.count('```') >= 4) or  # ```가 4개 이상 있으면 중복 감싸기 의심
+            ('\n```\n' in stripped_content and stripped_content.count('```') >= 2)  # 내부에 ```가 있고 전체적으로도 감싸져 있음
+        )
         
         logger = getLogger(__name__)
         logger.debug("BaseAlanBlockMessage._process_content 실행",
                     content_length=len(content_str),
                     block_tag=block_tag,
                     is_already_wrapped=is_already_wrapped,
+                    backtick_count=stripped_content.count('```'),
+                    has_internal_backticks='\n```\n' in stripped_content,
                     content_preview=content_str[:100] + "..." if len(content_str) > 100 else content_str)
         
         # 이미 코드블록으로 감싸져 있으면 그대로 반환
@@ -92,9 +101,13 @@ class BaseAlanBlockMessage(AlanAIMessage):
         return result
 
     def __init__(self, content: Any = None, block_tag: Optional[str] = None, **kwargs):
+        # block_tag를 kwargs에서 제거하여 중복 처리 방지
+        kwargs_without_block_tag = {k: v for k, v in kwargs.items() if k != 'block_tag'}
+        
         processed_content = self._process_content(content, block_tag)
-        # Pydantic 모델과 호환되도록 super().__init__ 호출 후 block_tag 설정
-        super().__init__(content=processed_content, **kwargs)
+        # Pydantic 모델과 호환되도록 super().__init__ 호출
+        super().__init__(content=processed_content, **kwargs_without_block_tag)
+        
         # block_tag는 이미 Field로 정의되어 있으므로 kwargs를 통해 전달되어야 함
         if block_tag is not None:
             object.__setattr__(self, 'block_tag', block_tag)

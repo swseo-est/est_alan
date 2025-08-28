@@ -7,7 +7,7 @@ from estalan.prebuilt.requirement_analysis_agent.state import RequirementCollect
 from estalan.prebuilt.requirement_analysis_agent.tools import Tools
 from estalan.prebuilt.requirement_analysis_agent.prompt import PROMPT_REQUIREMENT_ANALYSIS
 from estalan.prebuilt.requirement_analysis_agent.converter import requirements_to_markdown
-from estalan.messages.utils import create_ai_message, create_system_message
+from estalan.messages.utils import create_ai_message
 
 
 def pre_agent_node(state):
@@ -20,9 +20,9 @@ def pre_agent_node(state):
     else:
         msg = "현재 등록된 요구사항은 없습니다."
 
-    ai_msg = create_system_message(content=msg, name="previous_req", metadata={"log_level": "debug"})
+    ai_msg = create_ai_message(content=msg, name="previous_req", metadata={"log_level": "debug"})
     last_msg = state["messages"][-1]
-    return {}
+    return {"messages": [ai_msg]}
 
 
 def post_agent_node(state):
@@ -46,7 +46,7 @@ def post_agent_node(state):
     msg = "업데이트된 요구사항은 다음과 같습니다.\n"
     msg += markdown_docs
 
-    ai_msg = create_system_message(content=msg, name="updated_req", metadata={"log_level": "debug"})
+    ai_msg = create_ai_message(content=msg, name="updated_req", metadata={"log_level": "debug"})
 
     return {
         "messages": [ai_msg],

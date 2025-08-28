@@ -119,7 +119,7 @@ def convert_to_alan_message(message: BaseMessage) -> BaseAlanMessage:
     필요한 속성만 선택적으로 복사하여 안전하게 변환
     """
 
-    if isinstance(message, BaseAlanMessage) or isinstance(message, ToolMessage) or isinstance(message, SystemMessage):
+    if isinstance(message, BaseAlanMessage):
         return message
 
     if not isinstance(message, BaseMessage):

@@ -36,13 +36,21 @@ def add_messages_for_alan(left: Messages, right: Messages) -> Messages:
         message_type = message.__class__.__name__
         content = getattr(message, 'content', '내용 없음')
         
-        # Alan 메시지인지 확인
+        # Alan 메시지인지 확인 (안전하게 속성 존재 여부 체크)
         is_alan_message = hasattr(message, 'metadata') and hasattr(message.metadata, 'get')
         alan_info = ""
+        rendering_option = 'N/A'
+        log_level = 'N/A'
+        
         if is_alan_message:
-            rendering_option = message.metadata.get('rendering_option', 'N/A')
-            log_level = message.metadata.get('log_level', 'N/A')
-            alan_info = f" (Alan: {rendering_option}/{log_level})"
+            try:
+                rendering_option = message.metadata.get('rendering_option', 'N/A')
+                log_level = message.metadata.get('log_level', 'N/A')
+                alan_info = f" (Alan: {rendering_option}/{log_level})"
+            except (AttributeError, TypeError):
+                # metadata가 있지만 get 메서드가 없거나 예상과 다른 구조인 경우
+                alan_info = " (Alan: metadata 구조 오류)"
+                is_alan_message = False
         
         # content가 너무 길면 잘라서 로깅
         if isinstance(content, str) and len(content) > 100:
@@ -52,8 +60,8 @@ def add_messages_for_alan(left: Messages, right: Messages) -> Messages:
                    message_index=i, 
                    message_id=getattr(message, 'id', 'ID 없음'),
                    is_alan_message=is_alan_message,
-                   rendering_option=message.metadata.get('rendering_option', 'N/A') if is_alan_message else 'N/A',
-                   log_level=message.metadata.get('log_level', 'N/A') if is_alan_message else 'N/A')
+                   rendering_option=rendering_option,
+                   log_level=log_level)
     
     # right에 있는 메시지들을 Alan 메시지로 변환
     processed_right = []
@@ -62,14 +70,21 @@ def add_messages_for_alan(left: Messages, right: Messages) -> Messages:
         alan_message = convert_to_alan_message(message)
         processed_right.append(alan_message)
         
-        # Alan 메시지 변환 결과 상세 로깅
+        # Alan 메시지 변환 결과 상세 로깅 (안전하게 속성 접근)
+        try:
+            rendering_option = alan_message.metadata.get('rendering_option', 'N/A')
+            log_level = alan_message.metadata.get('log_level', 'N/A')
+        except (AttributeError, TypeError):
+            rendering_option = 'N/A'
+            log_level = 'N/A'
+        
         logger.debug("Alan 메시지로 변환 완료", 
                     original_type=message.__class__.__name__,
                     alan_type=alan_message.__class__.__name__,
                     original_id=getattr(message, 'id', 'ID 없음'),
                     alan_id=getattr(alan_message, 'id', 'ID 없음'),
-                    rendering_option=alan_message.metadata.get('rendering_option', 'N/A'),
-                    log_level=alan_message.metadata.get('log_level', 'N/A'))
+                    rendering_option=rendering_option,
+                    log_level=log_level)
 
     merged = merge_message(left_list, processed_right)
     logger.info("메시지 병합 완료", 
@@ -88,27 +103,42 @@ def merge_message(left: Messages, right: Messages) -> Messages:
     ids_to_remove = set()
     
     for m in right:
-        if (existing_idx := merged_by_id.get(m.id)) is not None:
+        # ID가 없는 메시지 처리 (안전하게)
+        message_id = getattr(m, 'id', None)
+        if message_id is None:
+            logger.warning("ID가 없는 메시지 발견", message_type=m.__class__.__name__)
+            # ID가 없는 메시지는 건너뛰거나 기본 ID 생성
+            continue
+            
+        if (existing_idx := merged_by_id.get(message_id)) is not None:
             if isinstance(m, RemoveMessage):
-                ids_to_remove.add(m.id)
-                logger.debug("메시지 제거 예정", message_id=m.id, message_type="RemoveMessage")
+                ids_to_remove.add(message_id)
+                logger.debug("메시지 제거 예정", message_id=message_id, message_type="RemoveMessage")
             else:
-                ids_to_remove.discard(m.id)
+                ids_to_remove.discard(message_id)
                 merged[existing_idx] = m
-                logger.debug("기존 메시지 업데이트", message_id=m.id, existing_index=existing_idx)
+                logger.debug("기존 메시지 업데이트", message_id=message_id, existing_index=existing_idx)
         else:
             if isinstance(m, RemoveMessage):
-                error_msg = f"Attempting to delete a message with an ID that doesn't exist ('{m.id}')"
-                logger.error("존재하지 않는 메시지 삭제 시도", message_id=m.id)
+                error_msg = f"Attempting to delete a message with an ID that doesn't exist ('{message_id}')"
+                logger.error("존재하지 않는 메시지 삭제 시도", message_id=message_id)
                 raise ValueError(error_msg)
 
-            merged_by_id[m.id] = len(merged)
+            merged_by_id[message_id] = len(merged)
             merged.append(m)
-            logger.debug("새 메시지 추가", message_id=m.id, message_type=m.__class__.__name__)
+            logger.debug("새 메시지 추가", message_id=message_id, message_type=m.__class__.__name__)
     
-    merged = [m for m in merged if m.id not in ids_to_remove]
-    logger.debug("merge_message 완료", final_count=len(merged), removed_count=len(ids_to_remove))
-    return merged
+    # ID가 없는 메시지도 안전하게 처리
+    final_merged = []
+    for m in merged:
+        message_id = getattr(m, 'id', None)
+        if message_id is not None and message_id not in ids_to_remove:
+            final_merged.append(m)
+        elif message_id is None:
+            logger.warning("병합된 메시지에서 ID가 없는 메시지 발견", message_type=m.__class__.__name__)
+    
+    logger.debug("merge_message 완료", final_count=len(final_merged), removed_count=len(ids_to_remove))
+    return final_merged
 
 
 
@@ -116,6 +146,16 @@ def update_metadata(metadata_old: dict, metadata_new: dict):
     logger.debug("메타데이터 업데이트 시작", 
                 old_keys=list(metadata_old.keys()), 
                 new_keys=list(metadata_new.keys()))
+    
+    # metadata_old가 None인 경우 빈 딕셔너리로 초기화
+    if metadata_old is None:
+        metadata_old = {}
+        logger.warning("metadata_old가 None이어서 빈 딕셔너리로 초기화")
+    
+    # metadata_new가 None인 경우 빈 딕셔너리로 초기화
+    if metadata_new is None:
+        metadata_new = {}
+        logger.warning("metadata_new가 None이어서 빈 딕셔너리로 초기화")
     
     for key, value in metadata_new.items():
         metadata_old[key] = value

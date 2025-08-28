@@ -39,7 +39,8 @@ dependencies = [
     "langgraph-api==0.2.130",
     "pytest>=8.4.1",
     "coverage>=7.10.3",
-    "pytest-asyncio"
+    "pytest-asyncio",
+    "colorama"
 ]
 
 [tool.poetry.dependencies]

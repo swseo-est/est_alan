@@ -63,11 +63,33 @@ class BaseAlanBlockMessage(AlanAIMessage):
         Returns:
             후처리된 content (코드블록으로 감싸짐)
         """
+        # 이미 코드블록으로 감싸져 있는지 확인
+        content_str = str(content)
+        is_already_wrapped = content_str.strip().startswith('```') and content_str.strip().endswith('```')
+        
+        logger = getLogger(__name__)
+        logger.debug("BaseAlanBlockMessage._process_content 실행",
+                    content_length=len(content_str),
+                    block_tag=block_tag,
+                    is_already_wrapped=is_already_wrapped,
+                    content_preview=content_str[:100] + "..." if len(content_str) > 100 else content_str)
+        
+        # 이미 코드블록으로 감싸져 있으면 그대로 반환
+        if is_already_wrapped:
+            logger.debug("이미 코드블록으로 감싸져 있음 - 중복 감싸기 방지")
+            return content_str
+        
         # content를 코드블록으로 감싸기
         if block_tag:
-            return f"```{block_tag}\n{content}\n```"
+            result = f"```{block_tag}\n{content}\n```"
         else:
-            return f"```\n{content}\n```"
+            result = f"```\n{content}\n```"
+        
+        logger.debug("코드블록 감싸기 완료", 
+                    result_length=len(result),
+                    result_preview=result[:100] + "..." if len(result) > 100 else result)
+        
+        return result
 
     def __init__(self, content: Any = None, block_tag: Optional[str] = None, **kwargs):
         processed_content = self._process_content(content, block_tag)

@@ -27,17 +27,33 @@ show_help() {
     echo "옵션:"
     echo "  -f, --follow       # 실시간 로그 보기"
     echo "  -t, --tail N       # 마지막 N줄 보기 (기본값: 100)"
+    echo "  -l, --level LEVEL  # 로그 레벨 필터링 (DEBUG, INFO, WARNING, ERROR, CRITICAL)"
     echo "  -h, --help         # 도움말 보기"
+    echo ""
+    echo "로그 레벨:"
+    echo "  DEBUG     # 디버그 정보 (가장 상세)"
+    echo "  INFO      # 일반 정보"
+    echo "  WARNING   # 경고"
+    echo "  ERROR     # 오류"
+    echo "  CRITICAL  # 치명적 오류 (가장 중요)"
+    echo ""
+    echo "예시:"
+    echo "  ./logs.sh -l ERROR langgraph-api     # API 서버의 오류 로그만 보기"
+    echo "  ./logs.sh -f -l WARNING              # 모든 서비스의 경고 이상 로그 실시간 보기"
     echo ""
 }
 
 # 서비스 목록
 SERVICES=("langgraph-api" "langgraph-redis" "langgraph-postgres")
 
+# 로그 레벨 정의
+LOG_LEVELS=("DEBUG" "INFO" "WARNING" "ERROR" "CRITICAL")
+
 # 기본값 설정
 FOLLOW=false
 TAIL_LINES=100
 SERVICE_NAME=""
+LOG_LEVEL=""
 
 # 인자 파싱
 while [[ $# -gt 0 ]]; do
@@ -48,6 +64,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -t|--tail)
             TAIL_LINES="$2"
+            shift 2
+            ;;
+        -l|--level)
+            LOG_LEVEL="$2"
             shift 2
             ;;
         -h|--help)
@@ -88,6 +108,23 @@ if [[ -n "$SERVICE_NAME" ]]; then
     fi
 fi
 
+# 로그 레벨 유효성 검사
+if [[ -n "$LOG_LEVEL" ]]; then
+    valid_level=false
+    for level in "${LOG_LEVELS[@]}"; do
+        if [[ "$LOG_LEVEL" == "$level" ]]; then
+            valid_level=true
+            break
+        fi
+    done
+    
+    if [[ "$valid_level" == false ]]; then
+        echo -e "${RED}유효하지 않은 로그 레벨: $LOG_LEVEL${NC}"
+        echo "사용 가능한 로그 레벨: ${LOG_LEVELS[*]}"
+        exit 1
+    fi
+fi
+
 # Docker Compose 상태 확인
 if ! docker compose ps > /dev/null 2>&1; then
     echo -e "${RED}Docker Compose가 실행되지 않고 있습니다.${NC}"
@@ -100,16 +137,50 @@ view_logs() {
     local service=$1
     local follow=$2
     local tail_lines=$3
+    local log_level=$4
     
     echo -e "${GREEN}=== $service 로그 ===${NC}"
+    if [[ -n "$log_level" ]]; then
+        echo -e "${YELLOW}로그 레벨 필터: $log_level 이상${NC}"
+    fi
     echo ""
+    
+    # 로그 레벨 필터링을 위한 grep 패턴 생성
+    local grep_pattern=""
+    if [[ -n "$log_level" ]]; then
+        case "$log_level" in
+            "DEBUG")
+                grep_pattern="(DEBUG|INFO|WARNING|ERROR|CRITICAL)"
+                ;;
+            "INFO")
+                grep_pattern="(INFO|WARNING|ERROR|CRITICAL)"
+                ;;
+            "WARNING")
+                grep_pattern="(WARNING|ERROR|CRITICAL)"
+                ;;
+            "ERROR")
+                grep_pattern="(ERROR|CRITICAL)"
+                ;;
+            "CRITICAL")
+                grep_pattern="CRITICAL"
+                ;;
+        esac
+    fi
     
     if [[ "$follow" == true ]]; then
         echo -e "${YELLOW}실시간 로그를 보여줍니다. 종료하려면 Ctrl+C를 누르세요.${NC}"
         echo ""
-        docker compose logs -f "$service"
+        if [[ -n "$grep_pattern" ]]; then
+            docker compose logs -f "$service" | grep -E "$grep_pattern"
+        else
+            docker compose logs -f "$service"
+        fi
     else
-        docker compose logs --tail="$tail_lines" "$service"
+        if [[ -n "$grep_pattern" ]]; then
+            docker compose logs --tail="$tail_lines" "$service" | grep -E "$grep_pattern"
+        else
+            docker compose logs --tail="$tail_lines" "$service"
+        fi
     fi
 }
 
@@ -120,12 +191,12 @@ if [[ -z "$SERVICE_NAME" ]]; then
     echo ""
     
     for service in "${SERVICES[@]}"; do
-        view_logs "$service" "$FOLLOW" "$TAIL_LINES"
+        view_logs "$service" "$FOLLOW" "$TAIL_LINES" "$LOG_LEVEL"
         echo ""
         echo -e "${BLUE}----------------------------------------${NC}"
         echo ""
     done
 else
     # 특정 서비스 로그 보기
-    view_logs "$SERVICE_NAME" "$FOLLOW" "$TAIL_LINES"
+    view_logs "$SERVICE_NAME" "$FOLLOW" "$TAIL_LINES" "$LOG_LEVEL"
 fi

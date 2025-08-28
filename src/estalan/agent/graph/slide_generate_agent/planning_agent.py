@@ -183,7 +183,6 @@ def create_generate_sections_node(llm):
                 }
                 )
 
-                msg_result = generate_section_result_msg(results['structured_response']['sections'])
 
                 sections = results['structured_response']['sections']
                 logger.info(f"섹션 생성 성공: {len(sections)}개 섹션 생성됨")
@@ -216,8 +215,9 @@ def create_generate_sections_node(llm):
 
         metadata = state["metadata"].copy()
         metadata["num_sections"] = len(sections_refined)
+        msg_result = generate_section_result_msg(results['structured_response']['sections'])
 
-        updated_state = {"metadata": metadata, "sections": sections_refined}
+        updated_state = {"metadata": metadata, "sections": sections_refined, "messages": [msg_result]}
         logger.info(f"섹션 생성 노드 실행 완료: {len(sections_refined)}개 섹션 생성됨")
         
         return updated_state

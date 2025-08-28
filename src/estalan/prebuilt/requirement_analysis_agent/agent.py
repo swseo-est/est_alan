@@ -54,13 +54,13 @@ def post_agent_node(state):
     }
 
 def pre_model_hook(state):
-    print("pre_model_hook")
-    print(state)
+    # print("pre_model_hook")
+    # print(state)
     return {}
 
 def post_model_hook(state):
-    print("post_model_hook")
-    print(state)
+    # print("post_model_hook")
+    # print(state)
     return {}
 
 def create_requirement_analysis_agent(model=None, name="requirement_analysis_agent"):

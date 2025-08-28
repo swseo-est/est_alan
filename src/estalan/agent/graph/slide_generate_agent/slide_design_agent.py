@@ -525,9 +525,9 @@ def create_slide_create_agent(name=None):
     # React 에이전트용 LLM (structured output 불필요)
     # slide_template_select_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
     slide_template_select_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
-    slide_design_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash", lazy=True).with_structured_output(SlideDesignNodeOutput)
+    slide_design_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini", lazy=True).with_structured_output(SlideDesignNodeOutput)
     image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
-    html_generate_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash", lazy=True).with_structured_output(HtmlGenerateNodeOutput)
+    html_generate_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini", lazy=True).with_structured_output(HtmlGenerateNodeOutput)
     
     logger.debug("모든 LLM 모델 초기화 완료")
 

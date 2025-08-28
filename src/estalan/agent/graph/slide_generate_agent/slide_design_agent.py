@@ -11,8 +11,10 @@ from estalan.tools.search import GoogleSerperImageSearchResult
 from estalan.llm import create_chat_model
 from estalan.messages.utils import create_ai_message, create_image_grid_message
 from estalan.agent.graph.slide_generate_agent.state import ExecutorState
+from estalan.logging.base import get_logger
 
-
+# 로거 초기화
+logger = get_logger(__name__)
 
 class Image(TypedDict):
     title: str
@@ -42,14 +44,20 @@ class HtmlGenerateNodeOutput(TypedDict):
     height: int
 
 def pre_processing_node(state):
+    logger.info("슬라이드 디자인 에이전트 전처리 노드 실행")
     return {}
 
+
 def post_processing_node(state):
+    logger.info("슬라이드 디자인 에이전트 후처리 노드 실행")
     return {}
 
 
 def pre_processing_slide_design_node(state):
+    logger.info("슬라이드 디자인 노드 전처리 시작")
+    
     name = state["name"]
+    logger.debug(f"디자인 시작 섹션: {name}")
 
     content = f"""슬라이드 디자인을 시작합니다.
     """
@@ -60,10 +68,15 @@ def pre_processing_slide_design_node(state):
         id="msg_slide_design_start"
     )
 
+    logger.info(f"슬라이드 디자인 시작 메시지 생성: {name}")
     return {"messages": [msg], "name": state["name"]}
 
+
 def post_processing_slide_design_node(state):
+    logger.info("슬라이드 디자인 노드 후처리 시작")
+    
     name = state["name"]
+    logger.debug(f"디자인 완료 섹션: {name}")
 
     content = f"""{name} 페이지 디자인을 완료하였습니다.
     """
@@ -73,11 +86,16 @@ def post_processing_slide_design_node(state):
         name="msg_slide_design_end",
         id="msg_slide_design_end"
     )
+    
+    logger.info(f"슬라이드 디자인 완료 메시지 생성: {name}")
     return {}
 
 
 def pre_processing_html_generate_node(state):
+    logger.info("HTML 생성 노드 전처리 시작")
+    
     name = state["name"]
+    logger.debug(f"HTML 생성 시작 섹션: {name}")
 
     content = f"""슬라이드를 생성하고 있습니다.
     """
@@ -88,10 +106,15 @@ def pre_processing_html_generate_node(state):
         id="msg_html_generate_start"
     )
 
+    logger.info(f"HTML 생성 시작 메시지 생성: {name}")
     return {"messages": [msg], "name": state["name"]}
 
+
 def post_processing_html_generate_node(state):
+    logger.info("HTML 생성 노드 후처리 시작")
+    
     name = state["name"]
+    logger.debug(f"HTML 생성 완료 섹션: {name}")
 
     content = f"""{name} 페이지 슬라이드를 생성하였습니다.
     """
@@ -102,10 +125,13 @@ def post_processing_html_generate_node(state):
         id="msg_html_generate_end"
     )
 
+    logger.info(f"HTML 생성 완료 메시지 생성: {name}")
     return {}
 
 
 def pre_processing_image_search_node(state):
+    logger.info("이미지 검색 노드 전처리 시작")
+    
     content = f"""슬라이드에 사용할 이미지를 검색하고 있습니다.
     """
 
@@ -115,10 +141,15 @@ def pre_processing_image_search_node(state):
         id="msg_image_search_start"
     )
 
+    logger.info("이미지 검색 시작 메시지 생성")
     return {"messages": [msg]}
 
+
 def post_processing_image_search_node(state):
+    logger.info("이미지 검색 노드 후처리 시작")
+    
     name = state["name"]
+    logger.debug(f"이미지 검색 완료 섹션: {name}")
 
     content = f"""{name} 페이지에 사용할 이미지를 검색하였습니다.
     """
@@ -127,32 +158,41 @@ def post_processing_image_search_node(state):
         content=content,
         name="msg_image_search_end",
     )
+    
+    logger.info(f"이미지 검색 완료 메시지 생성: {name}")
     return {"messages": [msg]}
 
 
 def print_image_grid_node(state):
+    logger.info("이미지 그리드 노드 실행 시작")
+    
     list_image = state["list_image"]
+    logger.debug(f"이미지 그리드 생성: {len(list_image)}개 이미지")
 
     list_url = list()
     for img in list_image:
         list_url.append(img["url"])
+    
     msg = create_image_grid_message(list_url, name="print_image_grid_node")
-    # print(msg)
+    
+    logger.info("이미지 그리드 메시지 생성 완료")
     return {"messages": [msg]}
 
 
 def create_slide_template_select_node(slide_design_react_agent):
     async def slide_template_select_node(state: SlideDesignAgentState):
+        logger.info("슬라이드 템플릿 선택 노드 실행 시작")
+        
         topic = state["topic"]
         name = state["name"]
         description = state["description"]
         content = state["content"]
-        # img_url = state["img_url"]
-
         template_folder = state["template_folder"]
+        
+        logger.debug(f"템플릿 선택 파라미터: topic='{topic}', name='{name}', template_folder='{template_folder}'")
 
         list_html_file = get_html_template_list(template_folder)
-
+        logger.debug(f"사용 가능한 HTML 템플릿: {len(list_html_file)}개")
 
         # React 에이전트를 위한 프롬프트 템플릿
         prompt_slide_template_select = f"""
@@ -192,9 +232,13 @@ template_folder: {template_folder}
         input_state = state.copy()
         input_state["messages"] = [HumanMessage(content=prompt_slide_template_select)]
 
+        logger.info("React 에이전트를 사용한 템플릿 선택 시작")
+        
         # 에이전트 실행
         for i in range(10):
             try:
+                logger.debug(f"템플릿 선택 시도 {i+1}/10")
+                
                 result = await slide_design_react_agent.ainvoke(input_state)
 
                 for message in result['messages']:
@@ -202,24 +246,37 @@ template_folder: {template_folder}
                         tool_result = json.loads(message.content)
 
                 # 결과에서 디자인 정보 추출
+                html_template = tool_result['content']
+                guideline = tool_result['guideline']
+                
+                logger.info(f"템플릿 선택 성공: {name} 섹션")
+                logger.debug(f"선택된 템플릿 길이: {len(html_template)}자")
+                
                 return {
-                    "html_template": tool_result['content'],
-                    "guideline": tool_result['guideline']
+                    "html_template": html_template,
+                    "guideline": guideline
                 }
+                
             except Exception as e:
-                print(i, e)
+                logger.error(f"템플릿 선택 중 오류 발생 (시도 {i+1}/10): {e}")
+                if i == 9:  # 마지막 시도에서도 실패
+                    logger.critical(f"템플릿 선택이 10번 시도 후에도 실패함: {name}")
+                    raise
     
     return slide_template_select_node
 
 
 def create_slide_design_node(slide_design_llm):
     async def slide_design_node(state: SlideDesignAgentState):
+        logger.info("슬라이드 디자인 노드 실행 시작")
+        
         html_template = state["html_template"]
         topic = state["topic"]
         name = state["name"]
         description = state["description"]
         content = state["content"]
-        # img_url = state["img_url"]
+        
+        logger.debug(f"디자인 노드 파라미터: topic='{topic}', name='{name}', content 길이={len(content)}자")
 
         # React 에이전트를 위한 프롬프트 템플릿
         msg = f"""
@@ -235,20 +292,33 @@ def create_slide_design_node(slide_design_llm):
 요구사항: {state.get("requirements", [])}
 """
 
+        logger.info("LLM을 사용한 슬라이드 디자인 시작")
+        
         for i in range(10):
             try:
+                logger.debug(f"디자인 생성 시도 {i+1}/10")
+                
                 result = await slide_design_llm.ainvoke([
                     HumanMessage(content=msg),
                 ])
 
                 design = result['design']
                 list_image = result['list_image']
+                
+                # 이미지 URL 초기화
                 for img in list_image:
                     img['url'] = ""
-                # print(result)
+                
+                logger.info(f"슬라이드 디자인 성공: {name} 섹션")
+                logger.debug(f"생성된 디자인 길이: {len(design)}자, 이미지 개수: {len(list_image)}개")
+                
                 break
+                
             except Exception as e:
-                print(i, e)
+                logger.error(f"슬라이드 디자인 중 오류 발생 (시도 {i+1}/10): {e}")
+                if i == 9:  # 마지막 시도에서도 실패
+                    logger.critical(f"슬라이드 디자인이 10번 시도 후에도 실패함: {name}")
+                    raise
 
         return {'design': design, "list_image": list_image}
     return slide_design_node
@@ -256,7 +326,10 @@ def create_slide_design_node(slide_design_llm):
 
 def create_image_search_agent(agent):
     async def image_search_agent(state: SlideDesignAgentState):
+        logger.info("이미지 검색 에이전트 실행 시작")
+        
         list_image = state["list_image"]
+        logger.debug(f"이미지 검색 대상: {len(list_image)}개 이미지")
 
         str_list_image = "list_image 정보\n"
         for img in list_image:
@@ -264,23 +337,36 @@ def create_image_search_agent(agent):
         
         msg = create_ai_message(content=f"list_image의 title과 description에 맞는 이미지를 검색하고, url을 업데이트 하세요. 추가 질문은 하지말고 작업을 수행하세요. \n\n{str_list_image}")
 
+        logger.info("React 에이전트를 사용한 이미지 검색 시작")
+        
         for i in range(10):
             try:
+                logger.debug(f"이미지 검색 시도 {i+1}/10")
+                
                 result = await agent.ainvoke(
                     {
                         "messages": [msg],
                         "list_image": list_image,
                     }
                 )
+                
                 list_image = result['structured_response']['list_image']
                 design = state['design']
 
                 design += f"\n\n 검색한 이미지 \n"
                 for img in list_image:
                     design += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
+                
+                logger.info(f"이미지 검색 성공: {len(list_image)}개 이미지")
+                logger.debug(f"업데이트된 디자인 길이: {len(design)}자")
+                
                 break
+                
             except Exception as e:
-                print(i, e)
+                logger.error(f"이미지 검색 중 오류 발생 (시도 {i+1}/10): {e}")
+                if i == 9:  # 마지막 시도에서도 실패
+                    logger.critical("이미지 검색이 10번 시도 후에도 실패함")
+                    raise
 
         return {"list_image": list_image, "design": design}
     return image_search_agent
@@ -288,14 +374,19 @@ def create_image_search_agent(agent):
 
 def create_html_generate_node(html_generate_llm):
     async def html_generate_node(state: SlideDesignAgentState):
+        logger.info("HTML 생성 노드 실행 시작")
+        
         # design이 없으면 기본값 사용
         design_content = state.get("design", "기본 디자인을 적용합니다.")
+        if design_content == "기본 디자인을 적용합니다.":
+            logger.warning("디자인 내용이 없어 기본값 사용")
 
         html_template = state["html_template"]
         guideline = state["guideline"]
         
         # design_prompt가 존재하면 이를 활용
         if state.get("design_prompt"):
+            logger.debug("디자인 프롬프트 발견 - 강화된 디자인 지시사항 적용")
             # design_prompt를 포함한 강화된 디자인 지시사항 생성
             enhanced_design = f"{design_content}\n\n추가 디자인 요구사항: {state['design_prompt']}"
             design_content = enhanced_design
@@ -306,14 +397,15 @@ def create_html_generate_node(html_generate_llm):
         content = state["content"]
         list_image = state["list_image"]
 
+        logger.debug(f"HTML 생성 파라미터: topic='{topic}', name='{name}', content 길이={len(content)}자")
+
         str_list_image = ""
         try:
             for img in list_image:
                 str_list_image += f"\ntitle: {img['title']}\ndescription: {img['description']} \n url: {img['url']}\n\n"
         except Exception as e:
-            print(e)
-            print(list_image)
-
+            logger.error(f"이미지 정보 처리 중 오류: {e}")
+            logger.debug(f"list_image 상태: {list_image}")
 
         msg_content = f"""
 아래 내용을 기반으로 슬라이드를 생성하세요.
@@ -392,26 +484,43 @@ CSS 클래스명 변경 금지: class="text-2xl font-bold mb-3 title-text" 등�
 ...
 ```
 """
+        logger.info("LLM을 사용한 HTML 생성 시작")
+        
         for i in range(10):
             try:
+                logger.debug(f"HTML 생성 시도 {i+1}/10")
+                
                 response = await html_generate_llm.ainvoke([
                     HumanMessage(content=msg_content),
                 ])
+                
+                logger.info(f"HTML 생성 성공: {name} 섹션")
+                logger.debug(f"생성된 HTML 길이: {len(response.get('html', ''))}자")
+                
                 break
+                
             except Exception as e:
-                print(i, e)
+                logger.error(f"HTML 생성 중 오류 발생 (시도 {i+1}/10): {e}")
+                if i == 9:  # 마지막 시도에서도 실패
+                    logger.critical(f"HTML 생성이 10번 시도 후에도 실패함: {name}")
+                    raise
+                    
         return response
 
     return html_generate_node
 
 def create_slide_create_agent(name=None):
+    logger.info(f"슬라이드 생성 에이전트 생성 시작: name='{name}'")
+    
     serper_api_key = os.getenv("SERPER_API_KEY")
+    if not serper_api_key:
+        logger.warning("SERPER_API_KEY 환경변수가 설정되지 않음")
 
     search_img_tool = GoogleSerperImageSearchResult.from_api_key(
         api_key=serper_api_key,
         k=5,
     )
-
+    logger.debug("Google Serper 이미지 검색 도구 초기화 완료")
 
     # React 에이전트용 LLM (structured output 불필요)
     # slide_template_select_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
@@ -419,6 +528,8 @@ def create_slide_create_agent(name=None):
     slide_design_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash", lazy=True).with_structured_output(SlideDesignNodeOutput)
     image_search_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
     html_generate_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash", lazy=True).with_structured_output(HtmlGenerateNodeOutput)
+    
+    logger.debug("모든 LLM 모델 초기화 완료")
 
     # React 에이전트 생성
     tools = [get_html_template_content_tool]
@@ -434,14 +545,21 @@ def create_slide_create_agent(name=None):
         tools=[search_img_tool],
         response_format=ImageSearchAgentOutput
     )
-
+    
+    logger.debug("React 에이전트들 생성 완료")
 
     slide_template_select_node = create_slide_template_select_node(slide_design_react_agent)
     slide_design_node = create_slide_design_node(slide_design_llm)
     image_search_node = create_image_search_agent(image_search_agent)
     html_generate_node = create_html_generate_node(html_generate_llm)
+    
+    logger.debug("모든 노드 함수 생성 완료")
 
+    logger.debug("상태 그래프 빌더 생성")
     builder = StateGraph(SlideDesignAgentState)
+    
+    # 노드 추가
+    logger.debug("슬라이드 디자인 에이전트 노드 추가")
     builder.add_node("pre_processing_node", pre_processing_node)
     builder.add_node("post_processing_node", post_processing_node)
     builder.add_node("pre_processing_slide_design_node", pre_processing_slide_design_node)
@@ -452,12 +570,13 @@ def create_slide_create_agent(name=None):
     builder.add_node("post_processing_image_search_node", post_processing_image_search_node)
     builder.add_node("print_image_grid_node", print_image_grid_node)
 
-
     builder.add_node("slide_template_select_node", slide_template_select_node)
     builder.add_node("slide_design_node", slide_design_node)
     builder.add_node("image_search_node", image_search_node)
     builder.add_node("html_generate_node", html_generate_node)
 
+    # 엣지 연결
+    logger.debug("슬라이드 디자인 에이전트 엣지 연결")
     builder.add_edge(START, "pre_processing_node")
     builder.add_edge("pre_processing_node", "pre_processing_slide_design_node")
     builder.add_edge("pre_processing_slide_design_node", "slide_template_select_node")
@@ -470,15 +589,15 @@ def create_slide_create_agent(name=None):
     builder.add_edge("image_search_node", "post_processing_image_search_node")
     builder.add_edge("post_processing_image_search_node", "print_image_grid_node")
 
-
     builder.add_edge("print_image_grid_node", "pre_processing_html_generate_node")
     builder.add_edge("pre_processing_html_generate_node", "html_generate_node")
     builder.add_edge("html_generate_node", "post_processing_html_generate_node")
     builder.add_edge("post_processing_html_generate_node", "post_processing_node")
     builder.add_edge("post_processing_node", END)
 
-
     slide_crate_agent = builder.compile(name=name)
+    logger.info(f"슬라이드 생성 에이전트 생성 완료: name='{name}'")
+    
     return slide_crate_agent
 
 
@@ -488,6 +607,7 @@ if __name__ == '__main__':
     import os
 
     load_dotenv()
+    logger.info("슬라이드 디자인 에이전트 메인 실행 시작")
 
     # 1. 전체 슬라이드 생성 에이전트 테스트
     print("=== 전체 슬라이드 생성 에이전트 테스트 ===")
@@ -509,7 +629,10 @@ if __name__ == '__main__':
         }
     }
 
+    logger.info("테스트 상태로 에이전트 실행")
     response = asyncio.run(slide_create_agent.ainvoke(test_state))
+    
+    logger.info("에이전트 실행 완료")
     print("생성된 HTML:")
     print(response.get('html', 'HTML이 생성되지 않았습니다.'))
 
@@ -517,6 +640,7 @@ if __name__ == '__main__':
     if 'html' in response:
         with open("test_slide.html", "w", encoding="utf-8") as f:
             f.write(response['html'])
+        logger.info("HTML이 test_slide.html 파일로 저장되었습니다.")
         print("\nHTML이 test_slide.html 파일로 저장되었습니다.")
 
     # serper_api_key = os.getenv("SERPER_API_KEY")

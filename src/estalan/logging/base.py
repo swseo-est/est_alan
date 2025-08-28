@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
 # 공통 포맷 상수 정의
-DEFAULT_LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d:%(funcName)s()] - %(message)s'
+DEFAULT_LOG_FORMAT = '%(levelname)s - [PID:%(process)d:TID:%(thread)d] - %(asctime)s - %(name)s - [%(filename)s:%(lineno)d:%(funcName)s()] - %(message)s'
 DEFAULT_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 try:
@@ -66,8 +66,9 @@ class JSONFormatter(logging.Formatter):
             'module': record.module,
             'function': record.funcName,
             'line': record.lineno,
-            'process': record.process,
-            'thread': record.threadName,
+            'process_id': record.process,
+            'thread_id': record.thread,
+            'thread_name': record.threadName,
         }
         
         # 예외 정보가 있는 경우 추가

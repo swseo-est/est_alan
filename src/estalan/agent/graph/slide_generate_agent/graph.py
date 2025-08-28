@@ -16,11 +16,14 @@ from estalan.prebuilt.requirement_analysis_agent import create_requirement_analy
 
 from estalan.llm.utils import create_chat_model
 from estalan.messages.utils import create_ai_message
+from estalan.logging.base import get_logger
 
 import asyncio
 from langgraph.types import Send
 from estalan.prebuilt.supervisor import create_supervisor
 
+# 로거 초기화
+logger = get_logger(__name__)
 
 class OutputState(TypedDict):
     template_folder: str
@@ -35,18 +38,22 @@ LIST_TEMPLATE_FOLDER = {
 
 
 def msg_test_node(state):
-    print("Supervisor 결과:", state)
+    logger.info("테스트 노드 실행 시작")
     
     # supervisor의 결과에서 요구사항 정보 추출
     requirements_docs = state.get("requirements_docs", "")
+    logger.debug(f"요구사항 문서 길이: {len(requirements_docs)}자")
     
     # 요구사항 정보를 포함하여 다음 단계로 전달
+    logger.info("테스트 노드 실행 완료")
     return {
         "requirements_docs": requirements_docs
     }
 
 
 def preprocessing_node(state):
+    logger.info("전처리 노드 실행 시작")
+    
     llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(OutputState)
 
     list_tempalte_folder = ""
@@ -55,6 +62,8 @@ def preprocessing_node(state):
 
     topic = state["metadata"]["topic"]
     requirements_docs = state.get("requirements_docs", "")
+    
+    logger.debug(f"전처리 파라미터: topic='{topic}', requirements_docs 길이={len(requirements_docs)}자")
 
     msg = f"""
     슬라이드 topic 주제와 유저 요구사항 requirement을 고려해서 template_folder를 추출하세요.
@@ -74,19 +83,31 @@ def preprocessing_node(state):
     msg = HumanMessage(content=msg)
 
     num_retry = 10
+    logger.info(f"템플릿 폴더 선택 시작: 최대 {num_retry}번 시도")
+    
     for i in range(num_retry):
         try:
+            logger.debug(f"템플릿 폴더 선택 시도 {i+1}/{num_retry}")
+            
             updated_state = llm.invoke([msg])
+            template_folder = updated_state["template_folder"]
+            
+            logger.info(f"템플릿 폴더 선택 성공: '{template_folder}'")
 
             node_message = create_ai_message(content=f"{topic}을 주제로 슬라이드를 생성하도록 하겠습니다.",
                                              name="msg_planning_start")
 
             metadata = state["metadata"].copy()
-            metadata["template_folder"] = updated_state["template_folder"]
+            metadata["template_folder"] = template_folder
             break
+            
         except Exception as e:
-            print(e)
+            logger.error(f"템플릿 폴더 선택 중 오류 발생 (시도 {i+1}/{num_retry}): {e}")
+            if i == num_retry - 1:  # 마지막 시도에서도 실패
+                logger.critical("템플릿 폴더 선택이 모든 시도 후에도 실패함")
+                raise
 
+    logger.info("전처리 노드 실행 완료")
     return {
         "metadata": metadata, 
         "messages": [node_message], 
@@ -100,31 +121,43 @@ class ExecutorOutput(TypedDict):
 
 
 def post_processing_executor_node(state):
-    # print("Post processing state:", state)
-
+    logger.info("실행기 후처리 노드 실행 시작")
+    
     # state에서 messages를 제거하고 반환
     state_without_messages = {k: v for k, v in state.items() if k != 'messages'}
+    
+    logger.debug(f"메시지 제거 후 상태 키: {list(state_without_messages.keys())}")
 
     # executor의 output이 ExecutorOutput 형태이므로 slides 필드를 그대로 반환
+    logger.info("실행기 후처리 노드 실행 완료")
     return {"slides": [state_without_messages]}
 
 
 def post_processing_node(state):
+    logger.info("최종 후처리 노드 실행 시작")
+    
     msg = create_ai_message(content="슬라이드 생성이 완료되었습니다.", name="end_msg")
-    print(msg)
+    logger.info("슬라이드 생성 완료 메시지 생성")
+    
     metadata = state["metadata"].copy()
     metadata["status"] = "finish"
+    
+    logger.info("최종 후처리 노드 실행 완료")
     return {"messages": [msg], "metadata": metadata}
 
 
 def create_slide_generate_agent(name="slide_generate_agent"):
     """슬라이드 생성 메인 그래프"""
+    logger.info(f"슬라이드 생성 에이전트 생성 시작: name='{name}'")
+    
     ## subroutine
+    logger.debug("실행기 서브루틴 생성 시작")
     executor = StateGraph(ExecutorState, output_schema=ExecutorOutput)
 
     research_agent = create_research_agent()
     slide_create_agent = create_slide_create_agent()
-
+    
+    logger.debug("실행기 노드 추가")
     executor.add_node("research_agent", research_agent)
     executor.add_node("slide_create_agent", slide_create_agent)
     executor.add_node("post_processing_executor_node", post_processing_executor_node)
@@ -133,8 +166,11 @@ def create_slide_generate_agent(name="slide_generate_agent"):
     executor.add_edge("research_agent", "slide_create_agent")
     executor.add_edge("slide_create_agent", "post_processing_executor_node")
     executor.add_edge("post_processing_executor_node", END)
+    
+    logger.debug("실행기 컴파일 완료")
 
     # main graph
+    logger.debug("메인 그래프 빌더 생성")
     builder = StateGraph(SlideGenerateAgentState)
     builder.add_node("preprocessing_node", preprocessing_node)
     builder.add_node("executor", executor.compile(name="executor"))
@@ -143,6 +179,7 @@ def create_slide_generate_agent(name="slide_generate_agent"):
     builder.add_edge(START, "preprocessing_node")
 
     def generate_slide(state):
+        logger.debug(f"슬라이드 생성 조건부 엣지 실행: {len(state['sections'])}개 섹션")
         return [
             Send(
                 "executor",
@@ -157,15 +194,23 @@ def create_slide_generate_agent(name="slide_generate_agent"):
     builder.add_edge("executor", "post_processing_node")
     builder.add_edge("post_processing_node", END)
 
-    return builder.compile(name=name)
+    slide_generate_agent = builder.compile(name=name)
+    logger.info(f"슬라이드 생성 에이전트 생성 완료: name='{name}'")
+    
+    return slide_generate_agent
 
 
 def create_graph(in_memory=False):
+    logger.info("슬라이드 생성 그래프 생성 시작")
+    
     requirement_analysis_agent = create_requirement_analysis_agent()
     planning_agent = create_planning_agent(name="planning_agent")
     slide_generate_graph = create_slide_generate_agent(name="slide_generate_agent")
+    
+    logger.debug("에이전트들 생성 완료")
 
     # Supervisor 생성
+    logger.debug("Supervisor 생성 시작")
     workflow = create_supervisor(
         [requirement_analysis_agent, planning_agent, slide_generate_graph],
         model=create_chat_model(provider="azure_openai", model="gpt-5-mini"),
@@ -175,19 +220,23 @@ def create_graph(in_memory=False):
         add_handoff_messages=True,
         add_handoff_back_messages=True
     ).compile()
-
+    
+    logger.debug("Supervisor 생성 완료")
 
     builder = StateGraph(SlideGenerateAgentState)
 
     alan_agent_start_node = create_alan_agent_start_node([BaseAlanAgentState, SlideGenerateAgentState])
+    logger.debug("Alan 에이전트 시작 노드 생성 완료")
 
     # 노드 추가
+    logger.debug("메인 그래프 노드 추가")
     builder.add_node("start_node", alan_agent_start_node)
     builder.add_node("test_node", msg_test_node)
     builder.add_node("agent", workflow)
     builder.add_node("finish_node", alan_agent_finish_node)
 
     # 엣지 연결
+    logger.debug("메인 그래프 엣지 연결")
     builder.add_edge(START, "start_node")
     builder.add_edge("start_node", "test_node")
     builder.add_edge("test_node", "agent")
@@ -196,27 +245,34 @@ def create_graph(in_memory=False):
 
     if in_memory:
         checkpointer = InMemorySaver()
+        logger.debug("메모리 체크포인터 설정")
     else:
         checkpointer = None
+        logger.debug("체크포인터 없음")
 
     # Compile and run
     app = builder.compile(checkpointer=checkpointer)
+    logger.info("슬라이드 생성 그래프 생성 완료")
+    
     return app
 
 
 async def run_agent(list_user_inputs):
+    logger.info(f"에이전트 실행 시작: {len(list_user_inputs)}개 사용자 입력")
+    
     graph = create_graph(in_memory=True)
 
-    for msg in list_user_inputs:
-        print("user input : ", msg)
+    for i, msg in enumerate(list_user_inputs):
+        logger.info(f"사용자 입력 {i+1}/{len(list_user_inputs)} 처리: {msg[:100]}...")
+        
         result = await graph.ainvoke(
                 {"messages": [msg]},
                 {"configurable": {"thread_id": "1"}}
             )
-        print("updated state: ", result)
-        # for msg in result["messages"]:
-        #     print(msg.content)
+        logger.info(f"사용자 입력 {i+1} 처리 완료")
+        logger.debug(f"업데이트된 상태 키: {list(result.keys())}")
 
+    logger.info("모든 사용자 입력 처리 완료")
     return result
 
 
@@ -224,6 +280,7 @@ if __name__ == '__main__':
     import time
     from estalan.agent.graph.slide_generate_agent.tests.inputs import initial_msg
 
+    logger.info("메인 실행 시작")
     s = time.time()
 
     list_user_inputs = [initial_msg, "아니야 10일 일정으로 부탁해", "슬라이드 개수는 12장이 좋겠어", "종아 슬라이드를 생성해줘"]
@@ -240,13 +297,19 @@ if __name__ == '__main__':
         "종아 슬라이드를 생성해줘"
     ]
 
+    logger.info(f"테스트 실행: {len(list_user_inputs)}개 입력")
     result = asyncio.run(run_agent(list_user_inputs))
 
+    logger.info("HTML 파일 생성 시작")
     for state in result['slides']:
-        with open(f"{state['idx']}.html", "w", encoding="utf-8") as f:
+        filename = f"{state['idx']}.html"
+        with open(filename, "w", encoding="utf-8") as f:
             f.write(state['html'])
+        logger.debug(f"HTML 파일 생성: {filename}")
 
     e = time.time()
-    print(e - s)
+    execution_time = e - s
+    logger.info(f"전체 실행 시간: {execution_time:.2f}초")
 
+    logger.info("메인 실행 완료")
     print(result)

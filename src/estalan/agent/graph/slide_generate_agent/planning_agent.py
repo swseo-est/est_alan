@@ -11,9 +11,14 @@ from estalan.tools.search import GoogleSerperSearchResult
 from estalan.llm import create_chat_model
 from estalan.messages.utils import create_ai_message, create_block_message
 from estalan.agent.graph.slide_generate_agent.state import Section, SlideGenerateAgentState
+from estalan.logging.base import get_logger
 
+# 로거 초기화
+logger = get_logger(__name__)
 
 def generate_section_result_msg(sections):
+    logger.info(f"섹션 결과 메시지 생성 시작: {len(sections)}개 섹션")
+    
     msg = "슬라이드 구성은 다음과 같습니다. \n\n"
 
     msg += "1. 타이틀 페이지\n"
@@ -24,6 +29,7 @@ def generate_section_result_msg(sections):
         msg += msg_section
 
     msg = create_ai_message(content=msg, name="toc", metadata={"log_level": "debug"})
+    logger.debug(f"섹션 결과 메시지 생성 완료: {len(msg.content)}자")
     return msg
 
 
@@ -37,18 +43,29 @@ class AnalyzeRequirementsOutput(TypedDict):
 
 def create_init_planning_agent_node():
     def init_planning_agent_node(state: SlideGenerateAgentState):
+        logger.info("계획 에이전트 초기화 노드 실행 시작")
+        
+        # 상태 정보 로깅
+        requirements_docs = state.get("requirements_docs", "")
+        logger.debug(f"요구사항 문서 길이: {len(requirements_docs)}자")
+        
         init_msg = create_ai_message(content="검색 도구를 사용하여 목차를 생성하기 위한 조사를 시작합니다.", name="planning_agent")
 
+        logger.info("계획 에이전트 초기화 노드 실행 완료")
         return {"messages": [init_msg]}
     return init_planning_agent_node
 
 def print_tool_usage_msg(state: SlideGenerateAgentState):
+    logger.info("웹 검색 도구 사용 메시지 생성")
+    
     tool_usage_msg = create_block_message(content="웹 검색 도구를 사용 중 입니다...", block_tag="web_search_tool", name="planning_tool_usage")
     return {"messages": [tool_usage_msg]}
 
 
 def create_analyze_requirements_node(llm):
     async def analyze_requirements_node(state: SlideGenerateAgentState):
+        logger.info("요구사항 분석 노드 실행 시작")
+        
         def generate_analysis_result_msg(topic, num_sections):
             msg = f"요구사항 분석 결과:\n"
             msg += f"- 주제: {topic}\n"
@@ -58,14 +75,15 @@ def create_analyze_requirements_node(llm):
 
         # requirements_docs에서 요구사항 정보 추출
         requirements_docs = state.get("requirements_docs", "")
+        logger.debug(f"분석할 요구사항 문서: {requirements_docs[:100]}...")
         
         if not requirements_docs:
+            logger.warning("요구사항 문서가 비어있음 - 기본값 사용")
             # ToDo 이 구현 해야함
             # 요구사항이 없는 경우 기본값 사용
             requirements_docs = f""
 
-
-            # 요구사항 분석을 위한 시스템 프롬프트
+        # 요구사항 분석을 위한 시스템 프롬프트
         system_prompt = f"""사용자의 요구사항을 분석하여 프레젠테이션 주제와 적절한 섹션 개수를 추출하세요.
 
 요구사항:
@@ -84,8 +102,12 @@ def create_analyze_requirements_node(llm):
 - topic: "AI 기술의 현재와 미래"
 - num_sections: 5
 """
+        
+        logger.info("LLM을 사용한 요구사항 분석 시작")
         for i in range(10):
             try:
+                logger.debug(f"요구사항 분석 시도 {i+1}/10")
+                
                 results = await llm.ainvoke(
                     [
                         SystemMessage(content=system_prompt.format(requirements=requirements_docs)),
@@ -95,19 +117,25 @@ def create_analyze_requirements_node(llm):
 
                 topic = results["topic"]
                 num_sections = int(results["num_sections"])
+                
+                logger.info(f"요구사항 분석 성공: 주제='{topic}', 섹션 개수={num_sections}")
                 break
 
             except Exception as e:
-                print(f"요구사항 분석 중 오류 발생: {e}")
+                logger.error(f"요구사항 분석 중 오류 발생 (시도 {i+1}/10): {e}")
+                if i == 9:  # 마지막 시도에서도 실패
+                    logger.critical("요구사항 분석이 10번 시도 후에도 실패함")
+                    raise
 
         msg_result = generate_analysis_result_msg(topic, num_sections)
-        # print(msg_result)
         
         # metadata 업데이트
         metadata = state["metadata"].copy()
         metadata["topic"] = topic
         metadata["num_sections"] = num_sections
         metadata["num_slides"] = num_sections + 2
+        
+        logger.info(f"메타데이터 업데이트 완료: topic={topic}, num_sections={num_sections}, num_slides={num_sections + 2}")
         
         return {
             "messages": [msg_result], 
@@ -119,8 +147,11 @@ def create_analyze_requirements_node(llm):
 
 def create_generate_sections_node(llm):
     async def generate_sections_node(state: SlideGenerateAgentState):
+        logger.info("섹션 생성 노드 실행 시작")
+        
         topic = state["metadata"]["topic"]
         num_sections = state["metadata"]["num_sections"]
+        logger.debug(f"섹션 생성 파라미터: topic='{topic}', num_sections={num_sections}")
         
         # requirements_docs만을 사용하여 요구사항 정보 추출
         requirements_docs = state.get("requirements_docs", "")
@@ -133,9 +164,13 @@ def create_generate_sections_node(llm):
         )
 
         num_try = 10
+        logger.info(f"섹션 생성 시작: 최대 {num_try}번 시도")
+        
         # Generate queries
         for i in range(num_try):
             try:
+                logger.debug(f"섹션 생성 시도 {i+1}/{num_try}")
+                
                 results = await llm.ainvoke({
                     "messages":
                     [
@@ -151,31 +186,40 @@ def create_generate_sections_node(llm):
                 msg_result = generate_section_result_msg(results['structured_response']['sections'])
 
                 sections = results['structured_response']['sections']
+                logger.info(f"섹션 생성 성공: {len(sections)}개 섹션 생성됨")
 
+                # 필드 검증
                 list_check_field = ["topic", "idx", "name", "description"]
                 for s in sections:
                     for field in list_check_field:
                         if field not in s.keys():
-                            print(f"there are no field name {field}")
-                            raise Exception()
+                            logger.error(f"섹션에 필수 필드 '{field}'가 누락됨: {s}")
+                            raise Exception(f"필수 필드 '{field}' 누락")
 
+                logger.info("섹션 필드 검증 완료")
                 break
+                
             except Exception as e:
-                print(e)
+                logger.error(f"섹션 생성 중 오류 발생 (시도 {i+1}/{num_try}): {e}")
+                if i == num_try - 1:  # 마지막 시도에서도 실패
+                    logger.critical("섹션 생성이 모든 시도 후에도 실패함")
+                    raise
 
-
-
+        # 섹션 데이터 정제
         sections_refined = list()
         for s in sections:
             s_refined = s.copy()
             s_refined["idx"] = int(s["idx"])
-
             sections_refined.append(s)
+
+        logger.debug(f"섹션 데이터 정제 완료: {len(sections_refined)}개 섹션")
 
         metadata = state["metadata"].copy()
         metadata["num_sections"] = len(sections_refined)
 
         updated_state = {"metadata": metadata, "sections": sections_refined}
+        logger.info(f"섹션 생성 노드 실행 완료: {len(sections_refined)}개 섹션 생성됨")
+        
         return updated_state
 
     return generate_sections_node
@@ -183,7 +227,10 @@ def create_generate_sections_node(llm):
 
 def create_add_tile_slide_node():
     def add_title_slide(state: SlideGenerateAgentState):
+        logger.info("타이틀 슬라이드 추가 노드 실행 시작")
+        
         title = state["metadata"]["topic"]
+        logger.debug(f"타이틀 슬라이드 생성: topic='{title}'")
         
         # 타이틀 슬라이드에 해당하는 section 정의
         title_section: Section = {
@@ -204,6 +251,7 @@ def create_add_tile_slide_node():
         current_sections = state.get("sections", [])
         updated_sections = [title_section] + current_sections
         
+        logger.info(f"타이틀 슬라이드 추가 완료: 총 {len(updated_sections)}개 섹션")
         return {"sections": updated_sections}
         
     return add_title_slide
@@ -211,8 +259,11 @@ def create_add_tile_slide_node():
 
 def create_add_toc_slide_node():
     def add_toc_slide(state: SlideGenerateAgentState):
+        logger.info("목차 슬라이드 추가 노드 실행 시작")
+        
         topic = state["metadata"]["topic"]
         current_sections = state.get("sections", [])
+        logger.debug(f"목차 슬라이드 생성: topic='{topic}', 현재 섹션 수={len(current_sections)}")
         
         # 기존 섹션들에서 목차 정보 추출
         section_list = []
@@ -222,6 +273,7 @@ def create_add_toc_slide_node():
         
         # 목차 문자열 생성
         contents_text = "\n".join(section_list) if section_list else "목차 항목들이 정의되지 않았습니다."
+        logger.debug(f"목차 항목: {len(section_list)}개")
         
         # 목차 슬라이드에 해당하는 section 정의
         contents_section: Section = {
@@ -244,24 +296,32 @@ def create_add_toc_slide_node():
         # 타이틀 슬라이드가 idx 0이므로, 목차는 idx 1에 위치
         updated_sections = [contents_section] + current_sections
 
+        logger.info(f"목차 슬라이드 추가 완료: 총 {len(updated_sections)}개 섹션")
         return {"sections": updated_sections}
         
     return add_toc_slide
 
 def create_planning_agent(name="planning_agent"):
+    logger.info(f"계획 에이전트 생성 시작: name='{name}'")
+    
     init_planning_agent_node = create_init_planning_agent_node()
 
     serper_api_key = os.getenv("SERPER_API_KEY")
+    if not serper_api_key:
+        logger.warning("SERPER_API_KEY 환경변수가 설정되지 않음")
 
     search_tool = GoogleSerperSearchResult.from_api_key(
         api_key=serper_api_key,
         k=15,
     )
+    logger.debug("Google Serper 검색 도구 초기화 완료")
 
     # 요구사항 분석을 위한 LLM
+    logger.debug("요구사항 분석용 LLM 초기화")
     analyze_requirements_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(AnalyzeRequirementsOutput)
     analyze_requirements_node = create_analyze_requirements_node(analyze_requirements_llm)
 
+    logger.debug("섹션 생성용 LLM 초기화")
     generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
 
     generate_sections_node_agent = create_react_agent(
@@ -276,7 +336,11 @@ def create_planning_agent(name="planning_agent"):
     add_tile_slide_node = create_add_tile_slide_node()
     add_toc_slide_node = create_add_toc_slide_node()
 
+    # 그래프 빌더 생성
+    logger.debug("상태 그래프 빌더 생성")
     builder = StateGraph(SlideGenerateAgentState)
+    
+    # 노드 추가
     builder.add_node("init_planning_agent_node", init_planning_agent_node)
     builder.add_node("analyze_requirements_node", analyze_requirements_node)
     builder.add_node("print_tool_usage_msg", print_tool_usage_msg)
@@ -284,16 +348,18 @@ def create_planning_agent(name="planning_agent"):
     builder.add_node("add_tile_slide_node", add_tile_slide_node)
     builder.add_node("add_toc_slide_node", add_toc_slide_node)
 
+    # 엣지 추가
     builder.add_edge(START, "init_planning_agent_node")
     builder.add_edge("init_planning_agent_node", "analyze_requirements_node")
     builder.add_edge("analyze_requirements_node", "print_tool_usage_msg")
     builder.add_edge("print_tool_usage_msg", "generate_sections_node")
     builder.add_edge("generate_sections_node", "add_toc_slide_node")
     builder.add_edge("add_toc_slide_node", "add_tile_slide_node")
-
     builder.add_edge("add_tile_slide_node", END)
 
     planning_agent = builder.compile(name=name)
+    logger.info(f"계획 에이전트 생성 완료: name='{name}'")
+    
     return planning_agent
 
 if __name__ == '__main__':
@@ -302,6 +368,7 @@ if __name__ == '__main__':
     from estalan.agent.graph.slide_generate_agent.tests.inputs import requirements_docs
 
     load_dotenv()
+    logger.info("메인 실행 시작")
 
     agent = create_planning_agent()
     result = asyncio.run(
@@ -310,5 +377,6 @@ if __name__ == '__main__':
         {"requirements_docs": requirements_docs}
         )
     )
+    logger.info("에이전트 실행 완료")
     print(result)
     print(generate_section_result_msg(result["sections"]))

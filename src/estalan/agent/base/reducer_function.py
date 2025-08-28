@@ -78,25 +78,25 @@ def add_messages_for_alan(left: Messages, right: Messages) -> Messages:
             rendering_option = 'N/A'
             log_level = 'N/A'
         
-        logger.debug("Alan 메시지로 변환 완료", 
-                    original_type=message.__class__.__name__,
-                    alan_type=alan_message.__class__.__name__,
-                    original_id=getattr(message, 'id', 'ID 없음'),
-                    alan_id=getattr(alan_message, 'id', 'ID 없음'),
-                    rendering_option=rendering_option,
-                    log_level=log_level)
+        # logger.debug("Alan 메시지로 변환 완료",
+        #             original_type=message.__class__.__name__,
+        #             alan_type=alan_message.__class__.__name__,
+        #             original_id=getattr(message, 'id', 'ID 없음'),
+        #             alan_id=getattr(alan_message, 'id', 'ID 없음'),
+        #             rendering_option=rendering_option,
+        #             log_level=log_level)
 
     merged = merge_message(left_list, processed_right)
-    logger.info("메시지 병합 완료", 
-               original_count=len(left_list), 
-               new_count=len(processed_right), 
-               final_count=len(merged))
+    # logger.info("메시지 병합 완료",
+    #            original_count=len(left_list),
+    #            new_count=len(processed_right),
+    #            final_count=len(merged))
     
     return merged
 
 def merge_message(left: Messages, right: Messages) -> Messages:
     # merge
-    logger.debug("merge_message 실행 시작", left_count=len(left), right_count=len(right))
+    # logger.debug("merge_message 실행 시작", left_count=len(left), right_count=len(right))
     
     merged = left.copy()
     merged_by_id = {m.id: i for i, m in enumerate(merged)}
@@ -126,7 +126,7 @@ def merge_message(left: Messages, right: Messages) -> Messages:
 
             merged_by_id[message_id] = len(merged)
             merged.append(m)
-            logger.debug("새 메시지 추가", message_id=message_id, message_type=m.__class__.__name__)
+            # logger.debug("새 메시지 추가", message_id=message_id, message_type=m.__class__.__name__)
     
     # ID가 없는 메시지도 안전하게 처리
     final_merged = []
@@ -137,15 +137,15 @@ def merge_message(left: Messages, right: Messages) -> Messages:
         elif message_id is None:
             logger.warning("병합된 메시지에서 ID가 없는 메시지 발견", message_type=m.__class__.__name__)
     
-    logger.debug("merge_message 완료", final_count=len(final_merged), removed_count=len(ids_to_remove))
+    # logger.debug("merge_message 완료", final_count=len(final_merged), removed_count=len(ids_to_remove))
     return final_merged
 
 
 
 def update_metadata(metadata_old: dict, metadata_new: dict):
-    logger.debug("메타데이터 업데이트 시작", 
-                old_keys=list(metadata_old.keys()), 
-                new_keys=list(metadata_new.keys()))
+    # logger.debug("메타데이터 업데이트 시작",
+    #             old_keys=list(metadata_old.keys()),
+    #             new_keys=list(metadata_new.keys()))
     
     # metadata_old가 None인 경우 빈 딕셔너리로 초기화
     if metadata_old is None:
@@ -159,7 +159,7 @@ def update_metadata(metadata_old: dict, metadata_new: dict):
     
     for key, value in metadata_new.items():
         metadata_old[key] = value
-        logger.debug("메타데이터 키 업데이트", key=key, value=value)
+        # logger.debug("메타데이터 키 업데이트", key=key, value=value)
 
-    logger.debug("메타데이터 업데이트 완료", final_keys=list(metadata_old.keys()))
+    # logger.debug("메타데이터 업데이트 완료", final_keys=list(metadata_old.keys()))
     return metadata_old

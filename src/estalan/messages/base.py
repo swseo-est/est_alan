@@ -112,6 +112,16 @@ def convert_to_alan_message(message: BaseMessage) -> BaseAlanMessage:
     if not kwargs.get('id'):
         kwargs['id'] = str(uuid.uuid4())
 
+    # tool_calls가 있고 실제 내용이 있는 AI 메시지의 경우 log_level을 debug로 설정
+    if isinstance(message, AIMessage) and kwargs.get('tool_calls'):
+        tool_calls = kwargs['tool_calls']
+        # tool_calls가 리스트이고 실제 내용이 있는지 확인
+        if isinstance(tool_calls, list) and len(tool_calls) > 0:
+            # metadata가 이미 있는 경우 기존 값 유지, 없는 경우 새로 생성
+            if 'metadata' not in kwargs:
+                kwargs['metadata'] = {}
+            kwargs['metadata']['log_level'] = 'debug'
+
     # AlanMessage 생성
     if isinstance(message, AIMessage):
         return AlanAIMessage(**kwargs)

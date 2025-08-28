@@ -53,7 +53,7 @@ def create_analyze_requirements_node(llm):
             msg = f"요구사항 분석 결과:\n"
             msg += f"- 주제: {topic}\n"
             msg += f"- 추천 섹션 개수: {num_sections}개\n"
-            msg = create_ai_message(content=msg, name="result_ analyze_requirements", metadata={"log_level": "debug"})
+            msg = create_ai_message(content=msg, name="result_analyze_requirements", metadata={"log_level": "debug"})
             return msg
 
         # requirements_docs에서 요구사항 정보 추출
@@ -259,10 +259,10 @@ def create_planning_agent(name="planning_agent"):
     )
 
     # 요구사항 분석을 위한 LLM
-    analyze_requirements_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash", lazy=True).with_structured_output(AnalyzeRequirementsOutput)
+    analyze_requirements_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash").with_structured_output(AnalyzeRequirementsOutput)
     analyze_requirements_node = create_analyze_requirements_node(analyze_requirements_llm)
 
-    generate_sections_node_llm = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash", lazy=True)
+    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
 
     generate_sections_node_agent = create_react_agent(
         generate_sections_node_llm,

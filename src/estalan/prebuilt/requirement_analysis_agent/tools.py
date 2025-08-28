@@ -6,7 +6,7 @@ from langchain_core.tools import tool
 import uuid
 import json
 from datetime import datetime
-from .state import RequirementCollectionState, Requirement, Question, Requirement
+from .state import Requirement
 from estalan.agent.base.state import state_to_json_pretty, state_to_json_compact
 
 
@@ -81,54 +81,18 @@ def update_requirement(
         "detail": "상세 내용",
         "priority": "우선순위",
         "status": "상태", 
-        "category": "카테고리"
+        "category": "카테고리",
+        "impact": "영향받는 시스템/프로세스/사용자",
+        "origin": "요구사항 출처"
     }
     
     if field not in valid_fields:
-        return state_to_json_compact({
-            "error": f"유효하지 않은 필드입니다. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
-        })
+        err_msg = f"유효하지 않은 필드입니다. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
+        print(err_msg)
+        return state_to_json_compact({"error": err_msg})
 
     requirement_new = requirement_old.copy()
     requirement_new[field] = value
-    return state_to_json_compact(requirement_new)
-    
-
-@tool
-def update_requirement_bulk(
-    requirement_old: Requirement,
-    requirement_id: str,
-    updates: Dict[str, Any]
-) -> Dict[str, Any]:
-    """
-    요구사항의 여러 필드를 한번에 수정합니다.
-    
-    Args:
-        requirement_old: Requirement - 수정할 기존 요구사항
-        requirement_id: str - 수정할 요구사항의 ID
-        updates: Dict[str, Any] - 수정할 필드와 값들의 딕셔너리
-                예: {"detail": "새로운 내용", "priority": "High", "status": "approved"}
-        
-    Returns:
-        str: 수정된 요구사항 정보 (JSON 형태)
-    """
-    valid_fields = {
-        "detail": "상세 내용",
-        "priority": "우선순위",
-        "status": "상태", 
-        "category": "카테고리"
-    }
-    
-    # 유효하지 않은 필드 확인
-    invalid_fields = [field for field in updates.keys() if field not in valid_fields]
-    if invalid_fields:
-        return state_to_json_compact({
-            "error": f"유효하지 않은 필드입니다: {', '.join(invalid_fields)}. 사용 가능한 필드: {', '.join(valid_fields.keys())}"
-        })
-    
-    requirement_new = requirement_old.copy()
-    for field, value in updates.items():
-        requirement_new[field] = value
     return state_to_json_compact(requirement_new)
 
 
@@ -143,7 +107,5 @@ Tools = [
     
     # UPDATE 도구들
     update_requirement,
-    update_requirement_bulk,
-
     # DELETE 도구들 (현재 미구현)
 ]

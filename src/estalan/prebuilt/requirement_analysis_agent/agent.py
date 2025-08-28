@@ -7,7 +7,7 @@ from estalan.prebuilt.requirement_analysis_agent.state import RequirementCollect
 from estalan.prebuilt.requirement_analysis_agent.tools import Tools
 from estalan.prebuilt.requirement_analysis_agent.prompt import PROMPT_REQUIREMENT_ANALYSIS
 from estalan.prebuilt.requirement_analysis_agent.converter import requirements_to_markdown
-from estalan.messages.utils import create_ai_message
+from estalan.messages.utils import create_ai_message, create_system_message
 
 
 def pre_agent_node(state):
@@ -20,8 +20,9 @@ def pre_agent_node(state):
     else:
         msg = "현재 등록된 요구사항은 없습니다."
 
-    ai_msg = create_ai_message(content=msg, name="previous_req", metadata={"log_level": "debug"})
-    return {"messages": [ai_msg]}
+    ai_msg = create_system_message(content=msg, name="previous_req", metadata={"log_level": "debug"})
+    last_msg = state["messages"][-1]
+    return {}
 
 
 def post_agent_node(state):
@@ -45,13 +46,22 @@ def post_agent_node(state):
     msg = "업데이트된 요구사항은 다음과 같습니다.\n"
     msg += markdown_docs
 
-    ai_msg = create_ai_message(content=msg, name="updated_req", metadata={"log_level": "debug"})
+    ai_msg = create_system_message(content=msg, name="updated_req", metadata={"log_level": "debug"})
 
     return {
-        "messages": state["messages"] + [ai_msg],
+        "messages": [ai_msg],
         "requirements_docs": markdown_docs,  # Markdown 형태
     }
 
+def pre_model_hook(state):
+    print("pre_model_hook")
+    print(state)
+    return {}
+
+def post_model_hook(state):
+    print("post_model_hook")
+    print(state)
+    return {}
 
 def create_requirement_analysis_agent(model=None, name="requirement_analysis_agent"):
     """
@@ -65,7 +75,7 @@ def create_requirement_analysis_agent(model=None, name="requirement_analysis_age
         생성된 요구사항 분석 에이전트
     """
     if model is None:
-        model = create_chat_model(provider="google_vertexai", model="gemini-2.5-flash")
+        model = create_chat_model(provider="azure_openai", model="gpt-5-nano")
 
     agent = create_react_agent(
         model=model,
@@ -75,6 +85,8 @@ def create_requirement_analysis_agent(model=None, name="requirement_analysis_age
         response_format=RequirementCollectionState,
         post_agent_node=post_agent_node,
         pre_agent_node=pre_agent_node,
+        pre_model_hook=pre_model_hook,
+        post_model_hook=post_model_hook,
         name=name
     )
     return agent

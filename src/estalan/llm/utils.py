@@ -27,7 +27,7 @@ except ImportError:
     HAS_ANTHROPIC_VERTEXAI = False  
 
 
-def create_chat_model(provider=None, model=None, structured_output=None, lazy=True):
+def create_chat_model(provider=None, model=None, structured_output=None, lazy=True, **kwargs):
     """
     지정된 제공자와 모델을 사용하여 채팅 모델을 생성합니다.
     
@@ -65,23 +65,23 @@ def create_chat_model(provider=None, model=None, structured_output=None, lazy=Tr
         if provider == "openai":
             if not HAS_OPENAI:
                 raise ImportError("OpenAI support is not available. Please install langchain_openai.")
-            chat_model = AlanChatOpenAI(model=model)
+            chat_model = AlanChatOpenAI(model=model, **kwargs)
         elif provider == "azure_openai":
             if not HAS_OPENAI:
                 raise ImportError("Azure OpenAI support is not available. Please install langchain_openai.")
-            chat_model = AlanAzureChatOpenAI(model=model)
+            chat_model = AlanAzureChatOpenAI(model=model, **kwargs)
         elif provider == "google_vertexai":
             if not HAS_GOOGLE_VERTEXAI:
                 raise ImportError("Google VertexAI support is not available. Please install langchain_google_vertexai.")
-            chat_model = AlanChatVertexAI(model=model)
+            chat_model = AlanChatVertexAI(model=model, **kwargs)
         elif provider == "anthropic":
             if not HAS_ANTHROPIC:
                 raise ImportError("Anthropic support is not available. Please install langchain_anthropic.")
-            chat_model = AlanChatAnthropic(model=model)
+            chat_model = AlanChatAnthropic(model=model, **kwargs)
         elif provider == "anthropic_vertexai":
             if not HAS_ANTHROPIC_VERTEXAI:
                 raise ImportError("VertexAI support is not available. Please install langchain_anthropic_vertexai.")
-            chat_model = AlanChatAnthropicVertex(model=model)
+            chat_model = AlanChatAnthropicVertex(model=model, **kwargs)
         else:
             raise Exception(f"Unsupported provider: {provider}")
 

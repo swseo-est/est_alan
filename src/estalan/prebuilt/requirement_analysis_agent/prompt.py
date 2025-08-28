@@ -7,6 +7,9 @@ PROMPT_REQUIREMENT_ANALYSIS = """
 당신의 역할은 사용자가 입력한 자연어 설명(여행, 쇼핑, 프로젝트, 생활 계획, IT 서비스 등 어떤 맥락이든)을  
 **구체적인 요구사항(Requirement)** 으로 변환하고, 반드시 제공된 Tools를 사용하여 state에 반영하는 것입니다.  
 
+주의사항:
+- 'Unexpected tool call: Model tried to call an undeclared function: transfer_back_to_supervisor' 실행중 이런 에러가 안나도록 하세요
+
 규칙:
 - 입력받은 언어로 요구사항을 작성하세요.
 - 단순한 조언이나 설명으로 끝내지 말고, 반드시 요구사항 관련 작업 시 적절한 Tool을 호출하세요.

@@ -25,7 +25,7 @@ def refresh_remaining_steps(state: Dict[str, Any]) -> Dict[str, Any]:
     return {"remaining_steps": 25}
 
 
-def create_react_agent(*args, state_schema=None, pre_agent_node=None, post_agent_node=None, name=None, **kwargs):
+def create_react_agent(*args, state_schema=None, pre_agent_node=None, post_agent_node=None, name=None, lazy=False, **kwargs):
     """
     LangGraph의 ReAct 에이전트를 확장하여 생성하는 함수
     
@@ -41,7 +41,13 @@ def create_react_agent(*args, state_schema=None, pre_agent_node=None, post_agent
         StateGraph: 컴파일된 상태 그래프
     """
     # 기본 ReAct 에이전트 생성
-    react_agent = langgraph.prebuilt.create_react_agent(*args, **kwargs)
+    if lazy:
+        def react_agent(state):
+            agent = langgraph.prebuilt.create_react_agent(*args, **kwargs)
+            print("lazy")
+            return agent.invoke(state)
+    else:
+        react_agent = langgraph.prebuilt.create_react_agent(*args, **kwargs)
 
     # 상태 그래프 빌더 초기화
     builder = StateGraph(state_schema)

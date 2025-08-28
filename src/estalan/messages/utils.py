@@ -1,24 +1,30 @@
+import re
 from typing import Optional
 from langchain_core.messages import BaseMessage
 from estalan.messages.base import AlanHumanMessage, AlanSystemMessage, AlanAIMessage, AlanToolMessage, BaseAlanBlockMessage
 from estalan.messages.format.chat_html import create_img_grid
 
-def create_message(message_type: str, content: str, allow_duplicate: bool = False, metadata: Optional[dict] = None, *args, **kwargs) -> BaseMessage:
+def create_message(message_type: str, content: str, metadata: Optional[dict] = None, name: Optional[str] = None, *args, **kwargs) -> BaseMessage:
     """
     메시지를 생성하는 함수
     
     Args:
         message_type: 메시지 타입 ("human", "system", "ai", "tool", "block")
         content: 메시지 내용
-        allow_duplicate: 중복 허용 여부
         metadata: 메시지 메타데이터 (선택사항)
             - rendering_option: "str", "json", "html" 중 하나
             - log_level: "info", "error", "debug", "warning" 중 하나
             - 기타 사용자 정의 필드들
+        name: 메시지 이름 (공백, <, |, \, /, > 문자를 포함할 수 없음)
         *args, **kwargs: 추가 매개변수들
     """
-    # allow_duplicate를 kwargs에 포함
-    kwargs['allow_duplicate'] = allow_duplicate
+    # name 검증 로직 추가
+    if name is not None:
+        # OpenAI에서 정한 정규식 규칙: 공백, <, |, \, /, > 문자를 포함하지 않는지 검증
+        # 해당 형식을 지키지 않으면 OpenAI에서 에러가 발생함
+        invalid_pattern = r'[\s<|\\/>]'
+        if re.search(invalid_pattern, name):
+            raise ValueError(f"잘못된 이름 '{name}': 이름에는 공백, <, |, \\, /, > 문자가 포함될 수 없습니다")
     
     # metadata가 정의되지 않으면 기본값 설정
     if metadata is None:
@@ -37,17 +43,6 @@ def create_message(message_type: str, content: str, allow_duplicate: bool = Fals
     
     # metadata를 kwargs에 명시적으로 추가
     kwargs['metadata'] = metadata
-    
-    # name이 있고 allow_duplicate가 True인 경우 name에 id를 추가
-    if 'name' in kwargs and kwargs['name'] and allow_duplicate:
-        import uuid
-        original_name = kwargs['name']
-        # id가 kwargs에 있으면 사용하고, 없으면 새로 생성
-        message_id = kwargs.get('id', str(uuid.uuid4()))
-        kwargs['name'] = f"{original_name}-{message_id}"
-        # id가 kwargs에 없었다면 추가
-        if 'id' not in kwargs:
-            kwargs['id'] = message_id
     
     if message_type == "human":
         return AlanHumanMessage(content=content, **kwargs)

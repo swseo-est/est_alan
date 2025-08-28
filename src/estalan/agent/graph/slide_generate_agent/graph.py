@@ -165,13 +165,15 @@ def create_graph(in_memory=False):
     planning_agent = create_planning_agent(name="planning_agent")
     slide_generate_graph = create_slide_generate_agent(name="slide_generate_agent")
 
-    # # # Supervisor 생성
+    # Supervisor 생성
     workflow = create_supervisor(
         [requirement_analysis_agent, planning_agent, slide_generate_graph],
         model=create_chat_model(provider="google_vertexai", model="gemini-2.5-flash"),
         prompt=prompt_supervisor,
         state_schema=SlideGenerateAgentState,
         output_mode="full_history",
+        add_handoff_messages=True,
+        add_handoff_back_messages=True
     ).compile()
 
 
@@ -227,6 +229,16 @@ if __name__ == '__main__':
     list_user_inputs = [initial_msg, "아니야 10일 일정으로 부탁해", "슬라이드 개수는 12장이 좋겠어", "종아 슬라이드를 생성해줘"]
     list_user_inputs = [initial_msg, "종아 슬라이드를 생성해줘", "종아 슬라이드를 생성해줘"]
     list_user_inputs = ["떡볶이 맛집 전국 투어 계획해줘", "목차 생성해줘", "종아 슬라이드를 생성해줘"]
+    list_user_inputs = [
+        "떡볶이 맛집 전국 투어 계획해줘",
+        "서울을 추가 시켜줘",
+        "슬라이드는 12장으로 해줘",
+        "목차 생성해줘",
+        "슬라이드를 5장으로 줄여줘",
+        "슬라이드를 3장으로 줄여줘",
+        "목차에 서울 맛집 섹션을 추가해줘"
+        "종아 슬라이드를 생성해줘"
+    ]
 
     result = asyncio.run(run_agent(list_user_inputs))
 

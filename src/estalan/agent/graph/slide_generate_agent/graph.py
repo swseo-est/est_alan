@@ -168,7 +168,7 @@ def create_graph(in_memory=False):
     # Supervisor 생성
     workflow = create_supervisor(
         [requirement_analysis_agent, planning_agent, slide_generate_graph],
-        model=create_chat_model(provider="google_vertexai", model="gemini-2.5-flash"),
+        model=create_chat_model(provider="azure_openai", model="gpt-5-mini"),
         prompt=prompt_supervisor,
         state_schema=SlideGenerateAgentState,
         output_mode="full_history",

@@ -3,14 +3,16 @@ volumes:
         driver: local
 
 services:
+    # Redis cache for Estsoft Alan
     langgraph-redis:
         image: redis:6
         healthcheck:
-            test: redis-cli ping
+            test: ["CMD", "redis-cli", "ping"]
             interval: 5s
             timeout: 1s
             retries: 5
 
+    # PostgreSQL database for Estsoft Alan
     langgraph-postgres:
         image: pgvector/pgvector:pg16
         ports:
@@ -26,31 +28,62 @@ services:
         volumes:
             - langgraph-data:/var/lib/postgresql/data
         healthcheck:
-            test: pg_isready -U postgres
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
             start_period: 10s
             timeout: 1s
             retries: 5
             interval: 60s
             start_interval: 1s
 
-    langgraph-api:
-        ports:
-            - "8000:8000"
+    # Database migration (runs once before API starts)
+    langgraph-migrate:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            RUN_MIGRATIONS: 1
+            POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
+            REDIS_URI: redis://langgraph-redis:6379
         depends_on:
-            langgraph-redis:
-                condition: service_healthy
             langgraph-postgres:
                 condition: service_healthy
+            langgraph-redis:
+                condition: service_healthy
+        command: ["/entrypoint.sh"]
+        restart: "no"
+        env_file:
+            - .env.dockerfile
+
+    # Estsoft Alan API service
+    langgraph-api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        expose:
+            - "8000"
+        depends_on:
+            langgraph-migrate:
+                condition: service_completed_successfully
         environment:
+            PORT: 8000
+            RUN_MIGRATIONS: 0   # API 인스턴스는 마이그레이션을 실행하지 않음
             REDIS_URI: redis://langgraph-redis:6379
             POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
         healthcheck:
-            test: python /api/healthcheck.py
+            test: ["CMD-SHELL", "python /api/healthcheck.py"]
             interval: 60s
             start_interval: 1s
             start_period: 10s
         env_file:
             - .env.dockerfile
-        build:
-            context: .
-            dockerfile: Dockerfile
+
+    # Nginx load balancer for Estsoft Alan
+    nginx:
+        image: nginx:alpine
+        ports:
+            - "8000:80"   # 외부 8000 → 내부 nginx:80
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf:ro
+        depends_on:
+            - langgraph-api
+        restart: unless-stopped

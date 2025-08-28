@@ -165,25 +165,24 @@ if user_router:
             f"Cannot merge lifespans with on_startup or on_shutdown: {app.router.on_startup} {app.router.on_shutdown}"
         )
 
+    import os
+    from contextlib import asynccontextmanager
+    from langgraph_runtime.lifespan import lifespan as base_lifespan
+
+
     @asynccontextmanager
     async def combined_lifespan(app):
         """
-        사용자 정의 lifespan과 기본 lifespan을 결합하는 비동기 컨텍스트 매니저
-        
-        두 개의 lifespan을 순차적으로 실행하여 애플리케이션의 시작과 종료를 관리합니다.
-        
-        Args:
-            app: 애플리케이션 인스턴스
-            
-        Yields:
-            None: 컨텍스트 매니저가 활성화된 상태
+        사용자 정의 lifespan과 기본 lifespan을 결합.
+        RUN_MIGRATIONS=1 일 때만 base_lifespan 실행 (마이그레이션 포함)
         """
-        async with lifespan(app):
-            if original_lifespan:
-                async with original_lifespan(app):
-                    yield
-            else:
+        if os.getenv("RUN_MIGRATIONS", "1") == "1":
+            async with base_lifespan(app):  # 여기서 migrate() 실행
                 yield
+        else:
+            # 마이그레이션 스킵 → 단순히 DB 풀만 붙이도록
+            yield
+
 
     app.router.lifespan_context = combined_lifespan
 

@@ -99,6 +99,10 @@ def preprocessing_node(state):
             node_message = create_ai_message(content=f"{topic}을 주제로 슬라이드를 생성하도록 하겠습니다.",
                                              name="msg_planning_start")
 
+            debug_message = create_ai_message(content=f"topic: {topic}, template_folder: {template_folder}",
+                                             name="debug_preprocessing_node", metadata={"log_level": "debug"})
+
+
             metadata = state["metadata"].copy()
             metadata["template_folder"] = template_folder
             break

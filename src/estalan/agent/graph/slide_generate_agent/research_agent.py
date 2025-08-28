@@ -100,7 +100,7 @@ def create_research_node(llm):
                             ]
                     }
                 )
-                
+
                 logger.info(f"연구 성공: {name} 섹션")
                 logger.debug(f"연구 결과 키: {list(results['structured_response'].keys())}")
                 
@@ -128,7 +128,7 @@ def create_research_agent(name=None):
     )
     logger.debug("Google Serper 검색 도구 초기화 완료")
 
-    research_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    research_node_llm = create_chat_model(provider="azure_openai", model="gpt-4o")
     logger.debug("연구 노드용 LLM 초기화 완료")
 
     research_node_agent = create_react_agent(

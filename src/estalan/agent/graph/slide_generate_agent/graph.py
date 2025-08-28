@@ -54,7 +54,7 @@ def msg_test_node(state):
 def preprocessing_node(state):
     logger.info("전처리 노드 실행 시작")
     
-    llm = create_chat_model(provider="azure_openai", model="gpt-5-mini").with_structured_output(OutputState)
+    llm = create_chat_model(provider="azure_openai", model="gpt-4o").with_structured_output(OutputState)
 
     list_tempalte_folder = ""
     for key in LIST_TEMPLATE_FOLDER.keys():
@@ -213,7 +213,7 @@ def create_graph(in_memory=False):
     logger.debug("Supervisor 생성 시작")
     workflow = create_supervisor(
         [requirement_analysis_agent, planning_agent, slide_generate_graph],
-        model=create_chat_model(provider="azure_openai", model="gpt-5-mini"),
+        model=create_chat_model(provider="azure_openai", model="gpt-4o"),
         prompt=prompt_supervisor,
         state_schema=SlideGenerateAgentState,
         output_mode="full_history",

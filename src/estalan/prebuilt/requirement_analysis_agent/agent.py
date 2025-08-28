@@ -86,8 +86,8 @@ def create_requirement_analysis_agent(model=None, name="requirement_analysis_age
     logger.info("요구사항 분석 에이전트 생성 시작", agent_name=name)
     
     if model is None:
-        model = create_chat_model(provider="azure_openai", model="gpt-5-nano")
-        logger.debug("기본 모델 생성됨", provider="azure_openai", model="gpt-5-nano")
+        model = create_chat_model(provider="azure_openai", model="gpt-4o")
+        logger.debug("기본 모델 생성됨", provider="azure_openai", model="gpt-4o")
 
     agent = create_react_agent(
         model=model,

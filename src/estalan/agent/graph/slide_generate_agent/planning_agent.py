@@ -322,7 +322,7 @@ def create_planning_agent(name="planning_agent"):
     analyze_requirements_node = create_analyze_requirements_node(analyze_requirements_llm)
 
     logger.debug("섹션 생성용 LLM 초기화")
-    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-5-mini")
+    generate_sections_node_llm = create_chat_model(provider="azure_openai", model="gpt-4o")
 
     generate_sections_node_agent = create_react_agent(
         generate_sections_node_llm,

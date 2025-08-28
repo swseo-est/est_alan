@@ -66,16 +66,18 @@ def preprocessing_node(state):
     logger.debug(f"전처리 파라미터: topic='{topic}', requirements_docs 길이={len(requirements_docs)}자")
 
     msg = f"""
-    슬라이드 topic 주제와 유저 요구사항 requirement을 고려해서 template_folder를 추출하세요.
+    - 슬라이드 topic 주제와 유저 요구사항 requirement을 고려해서 template_folder를 추출하세요.
+    - template_folder는 제시된 폴더 중에서만 선택하세요. ex) general
     
+    # template_folder
+    {list_tempalte_folder}
+
     # topic
     {topic}
     
     # requirements
     {requirements_docs}
     
-    template_folder는 아래 중 하나를 선택하세요
-    {list_tempalte_folder}
     
     Output
         template_folder: str, topic에 적합한 template 폴더 이름, ex) general
